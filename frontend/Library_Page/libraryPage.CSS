@@ -2,7 +2,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	background: #efefef;
+	background-color: #FDF9F6;
 	color: #333333;
 	font-family: "Roboto", sans-serif;
 	overflow-x: hidden;
@@ -47,7 +47,7 @@ a:hover {
 	height: 4px;
 	margin-bottom: 5px;
 	position: relative;
-	background: #cdcdcd;
+	background: #07342F;
 	border-radius: 3px;
 	z-index: 1;
 	transform-origin: 4px 0px;
@@ -87,7 +87,7 @@ a:hover {
 	padding: 50px;
 	padding-top: 125px;
 	right: -100px;
-	background: #ededed;
+	background: #FDF9F6;
 	list-style-type: none;
 	-webkit-font-smoothing: antialiased;
 	transform-origin: 0% 0%;
@@ -99,6 +99,7 @@ a:hover {
 #menu li {
 	padding: 10px 0;
 	font-size: 22px;
+	color: #303958;
 }
 
 #menuToggle input:checked~ul {
@@ -106,3 +107,18 @@ a:hover {
 	opacity: 1;
 }
 /* navbar end */
+
+.card {
+	margin: auto;
+	margin-top: 200px;
+	color: #303958;
+}
+
+.card button {
+	background-color: #649399;
+	color: #FDF9F6;
+}
+
+.card button:hover {
+	background-color: #E2BA65;
+}
