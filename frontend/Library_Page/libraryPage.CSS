@@ -98,8 +98,13 @@ a:hover {
 
 #menu li {
 	padding: 10px 0;
+	padding-left: 30px;
 	font-size: 22px;
 	color: #303958;
+}
+
+#menu li:hover {
+	background-color: #E2BA65;
 }
 
 #menuToggle input:checked~ul {
@@ -110,7 +115,7 @@ a:hover {
 
 .card {
 	margin: auto;
-	margin-top: 200px;
+	top: 200px;
 	color: #303958;
 }
 
