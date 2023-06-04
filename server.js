@@ -15,7 +15,6 @@ const initializePassport = require('./passport-config');
 const {forgotPassword, resetPassword} = require("./password_recovery/auth");
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
-
 initializePassport(passport, 
     email => collection.findOne({email: email}),
     id => collection.findOne({_id: id})
@@ -162,14 +161,17 @@ app.post('/create-checkout-session', async (req, res) => {
                 quantity: item.quantity
             }
         }),
-        success_url: `http://localhost:3000/success`,
-        cancel_url: `http://localhost:3000/cancel`,
+        success_url: `${process.env.CLIENT_URL}/success`,
+        cancel_url: `${process.env.CLIENT_URL}/cancel`,
     })
     res.json({ url: session.url });
    } catch (e) {
     res.status(500).json({ error: e.message });
    }
-})
+});
 
+app.get('/course', (req, res) => {
+    res.render('course.ejs');
+});
 
 app.listen(3000);

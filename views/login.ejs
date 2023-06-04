@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
     <link rel="stylesheet" href="CSS/login.css">
 </head>
-<body>
+<body onload="getCookieData();">
     <div class="content">
         <h1 style="font-size: 38px;">Login</h1>
         <div style="color: red">
@@ -20,11 +20,11 @@
         <form action="/login" method="POST">
             <div class="inputs">
                 <label for="email" class="emailLabel">Email</label><br>
-                <input type="email" id="email" name="email" required><br>
+                <input type="email" id="email" name="email" placeholder="email" required><br>
                 <label for="password" class="pwdLabel pt-3">Password</label><br>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" placeholder="password" required>
             </div>
-            <input type="checkbox">
+            <input id="remember" name="remember" type="checkbox" onclick="setCookie()">
             <label class="pt-1 remember">Remember Me</label>
             <br>
             <input type="submit" class="submitBtn mt-3 mb-3"><br>
@@ -34,3 +34,59 @@
     </div>
 </body>
 </html>
+
+<script type="text/javascript">
+    function setCookie()
+    {
+        if (document.getElementById('remember').checked)
+        {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            document.cookie = "myemail="+email+";path=http://localhost:3000/";
+            document.cookie = "mypwd="+password+";path=http://localhost:3000/";
+        }
+        else
+        {
+            document.cookie = "myemail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "mypwd=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+    }
+
+    function getCookieData()
+    {
+        const email = getCookie('myemail');
+        const pwd = getCookie('mypwd');
+
+        document.getElementById('email').value = email;
+        document.getElementById('password').value = pwd;
+        if(email && pwd)
+        {
+            document.getElementById('remember').checked = true;
+        }
+        else
+        {}
+    }
+
+    function getCookie(cname)
+    {
+        const name = cname + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        const caLength = ca.length;
+
+        for (let i = 0; i < caLength; i++)
+        {
+            let c = ca[i];
+            while (c.charAt(0) == ' ')
+            {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0)
+            {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+</script>

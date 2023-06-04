@@ -149,7 +149,8 @@ exports.forgotPassword = async (req, res) =>
                 }
                 
                 .button--green {
-                background-color: #22BC66;
+                background-color: #07342F;
+                color: white;
                 border-top: 10px solid #22BC66;
                 border-right: 18px solid #22BC66;
                 border-bottom: 10px solid #22BC66;
