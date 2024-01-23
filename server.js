@@ -21,7 +21,7 @@ initializePassport(passport,
 );
 
 app.set('view-engine', 'ejs');
-app.use('/CSS', express.static('CSS'));
+app.use('/assets', express.static('assets'));
 app.use(express.urlencoded({ extended:false })); // helps access form data at req in post methods
 app.use(flash());
 app.use(session({
@@ -33,12 +33,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
 
-app.get('/', checkAuthenticated, async (req, res) => {
+let userEmail;
+
+app.get('/', checkAuthenticated, async (req, res) =>
+{
+    let videoTime;
     const userName = await collection.findOne({_id: req.user._conditions._id}).then((user, err) =>
     {
+        userEmail = user.email;
+        videoTime = user.videoState;
         return user.name;
     });
-    res.render('library.ejs', { name: userName });
+
+    res.render('library.ejs', { name: userName, videoState: videoTime });
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -71,7 +78,7 @@ app.post('/register', checkNotAuthenticated, (req, res) =>
 {
     collection.findOne({email: req.body.email}).then(async (user, err) => 
     {
-        if(user)
+        if (user)
         {
             return res.status(400).json({error: "User with this email already exists."});
         }
@@ -84,7 +91,8 @@ app.post('/register', checkNotAuthenticated, (req, res) =>
                     createdDate: Date.now().toString(),
                     name: req.body.name,
                     email: req.body.email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    videoState: ''
                 }
             await collection.insertMany([data]);
             res.redirect('/login');
@@ -93,6 +101,49 @@ app.post('/register', checkNotAuthenticated, (req, res) =>
         {
             res.redirect('/register');
         }
+    });
+});
+
+app.patch('/video-state:videoState', async (req, res) =>
+{
+    console.log(userEmail);
+
+    let password;
+    let email; 
+    let userName;
+    let createdDate;
+
+    const results = await collection.find({email: userEmail}).then((info, err) =>
+    {
+        password = info[0].password;
+        email = info[0].email;
+        userName = info[0].name;
+        createdDate = info[0].createdDate
+    });
+
+    const videoState = JSON.parse(JSON.stringify(req.body)).sectionTime;
+
+    try
+    {
+        const data = 
+        {
+            password: password,
+            email: email,
+            name: userName,
+            createdDate: createdDate,
+            videoState: videoState
+        }
+
+        const newState = await collection.findOneAndUpdate({email: email},data, {new: true});
+        console.log(newState)
+    }
+    catch
+    {
+        console.log("didn't work");
+    }
+
+    return res.json({
+        message: 'state updated'
     });
 });
 
@@ -115,7 +166,8 @@ function checkAuthenticated(req, res, next)
     res.redirect('/login')
 }
 
-function checkNotAuthenticated(req, res, next) {
+function checkNotAuthenticated(req, res, next)
+{
     if (req.isAuthenticated())
     {
         return res.redirect('/');
@@ -163,7 +215,7 @@ app.post('/create-checkout-session', async (req, res) => {
         }),
         success_url: `${process.env.CLIENT_URL}/success`,
         cancel_url: `${process.env.CLIENT_URL}/cancel`,
-    })
+    });
     res.json({ url: session.url });
    } catch (e) {
     res.status(500).json({ error: e.message });

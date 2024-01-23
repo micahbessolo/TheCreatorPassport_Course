@@ -7,41 +7,150 @@
     <title>Course</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
-    <link rel="stylesheet" href="CSS/library.css">
+    <!-- <link rel="stylesheet" href="assets/CSS/library.css"> -->
+    <link rel="stylesheet" href="assets/CSS/course.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
-<body>
-    <!--Sidebar-->
-    <nav role='navigation'>
-        <div class="topNav">
-            <a href="/">
-                <img class="logo" src="https://i.imgur.com/hTKJ0wx.jpg" alt="logo">
-            </a>
-        </div>
-        <div id="menuToggle">
-            <input id="sidebarToggle" type="checkbox" />
-            <span onclick="toggleSidebar();"></span>
-            <span onclick="toggleSidebar();"></span>
-            <span onclick="toggleSidebar();"></span>
-            <ul id="menu" class="shadow-sm">
-                <a href="/">
-                    <li class="library">Library</li>
-                </a>
-                <a href="#">
-                    <li>Profile</li>
-                </a>
-                <a href="#">
-                    <li>
-                        <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                            <button type="submit" style="all:unset">Log Out</button>
-                        </form>
-                    </li>
-                </a>
-            </ul>
-        </div>
-    </nav>
+<body style="overflow: hidden; background-color: #36454F;">
 
-    <h1>This is the course</h1>
+    <!-- video -->
+    <video id="video" class="partial-screen" controls onplaying="postState();" onpause="postState();">
+        <source src="assets/videos/Module_1/1.1_Introduction_to_Photography_Basics.mov" type="video/mp4">
+    </video>
+    <div style="display: none;" id="current">0:00</div>
+    <div style="display: none;" id="duration">0:00</div>
 
+    <!-- toggle sidenav buttons -->
+    <div id="sidenav-toggle-button" class="to-left">
+        <button class="button-no-style" id="close-sidenav">
+            <svg aria-label="button with icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="white" class="ps-icon iconCSS-module_mIconSize__5FMiC iconCSS-module_psIcon__-TEP4" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M18.176 5H2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h15.676l-.94.939a.5.5 0 0 0 0 .707l.708.707a.5.5 0 0 0 .707 0l3-3a.5.5 0 0 0 0-.707l-3-3a.5.5 0 0 0-.707 0l-.708.707a.5.5 0 0 0 0 .707l.94.94ZM15.5 11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h13Zm-13 6h18a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-18a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5Z"></path></svg>
+        </button>
+        <button class="button-no-style" id="open-sidenav">
+            <svg aria-label="button with icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="white" class="ps-icon iconCSS-module_mIconSize__5FMiC iconCSS-module_psIcon__-TEP4" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M22 11.5v1a.5.5 0 0 1-.5.5h-19a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h19a.5.5 0 0 1 .5.5ZM2.5 17h18.98a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5Zm0-12h18.977a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5Z"></path></svg>
+        </button>
+    </div>
+    <!-- sidenav -->
+    <div class="opened-sidenav" id="sidenav-container">
+        <div class="sidebarColumn">
+            <div style="background-color: white; color: black; height: 60px; font-size: 30px;"  class="d-flex justify-content-center select-video">Module 1</div>
+            <a class="d-flex justify-content-center select-video" id="1.1_Introduction_to_Photography_Basics.mov"><div>Introduction to Photography Basics</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.2_ISO,_Shutter_Speed_&_Aperture.mov"><div>ISO, Shutter Speed & Aperture</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.3_The_Exposure_Triangle.mov"><div>The Exposure Triangle</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.4_Shutter_Priority_vs._Aperture_Priority.mov"><div>Shutter Priority vs. Aperture Priority</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.5_Metering.mov"><div>Metering</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.6_White_Balance.mov"><div>White Balance</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.7_Your_Camera_Dial.mov"><div>Your Camera Dial</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.8_Bulb_Mode.mov"><div>Bulb Mode</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.9_HDR_&_Dynamic_Range.mov"><div>HDR & Dynamic Range</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.10_Histograms.mov"><div>Histograms</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.11_Setting_Auto_&_Manual_Focus.mov"><div>Setting Auto & Manual Focus</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.12_RAW_vs._JPEG_vs._PNG.mov"><div>RAW vs. JPEG vs. PNG</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.13_Shooting_Manual_on_Film.mov"><div>Shooting Manual on Film</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.14_Photography_Basics_Summary.mov"><div>Photography Basics Summary</div></a>
+            <div></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // toggles sidenav
+        $("#open-sidenav").click(function(){
+            // moves button to the left
+            $("#sidenav-toggle-button").addClass("to-left");
+            $("#sidenav-toggle-button").removeClass("to-right");
+            // shows correct button
+            $("#open-sidenav").hide();
+            $("#close-sidenav").show();
+            // moves sidenav and changes width
+            $("#sidenav-container").addClass("opened-sidenav");
+            $("#sidenav-container").removeClass("closed-sidenav");
+            $("#video").addClass("partial-screen");
+            $("#video").removeClass("full-screen");
+        });
+        $("#close-sidenav").click(function(){
+            // moves button to the right
+            $("#sidenav-toggle-button").addClass("to-right");
+            $("#sidenav-toggle-button").removeClass("to-left");
+            // shows correct button
+            $("#close-sidenav").hide();
+            $("#open-sidenav").show();
+            // moves sidenav and changes width
+            $("#sidenav-container").addClass("closed-sidenav");
+            $("#sidenav-container").removeClass("opened-sidenav");
+            $("#video").addClass("full-screen");
+            $("#video").removeClass("partial-screen");
+        });
+
+        // routes user to video page
+        $(".select-video").click(function(){
+            const videoName = $(this).attr('id');
+            location.href = './course?video=' + videoName;
+        });
+
+        // plays the video based on the url info
+        function playVideo()
+        {
+            const videoElement = $('#video')[0];
+
+            const url = window.location.search;
+            const urlParams = new URLSearchParams(url);
+            const videoSection = urlParams.get('video');
+            const resumeTime = urlParams.get('resumeTime');
+            const duration = urlParams.get('duration');
+
+            const filePath = "assets/videos/Module_" + videoSection.split(".")[0] + "/" + videoSection + "#t=" + resumeTime + "," + duration;
+            
+            videoElement.src = filePath;
+            videoElement.load();
+            videoElement.play();
+
+            console.log(filePath);
+        }
+        playVideo();
+
+        // tracks video time
+        $(document).ready(function()
+        {
+            $("#video").on(
+                "timeupdate", 
+                function(event)
+                {
+                    onTrackedVideoFrame(this.currentTime, this.duration);
+                });
+        });
+
+        function onTrackedVideoFrame(currentTime, duration)
+        {
+            $("#current").text(currentTime);
+            $("#duration").text(duration);
+        }
+
+        // posts the video, current time, and duration when the user logs out
+        function postState(event)
+        {
+            // event.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoSection = urlParams.get('video');
+            const currentTime = $("#current").text();
+            const duration = $("#duration").text();
+
+            const data = `${videoSection}-${currentTime}-${duration}`;
+
+            $.ajax({
+                type: "patch",
+                url: "/video-state:videoState",
+                data: {
+                    'sectionTime': data
+                },
+                success: console.log(data)
+            });
+
+            return (event.returnValue = '');
+        }
+
+        window.addEventListener('beforeunload', postState)
+
+    </script>
 
 </body>
 </html>

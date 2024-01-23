@@ -28,7 +28,12 @@ const LoginSchema = new mongoose.Schema({
     resetLink: {
         type: String,
         default: ''
+    },
+    videoState: {
+        type:String,
+        default: ''
     }
+    
 }, {timestamps: true})
 
 
