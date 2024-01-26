@@ -4,8 +4,8 @@ mongoose.connect("mongodb://localhost:27017/LoginSignup")
 .then(() => {
     console.log("mongo connected");
 })
-.catch(() => {
-    console.log("failed to connect");
+.catch('error', err => {
+    console.log("failed to connect to MongoDB: ", err);
 });
 
 const LoginSchema = new mongoose.Schema({
