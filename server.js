@@ -1,6 +1,10 @@
-if (process.env.NODE_ENV !== 'production')
+if ((process.env.NODE_ENV || '').trim() !== 'production')
 {
     require('dotenv').config();
+}
+else
+{
+    console.log("we in prod boiii")
 }
 
 const express = require('express');

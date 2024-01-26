@@ -4,18 +4,20 @@
   "description": "backend for Login system",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "start": "export NODE_ENV=development && node server.js",
+    "test": "export NODE_ENV=production && node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/micahbessolo/TheLoversPassport_Course.git"
+    "url": "git+https://https://github.com/micahbessolo/TheCreatorPassport_Course.git"
   },
   "author": "Micah Bessolo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/micahbessolo/TheLoversPassport_Course/issues"
+    "url": "https://https://github.com/micahbessolo/TheCreatorPassport_Course/issues"
   },
-  "homepage": "https://github.com/micahbessolo/TheLoversPassport_Course#readme",
+  "homepage": "https://https://github.com/micahbessolo/TheCreatorPassport_Course#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "ejs": "^3.1.8",
