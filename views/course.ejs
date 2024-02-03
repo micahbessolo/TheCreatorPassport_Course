@@ -34,7 +34,7 @@
         <div class="sidebarColumn">
             <div style="background-color: white; color: black; height: 60px; font-size: 30px;"  class="d-flex justify-content-center select-video">Module 1</div>
             <a class="d-flex justify-content-center select-video" id="1.1_Introduction_to_Photography_Basics.mov"><div>Introduction to Photography Basics</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.2_ISO,_Shutter_Speed_&_Aperture.mov"><div>ISO, Shutter Speed & Aperture</div></a>
+            <a class="d-flex justify-content-center select-video" id="1.2_ISO,_Shutter_Speed_and_Aperture.mov"><div>ISO, Shutter Speed & Aperture</div></a>
             <a class="d-flex justify-content-center select-video" id="1.3_The_Exposure_Triangle.mov"><div>The Exposure Triangle</div></a>
             <a class="d-flex justify-content-center select-video" id="1.4_Shutter_Priority_vs._Aperture_Priority.mov"><div>Shutter Priority vs. Aperture Priority</div></a>
             <a class="d-flex justify-content-center select-video" id="1.5_Metering.mov"><div>Metering</div></a>
@@ -52,8 +52,15 @@
     </div>
 
     <script type="text/javascript">
+        const url = window.location.search;
+        const urlParams = new URLSearchParams(url);
+        const videoSection = urlParams.get('video');
+        const resumeTime = urlParams.get('resumeTime');
+        const duration = urlParams.get('duration');
+
         // toggles sidenav
-        $("#open-sidenav").click(function(){
+        $("#open-sidenav").click(function()
+        {
             // moves button to the left
             $("#sidenav-toggle-button").addClass("to-left");
             $("#sidenav-toggle-button").removeClass("to-right");
@@ -66,7 +73,8 @@
             $("#video").addClass("partial-screen");
             $("#video").removeClass("full-screen");
         });
-        $("#close-sidenav").click(function(){
+        $("#close-sidenav").click(function()
+        {
             // moves button to the right
             $("#sidenav-toggle-button").addClass("to-right");
             $("#sidenav-toggle-button").removeClass("to-left");
@@ -80,8 +88,42 @@
             $("#video").removeClass("partial-screen");
         });
 
+        // styles sidebar to show active video
+        function showVidOnSideNav()
+        {
+            let videoTitle = "";
+            const wordLength = videoSection.split('_').length;
+
+            for (let i = 1; i < wordLength; i++)
+            {
+                videoTitle += videoSection.split('_')[i];
+                if(i !== wordLength - 1)
+                {
+                    videoTitle += ' ';
+                }
+            }
+            videoTitle = videoTitle.split('.')[0];
+
+            let children = document.getElementsByClassName('sidebarColumn')[0].children;
+            
+            for (let i = 0; i < children.length; i++)
+            {
+                if (children[i].firstChild)
+                {
+                    if (children[i].firstChild.innerHTML === videoTitle)
+                    {
+                        children[i].style.background = 'white';
+                        children[i].style.color = 'black';
+                    }
+                }
+            }
+            console.log(videoTitle);
+        }
+        showVidOnSideNav();
+
         // routes user to video page
-        $(".select-video").click(function(){
+        $(".select-video").click(function()
+        {
             const videoName = $(this).attr('id');
             location.href = './course?video=' + videoName;
         });
@@ -90,14 +132,7 @@
         function playVideo()
         {
             const videoElement = $('#video')[0];
-
-            const url = window.location.search;
-            const urlParams = new URLSearchParams(url);
-            const videoSection = urlParams.get('video');
-            const resumeTime = urlParams.get('resumeTime');
-            const duration = urlParams.get('duration');
-
-            const filePath = "assets/videos/Module_" + videoSection.split(".")[0] + "/" + videoSection + "#t=" + resumeTime + "," + duration;
+            const filePath = "./assets/videos/Module_" + videoSection.split(".")[0] + "/" + videoSection + "#t=" + resumeTime + "," + duration;
             
             videoElement.src = filePath;
             videoElement.load();
@@ -110,8 +145,7 @@
         // tracks video time
         $(document).ready(function()
         {
-            $("#video").on(
-                "timeupdate", 
+            $("#video").on("timeupdate", 
                 function(event)
                 {
                     onTrackedVideoFrame(this.currentTime, this.duration);

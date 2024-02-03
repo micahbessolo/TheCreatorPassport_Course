@@ -94,6 +94,7 @@
 	function resumeVideoLink()
 	{
 		const videoData = document.getElementById("resumeVideo").innerText;
+		const goToCourseLink = document.getElementById("resumeVideoButton");
 
 		if (videoData !== '')
 		{
@@ -101,13 +102,12 @@
 			const time = videoData.split('-')[1];
 			const duration = videoData.split('-')[2];
 
-			const goToCourseLink = document.getElementById("resumeVideoButton");
 			goToCourseLink.href = '/course?video=' + section + "&resumeTime=" + time + "&duration=" + duration;
 		}
 		else
 		{
 			// if variable is not defined, starts user on the first video
-			goToCourseLink.href = '1.1_Introduction_to_Photography_Basics.mov-0-57.80775';
+			goToCourseLink.href = '/course?video=1.1_Introduction_to_Photography_Basics.mov&resumeTime=0&duration=57.80775';
 		}
 		console.log(videoData)
 	}
