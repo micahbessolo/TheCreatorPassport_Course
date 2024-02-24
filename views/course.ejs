@@ -7,182 +7,526 @@
     <title>Course</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
-    <!-- <link rel="stylesheet" href="assets/CSS/library.css"> -->
+    <link rel="stylesheet" href="assets/CSS/library.css">
     <link rel="stylesheet" href="assets/CSS/course.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
-<body style="overflow: hidden; background-color: #36454F;">
-
-    <!-- video -->
-    <video id="video" class="partial-screen" controls onplaying="postState();" onpause="postState();">
-        <source src="assets/videos/Module_1/1.1_Introduction_to_Photography_Basics.mov" type="video/mp4">
-    </video>
-    <div style="display: none;" id="current">0:00</div>
-    <div style="display: none;" id="duration">0:00</div>
-
-    <!-- toggle sidenav buttons -->
-    <div id="sidenav-toggle-button" class="to-left">
-        <button class="button-no-style" id="close-sidenav">
-            <svg aria-label="button with icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="white" class="ps-icon iconCSS-module_mIconSize__5FMiC iconCSS-module_psIcon__-TEP4" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M18.176 5H2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h15.676l-.94.939a.5.5 0 0 0 0 .707l.708.707a.5.5 0 0 0 .707 0l3-3a.5.5 0 0 0 0-.707l-3-3a.5.5 0 0 0-.707 0l-.708.707a.5.5 0 0 0 0 .707l.94.94ZM15.5 11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h13Zm-13 6h18a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-18a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5Z"></path></svg>
-        </button>
-        <button class="button-no-style" id="open-sidenav">
-            <svg aria-label="button with icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="white" class="ps-icon iconCSS-module_mIconSize__5FMiC iconCSS-module_psIcon__-TEP4" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M22 11.5v1a.5.5 0 0 1-.5.5h-19a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h19a.5.5 0 0 1 .5.5ZM2.5 17h18.98a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5Zm0-12h18.977a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5Z"></path></svg>
-        </button>
+<body style="background-color: #36454F;">
+    <div>
+        <input id="_1_1" class="resumeVideo" style="display: none;" value="<%= _1_1 %>" />
+        <input id="_1_2" class="resumeVideo" style="display: none;" value="<%= _1_2 %>" />
+        <input id="_1_3" class="resumeVideo" style="display: none;" value="<%= _1_3 %>" />
+        <input id="_1_4" class="resumeVideo" style="display: none;" value="<%= _1_4 %>" />
+        <input id="_1_5" class="resumeVideo" style="display: none;" value="<%= _1_5 %>" />
+        <input id="_1_6" class="resumeVideo" style="display: none;" value="<%= _1_6 %>" />
+        <input id="_1_7" class="resumeVideo" style="display: none;" value="<%= _1_7 %>" />
+        <input id="_1_8" class="resumeVideo" style="display: none;" value="<%= _1_8 %>" />
+        <input id="_1_9" class="resumeVideo" style="display: none;" value="<%= _1_9 %>" />
+        <input id="_1_10" class="resumeVideo" style="display: none;" value="<%= _1_10 %>" />
+        <input id="_1_11" class="resumeVideo" style="display: none;" value="<%= _1_11 %>" />
+        <input id="_1_12" class="resumeVideo" style="display: none;" value="<%= _1_12 %>" />
+        <input id="_1_13" class="resumeVideo" style="display: none;" value="<%= _1_13 %>" />
+        <input id="_1_14" class="resumeVideo" style="display: none;" value="<%= _1_14 %>" />
+        <input id="_1_15" class="resumeVideo" style="display: none;" value="<%= _1_15 %>" />
+        <input id="_1_16" class="resumeVideo" style="display: none;" value="<%= _1_16 %>" />
+        <input id="_2_1" class="resumeVideo" style="display: none;" value="<%= _2_1 %>" />
+        <input id="_2_2" class="resumeVideo" style="display: none;" value="<%= _2_2 %>" />
+        <input id="_2_3" class="resumeVideo" style="display: none;" value="<%= _2_3 %>" />
+        <input id="_2_4" class="resumeVideo" style="display: none;" value="<%= _2_4 %>" />
+        <input id="_2_5" class="resumeVideo" style="display: none;" value="<%= _2_5 %>" />
+        <input id="_2_6" class="resumeVideo" style="display: none;" value="<%= _2_6 %>" />
+        <input id="_2_7" class="resumeVideo" style="display: none;" value="<%= _2_7 %>" />
+        <input id="_2_8" class="resumeVideo" style="display: none;" value="<%= _2_8 %>" />
+        <input id="_2_9" class="resumeVideo" style="display: none;" value="<%= _2_9 %>" />
+        <input id="_2_10" class="resumeVideo" style="display: none;" value="<%= _2_10 %>" />
+        <input id="_2_11" class="resumeVideo" style="display: none;" value="<%= _2_11 %>" />
+        <input id="_3_1" class="resumeVideo" style="display: none;" value="<%= _3_1 %>" />
+        <input id="_3_2" class="resumeVideo" style="display: none;" value="<%= _3_2 %>" />
+        <input id="_3_3" class="resumeVideo" style="display: none;" value="<%= _3_3 %>" />
+        <input id="_3_4" class="resumeVideo" style="display: none;" value="<%= _3_4 %>" />
+        <input id="_3_5" class="resumeVideo" style="display: none;" value="<%= _3_5 %>" />
+        <input id="_3_6" class="resumeVideo" style="display: none;" value="<%= _3_6 %>" />
+        <input id="_3_7" class="resumeVideo" style="display: none;" value="<%= _3_7 %>" />
+        <input id="_3_8" class="resumeVideo" style="display: none;" value="<%= _3_8 %>" />
+        <input id="_3_9" class="resumeVideo" style="display: none;" value="<%= _3_9 %>" />
+        <input id="_3_10" class="resumeVideo" style="display: none;" value="<%= _3_10 %>" />
     </div>
-    <!-- sidenav -->
-    <div class="opened-sidenav" id="sidenav-container">
-        <div class="sidebarColumn">
-            <div style="background-color: white; color: black; height: 60px; font-size: 30px;"  class="d-flex justify-content-center select-video">Module 1</div>
-            <a class="d-flex justify-content-center select-video" id="1.1_Introduction_to_Photography_Basics.mov"><div>Introduction to Photography Basics</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.2_ISO,_Shutter_Speed_and_Aperture.mov"><div>ISO, Shutter Speed & Aperture</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.3_The_Exposure_Triangle.mov"><div>The Exposure Triangle</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.4_Shutter_Priority_vs._Aperture_Priority.mov"><div>Shutter Priority vs. Aperture Priority</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.5_Metering.mov"><div>Metering</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.6_White_Balance.mov"><div>White Balance</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.7_Your_Camera_Dial.mov"><div>Your Camera Dial</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.8_Bulb_Mode.mov"><div>Bulb Mode</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.9_HDR_&_Dynamic_Range.mov"><div>HDR & Dynamic Range</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.10_Histograms.mov"><div>Histograms</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.11_Setting_Auto_&_Manual_Focus.mov"><div>Setting Auto & Manual Focus</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.12_RAW_vs._JPEG_vs._PNG.mov"><div>RAW vs. JPEG vs. PNG</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.13_Shooting_Manual_on_Film.mov"><div>Shooting Manual on Film</div></a>
-            <a class="d-flex justify-content-center select-video" id="1.14_Photography_Basics_Summary.mov"><div>Photography Basics Summary</div></a>
-            <div></div>
+
+    <!--topnav-->
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
+        <div>
+            <a href="/">
+                <img class="logo" src="https://i.imgur.com/hTKJ0wx.jpg" alt="logo">
+            </a>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; width: 200px;">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
+                <div><a style="color: white;" href="/">Home</a></div>
+                <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
+                <div>
+                    <a href="#">
+                        <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                            <button type="submit" style="all:unset; color: white;">Log Out</button>
+                        </form>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
+
+    <div class="content-container container">
+        <div id="videoAndSidenav">
+            <!-- video -->
+            <div id="video-container">
+                <div style="aspect-ratio: 16/9;">
+                    <div id="video">
+                        <!-- load in video -->
+                    </div>
+                </div>
+            </div>
+    
+            <!-- sidenav -->
+            <div id="sidenav-container">
+                <div class="sidebarColumn">
+                    <!-- load in sidenav -->
+                </div>
+            </div>
+        </div>
+    
+        <!-- player nav -->
+        <div id="player-nav">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 15px;">
+                <div style="width: 100px; height: 48px; background: #2e91fc; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="margin-left: auto; margin-right: auto;">
+                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Back</a>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div id="lesson-of"></div>
+                </div>
+                <div style="width: 100px; height: 48px; background: #2e91fc; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="margin-left: auto; margin-right: auto;">
+                        <a id="next-button" style="color: white;">Next  <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; margin-top: 25px;">
+            <div class="below-vid-content">
+                <div class="copyContent">
+                    <div style="width: 100%; padding: 15px; background: #E0E0E0; margin-left: auto; margin-right: auto; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <div class="d-flex align-items-center">
+                            <img id="nextLessonImage" src="" style="width: 100px; height: auto;" />
+                            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px;">
+                                <div>Continue learning</div>
+                                <div id="nextLessonTitle" style="font-weight: 700; font-size: 16px;"><!-- gets next lesson title from function --></div>
+                            </div>
+                        </div>
+                        <div><a id="nextLessonLink" style="color: #2e91fc;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h3 id="currentLessonTitle"></h3>
+                        <div id="copy">
+                            <!-- copy goes here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="downloadContent">
+                    <h4><b>Downloads</b></h4>
+                    <a href="#">Download 1</a><br />
+                    <a href="#">Download 2</a>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="postState();" id="patch" style="display: none;">PATCH BUTTON</button>
+    </div>
+    
+    
     <script type="text/javascript">
+
         const url = window.location.search;
         const urlParams = new URLSearchParams(url);
-        const videoSection = urlParams.get('video');
-        const resumeTime = urlParams.get('resumeTime');
-        const duration = urlParams.get('duration');
+        const module = urlParams.get('module');
+        let videoTime = 12;
 
-        // toggles sidenav
-        $("#open-sidenav").click(function()
+        let allVidArray = [];
+
+
+        // track 1
+        allVidArray1 = [
+            "1-1-1","1-1-2","1-1-3","1-1-4","1-1-5","1-1-6","1-1-7","1-1-8","1-1-9","1-1-10","1-1-11","1-1-12","1-1-13","1-1-14",
+            "1-2-1","1-2-2","1-2-3","1-2-4","1-2-5","1-2-6","1-2-7","1-2-8","1-2-9","1-2-10","1-2-11","1-2-12","1-2-13","1-2-14","1-2-15","1-2-16","1-2-17",
+            "1-3-1","1-3-2","1-3-3","1-3-4","1-3-5","1-3-6","1-3-7","1-3-8","1-3-9","1-3-10",
+            "1-4-1","1-4-2","1-4-3","1-4-4",
+            "1-5-1","1-5-2","1-5-3","1-5-4","1-5-5","1-5-6",
+            "1-6-1","1-6-2","1-6-3","1-6-4",
+            "1-7-1","1-7-2","1-7-3","1-7-4","1-7-5","1-7-6","1-7-7","1-7-8","1-7-9","1-7-10",
+            "1-8-1","1-8-2","1-8-3",
+            "1-9-1","1-9-2","1-9-3","1-9-4","1-9-5","1-9-6","1-9-7","1-9-8","1-9-9","1-9-10","1-9-11","1-9-12","1-9-13","1-9-14","1-9-15","1-9-16","1-9-17","1-9-18","1-9-19","1-9-20","1-9-21","1-9-22",
+            "1-10-1","1-10-2","1-10-3","1-10-4","1-10-5","1-10-6","1-10-7","1-10-8","1-10-9","1-10-10","1-10-11","1-10-12","1-10-13","1-10-14","1-10-15","1-10-16","1-10-17","1-10-18","1-10-19","1-10-20","1-10-21","1-10-22","1-10-23","1-10-24","1-10-25",
+            "1-11-1","1-11-2","1-11-3","1-11-4","1-11-5","1-11-6","1-11-7","1-11-8",
+            "1-12-1","1-12-2","1-12-3","1-12-4","1-12-5","1-12-6","1-12-7","1-12-8","1-12-9","1-12-10","1-12-11","1-12-12","1-12-13","1-12-14","1-12-15","1-12-16","1-12-17","1-12-18","1-12-19","1-12-20",
+            "1-13-1","1-13-2","1-13-3","1-13-4","1-13-5","1-13-6","1-13-7","1-13-8","1-13-9","1-13-10","1-13-11",
+            "1-14-1","1-14-2","1-14-3","1-14-4","1-14-5","1-14-6","1-14-7","1-14-8","1-14-9","1-14-10","1-14-11","1-14-12","Tutorial #1: Editing Memes","Tutorial #2: Editing Voice Over","Tutorial #3: Editing Montage","Tutorial #4 Editing Transitions",
+            "1-15-1","1-15-2","1-15-3","1-15-4","1-15-5","Tutorial #1: CapCut",
+            "1-16-1","1-16-2","1-16-3","1-16-4","1-16-5","1-16-6","1-16-7"          
+        ];
+        // track 2
+        allVidArray2 = [
+            "2-1-1","2-1-2","2-1-3","2-1-4","2-1-5","2-1-6","2-1-7","2-1-8",
+            "2-2-1","2-2-2","2-2-3","2-2-4","2-2-5","2-2-6","2-2-7","2-2-8","2-2-9","2-2-10",
+            "2-3-1","2-3-2","2-3-3","2-3-4","2-3-5",
+            "2-4-1","2-4-2","2-4-3","2-4-4","2-4-5","2-4-6",
+            "2-5-1","2-5-2","2-5-3","2-5-4",
+            "2-6-1","2-6-2","2-6-3","2-6-4","2-6-5","2-6-6","2-6-7",
+            "2-7-1","2-7-2",
+            "2-8-1","2-8-2",
+            "2-9-1","2-9-2","2-9-3","2-9-4","2-9-5","2-9-6",
+            "2-10-1","2-10-2","2-10-3","2-10-4","2-10-5","2-10-6","2-10-7",
+            "2-11-1","2-11-2","2-11-3","2-11-4"
+        ];
+        // track 3
+        allVidArray3 = [
+            "3-1-1","3-1-2","3-1-3","3-1-4","3-1-5","3-1-6","3-1-7","3-1-8","3-1-9",
+            "3-2-1","3-2-2","3-2-3","3-2-4","3-2-5",
+            "3-3-1","3-3-2","3-3-3","3-3-4",
+            "3-4-1","3-4-2","3-4-3","3-4-4","3-4-5","3-4-6","3-4-7",
+            "3-5-1","3-5-2","3-5-3","3-5-4",
+            "3-6-1","3-6-2","3-6-3","3-6-4","3-6-5",
+            "3-7-1","3-7-2","3-7-3","3-7-4","3-7-5",
+            "3-8-1","3-8-2","3-8-3","3-8-4","3-8-5","3-8-6","3-8-7",
+            "3-9-1","3-9-2","3-9-3","3-9-4",
+            "3-10-1","3-10-2","3-10-3","3-10-4","3-10-5","3-10-6","3-10-7","3-10-8","3-10-9"
+        ];
+
+
+        if (Number(module.split("-")[0]) === 1)
         {
-            // moves button to the left
-            $("#sidenav-toggle-button").addClass("to-left");
-            $("#sidenav-toggle-button").removeClass("to-right");
-            // shows correct button
-            $("#open-sidenav").hide();
-            $("#close-sidenav").show();
-            // moves sidenav and changes width
-            $("#sidenav-container").addClass("opened-sidenav");
-            $("#sidenav-container").removeClass("closed-sidenav");
-            $("#video").addClass("partial-screen");
-            $("#video").removeClass("full-screen");
-        });
-        $("#close-sidenav").click(function()
+            allVidArray = allVidArray1
+        }
+        else if (Number(module.split("-")[0]) === 2)
         {
-            // moves button to the right
-            $("#sidenav-toggle-button").addClass("to-right");
-            $("#sidenav-toggle-button").removeClass("to-left");
-            // shows correct button
-            $("#close-sidenav").hide();
-            $("#open-sidenav").show();
-            // moves sidenav and changes width
-            $("#sidenav-container").addClass("closed-sidenav");
-            $("#sidenav-container").removeClass("opened-sidenav");
-            $("#video").addClass("full-screen");
-            $("#video").removeClass("partial-screen");
-        });
-
-        // styles sidebar to show active video
-        function showVidOnSideNav()
+            allVidArray = allVidArray2
+        }
+        else if (Number(module.split("-")[0]) === 3)
         {
-            let videoTitle = "";
-            const wordLength = videoSection.split('_').length;
+            allVidArray = allVidArray3
+        }
+        else {}
 
-            for (let i = 1; i < wordLength; i++)
-            {
-                videoTitle += videoSection.split('_')[i];
-                if(i !== wordLength - 1)
-                {
-                    videoTitle += ' ';
-                }
-            }
-            videoTitle = videoTitle.split('.')[0];
 
-            let children = document.getElementsByClassName('sidebarColumn')[0].children;
+        if (urlParams.has('time'))
+        {
+            videoTime = urlParams.get('time');
+        }
+
+        let videoNumber;
+        let sectionArray;
+        let returnObject = {};
+
+        document.getElementById('tracks').href = `/track?number=${module.split("-")[0]}`
+
+        // fetches video list from DB
+        function videoList(section, onload=true)
+        {
+            sectionArray = section.split("-");
+            const trackMod = sectionArray[0] + "-" + sectionArray[1]
+            videoNumber = sectionArray[2] - 1;
+            let notOnload = "";
             
-            for (let i = 0; i < children.length; i++)
-            {
-                if (children[i].firstChild)
+            $.ajax({
+                type: "POST",
+                url: "/videoList",
+                data: trackMod,
+                success: function(res)
                 {
-                    if (children[i].firstChild.innerHTML === videoTitle)
+                    if(onload)
                     {
-                        children[i].style.background = 'white';
-                        children[i].style.color = 'black';
+                        returnObject.titles = res.titles;
+                        returnObject.links = res.links;
+                        returnObject.moduleTitle = res.moduleName;
+                        returnObject.copy = res.copy
                     }
+                    else
+                    {
+                        notOnload = res.titles[0];
+                    }
+                },
+                error: function(res)
+                {
+                    console.log("error" + res);
+                }
+            });
+            return notOnload;
+        };
+        videoList(module);
+
+
+        // YouTube Player API Reference for iframe Embeds
+        (function loadYoutubeIFrameApiScript()
+        {
+            const tag = document.createElement("script");
+            tag.src = "https://www.youtube.com/iframe_api";
+
+            const firstScriptTag = document.getElementsByTagName("script")[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            tag.onload = onYouTubeIframeAPIReady;
+        })();
+
+        let player;
+        function onYouTubeIframeAPIReady()
+        {
+            let startPoint;
+            let currentLessonProgress = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[Number(module.split("-")[2]) - 1];
+            
+            if (currentLessonProgress === 0 || currentLessonProgress === "")
+            {
+                startPoint = 0;
+            }
+            else
+            {
+                startPoint = Math.floor(Number(currentLessonProgress.split("_")[0]));
+            }
+            console.log(startPoint);
+
+            window.YT.ready(function()
+            {
+                player = new window.YT.Player('video',
+                {
+                    height: '100%',
+                    width: '100%',
+                    videoId: returnObject.links[videoNumber],
+                    playerVars:
+                    {
+                        'playsinline': 1,
+                        'start': startPoint
+                    },
+                    events:
+                    {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            });
+            addToSidenav(returnObject.titles, returnObject.moduleTitle);
+            pageStyling(returnObject.titles, returnObject.copy);
+        }
+
+        function onPlayerReady(event)
+        {
+            event.target.playVideo();
+        }
+
+        video = document.getElementById('video');
+        let done = false;
+        function onPlayerStateChange(event)
+        {
+            if (event.data == YT.PlayerState.PLAYING && !done)
+            {
+                setTimeout(stopVideo, 6000);
+                done = true;
+            }
+        }
+
+        function stopVideo()
+        {
+            // updates video progress
+            document.getElementById("patch").click();
+        }
+
+        // Make Sidenav
+        function addToSidenav(titles, moduleTitle)
+        {
+            // gets sidenav progress data
+            let progressArray = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",");
+
+            for (let i = 0; i < progressArray.length; i++)
+            {
+                if (progressArray[i] === "" || Number(progressArray[i]) <= .05)
+                {
+                    progressArray[i] = 0;
+                }
+                else if (Number(progressArray[i]) >= .95)
+                {
+                    progressArray[i] = 1;
+                }
+                else
+                {
+                    progressArray[i] = Number(progressArray[i].split("_")[2]);
                 }
             }
-            console.log(videoTitle);
-        }
-        showVidOnSideNav();
-
-        // routes user to video page
-        $(".select-video").click(function()
-        {
-            const videoName = $(this).attr('id');
-            location.href = './course?video=' + videoName;
-        });
-
-        // plays the video based on the url info
-        function playVideo()
-        {
-            const videoElement = $('#video')[0];
-            const filePath = "./assets/videos/Module_" + videoSection.split(".")[0] + "/" + videoSection + "#t=" + resumeTime + "," + duration;
             
-            videoElement.src = filePath;
-            videoElement.load();
-            videoElement.play();
+            // generates sidenav
+            if (titles)
+            {
+                const titlesLength = titles.length;
 
-            console.log(filePath);
-        }
-        playVideo();
-
-        // tracks video time
-        $(document).ready(function()
-        {
-            $("#video").on("timeupdate", 
-                function(event)
+                if (document.querySelectorAll('.select-video').length <= titlesLength)
                 {
-                    onTrackedVideoFrame(this.currentTime, this.duration);
-                });
-        });
+                    let sideNav =
+                    `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; background-color: white;">
+                        <div style="font-size: 14px; width: 66%; color: black; padding-left: 15px;" class="d-flex justify-content-center select-video">
+                            Module ${sectionArray[1]} - ${moduleTitle}
+                        </div>
+                        <div class="d-flex justify-content-center" style="width: 33%; color: #3d3d3d;">
+                            ${titlesLength} Lessons
+                        </div>
+                    </div>`;
 
-        function onTrackedVideoFrame(currentTime, duration)
-        {
-            $("#current").text(currentTime);
-            $("#duration").text(duration);
+                    for (let i = 0; i < titlesLength; i++)
+                    {
+                        sideNav +=
+                        `<a class="d-flex select-video ps-3" href="./course?module=${sectionArray[0]}-${sectionArray[1]}-${i + 1}">
+                            <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; width: 100%;">
+                                <div style="width: 45px">${titles[i].split(" - ")[0].split(".")[1]}</div>
+                                <div><img src="../assets/images/${sectionArray[0]}-${sectionArray[1]}-${i + 1}.png" alt="lesson thumbnail" style="width: 120px; height: auto;" /></div>
+                                <div class="titleFlex" style="width: 100%; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <div>${titles[i].split(" - ")[1]}</div>
+                                    <div><progress class="progress-bar" max="1" value="${progressArray[i]}"></progress></div>
+                                </div>
+                                <div style="width: 24px;" class="check-container">
+                                    
+                                </div>
+                            </div>
+                        </a>`;
+                    }
+                    document.getElementsByClassName("sidebarColumn")[0].innerHTML = sideNav
+                }
+            }
         }
 
-        // posts the video, current time, and duration when the user logs out
+        // styling including image, title, and link for next lesson, active lesson on sidenav, copy
+        function pageStyling(titles, copy)
+        {
+            const URLSection = Number(module.split('-')[2]);
+
+            if (titles)
+            {
+                let titlesLength = titles.length;
+                let nextLesson = "";
+                let previousLesson = "";
+                let nextModuleTitle = "";
+
+                // Styling next lesson, previous lesson buttons
+                if (URLSection === titlesLength)
+                {
+                    let index = Number(allVidArray.indexOf(module));
+
+                    if (allVidArray.length > index + 1)
+                    {
+                        nextLesson = allVidArray[Number(index) + 1];
+                        nextModuleTitle = "Next Module";
+                        previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
+                        document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    }
+                    else if (allVidArray.length === index + 1) // last lesson of entire course
+                    {
+                        nextLesson = "#";
+                        nextModuleTitle = "Course complete!";
+                        previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
+                        document.getElementById('nextLessonImage').style.display = "none";
+                    }
+                    else {}
+                }
+                else if (URLSection === 1)
+                {
+                    let index = Number(allVidArray.indexOf(module));
+
+                    if (index > 0)
+                    {
+                        nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
+                        previousLesson = allVidArray[Number(index) - 1];
+                        nextModuleTitle = titles[URLSection];
+                    }
+                    else if (index === 0)
+                    {
+                        nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
+                        previousLesson = "#";
+                        nextModuleTitle = titles[URLSection];
+                    }
+                    else {}
+                    document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                }
+                else
+                {
+                    nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
+                    previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
+                    nextModuleTitle = titles[URLSection];
+                    document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                }
+                if (nextLesson === "#")
+                {
+                    document.getElementById('nextLessonLink').href = `#`;
+                    document.getElementById('next-button').href = `#`;
+                    document.getElementById('next-button').parentNode.parentNode.style.background = "gray";
+                }
+                else
+                {
+                    document.getElementById('nextLessonLink').href = `./course?module=${nextLesson}`;
+                    document.getElementById('next-button').href = `./course?module=${nextLesson}`;
+                }
+                if (previousLesson === "#")
+                {
+                    document.getElementById('back-button').href = `#`;
+                    document.getElementById('back-button').parentNode.parentNode.style.background = "gray";
+                }
+                else
+                {
+                    document.getElementById('back-button').href = `./course?module=${previousLesson}`;
+                }
+                document.getElementById('currentLessonTitle').innerText = titles[URLSection - 1];
+                document.getElementById('lesson-of').innerHTML = `Lesson ${URLSection} of ${titlesLength}`;
+                document.getElementById('copy').innerText = copy[Number(module.split('-')[2]) - 1];
+
+                // styles sidenav of current lesson
+                for (let i = 0; i < titlesLength; i++)
+                {
+                    if (i === URLSection - 1)
+                    {
+                        document.getElementsByClassName('select-video')[URLSection].style.background = '#f9f9f9';
+                        document.getElementsByClassName('select-video')[URLSection].style.color = 'black';
+                    }
+                    // progress bar and check box sidenav styling
+                    if (Number(document.getElementsByClassName("progress-bar")[i].value) === 0)
+                    {
+                        document.getElementsByClassName("progress-bar")[i].style.display = "none";
+                    }
+                    else if (Number(document.getElementsByClassName("progress-bar")[i].value) >= .95)
+                    {
+                        document.getElementsByClassName("progress-bar")[i].style.display = "none";
+                        document.getElementsByClassName("check-container")[i].innerHTML = '<i class="fa-solid fa-check" style="padding-right: 8px; color: green;"></i>';                        
+                    }
+                    else {}
+                }
+            }
+        }
+
+        // posts the video's current time, and duration when the user leaves page
         function postState(event)
         {
-            // event.preventDefault();
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoSection = urlParams.get('video');
-            const currentTime = $("#current").text();
-            const duration = $("#duration").text();
-
-            const data = `${videoSection}-${currentTime}-${duration}`;
+            const currentTime = Math.floor(player.playerInfo.currentTime);
+            const duration = player.playerInfo.duration;
 
             $.ajax({
                 type: "patch",
                 url: "/video-state:videoState",
                 data: {
-                    'sectionTime': data
+                    'currentTime': currentTime,
+                    'videoDuration': duration,
+                    'URLData': module
                 },
-                success: console.log(data)
+                success: function (data)
+                {
+                    console.log(data);
+                }
             });
-
-            return (event.returnValue = '');
         }
 
-        window.addEventListener('beforeunload', postState)
+        window.addEventListener('beforeunload', postState);
 
     </script>
 
