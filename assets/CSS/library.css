@@ -7,7 +7,6 @@ body {
   color: #333333;
   font-family: "Roboto", sans-serif;
   overflow-x: hidden;
-  /* background-image: url("https://i.imgur.com/oqwmoSG.jpg"); */
 }
 
 #wrapper {
@@ -32,7 +31,7 @@ body {
 }
 
 a {
-  text-decoration: none !important;
+  text-decoration: none;
   color: #232323;
   transition: color 0.3s ease;
 }
@@ -273,66 +272,62 @@ progress::-moz-progress-bar {
     max-width: calc(100% - 2rem);
     margin: 0 auto;
 }
+.header-options
+{
+  color: #FFFFFF; 
+  font-size: 20px; 
+  letter-spacing: 1px;
+}
+.header-options:hover
+{
+  text-decoration: underline;
+  text-decoration-color: #FFFFFF;
+  text-underline-offset: 6px;
+  color: #FFFFFF; 
+}
 
-.outside-container {
+.outside-container
+{
 	position: absolute;
-	top: 400px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	top: 355px;
 	min-height: calc(100vh - 630px);
 	background: #F1F4FD;
 	width: 100%;
 }
+.flex-container
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 .container
 {
 	max-width: 1200px;
-	width: 75%;
 	height: 600px;
 }
 .slider-wrapper
 {
 	position: relative;
 	height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
-.slider-wrapper .slide-button
+.image-item
 {
-	position: absolute;
-	top: 50%;
-	height: 50px;
-	width: 50px;
-	transform: translateY(-50%);
-	border: none;
-	color:rgba(120,113,108,1) !important;
-	background: #F1F4FD;
-	cursor: pointer;
+  max-width: 315px;
+  max-height: 480px;
 }
-.slider-wrapper .slide-button#prev-slide
+.image-item:hover
 {
-	left: -50px;
-	display: none;
-}
-.slider-wrapper .slide-button#next-slide
-{
-	right: -50px;
-}
-
-@media (min-width: 1540px)
-{
-	.slider-wrapper .slide-button#next-slide
-	{
-		display: none;
-	}
+  transform: translate3D(0,-1px,0) scale(1.03);
 }
 .slider-wrapper .image-list
 {
-	display: grid;
-	gap: 18px;
+	display: flex;
 	font-size: 0;
 	margin-bottom: 30px;
-	overflow-x: auto;
-	scrollbar-width: none;
-	grid-template-columns: repeat(5, 1fr);
 	width: 100%;
 	height: 100%;
 }
@@ -342,7 +337,7 @@ progress::-moz-progress-bar {
 }
 .slider-wrapper .image-list .image-item
 {
-	width: 325px;
+	width: 300px;
 	height: 500px;
 	object-fit: cover;
 }

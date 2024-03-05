@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Track 1</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/creatorPassportIcon.ico">
     <link rel="stylesheet" href="assets/CSS/track.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -28,39 +29,18 @@
         <input id="_1_14" class="resumeVideo" style="display: none;" value="<%= _1_14 %>" />
         <input id="_1_15" class="resumeVideo" style="display: none;" value="<%= _1_15 %>" />
         <input id="_1_16" class="resumeVideo" style="display: none;" value="<%= _1_16 %>" />
-        <input id="_2_1" class="resumeVideo" style="display: none;" value="<%= _2_1 %>" />
-        <input id="_2_2" class="resumeVideo" style="display: none;" value="<%= _2_2 %>" />
-        <input id="_2_3" class="resumeVideo" style="display: none;" value="<%= _2_3 %>" />
-        <input id="_2_4" class="resumeVideo" style="display: none;" value="<%= _2_4 %>" />
-        <input id="_2_5" class="resumeVideo" style="display: none;" value="<%= _2_5 %>" />
-        <input id="_2_6" class="resumeVideo" style="display: none;" value="<%= _2_6 %>" />
-        <input id="_2_7" class="resumeVideo" style="display: none;" value="<%= _2_7 %>" />
-        <input id="_2_8" class="resumeVideo" style="display: none;" value="<%= _2_8 %>" />
-        <input id="_2_9" class="resumeVideo" style="display: none;" value="<%= _2_9 %>" />
-        <input id="_2_10" class="resumeVideo" style="display: none;" value="<%= _2_10 %>" />
-        <input id="_2_11" class="resumeVideo" style="display: none;" value="<%= _2_11 %>" />
-        <input id="_3_1" class="resumeVideo" style="display: none;" value="<%= _3_1 %>" />
-        <input id="_3_2" class="resumeVideo" style="display: none;" value="<%= _3_2 %>" />
-        <input id="_3_3" class="resumeVideo" style="display: none;" value="<%= _3_3 %>" />
-        <input id="_3_4" class="resumeVideo" style="display: none;" value="<%= _3_4 %>" />
-        <input id="_3_5" class="resumeVideo" style="display: none;" value="<%= _3_5 %>" />
-        <input id="_3_6" class="resumeVideo" style="display: none;" value="<%= _3_6 %>" />
-        <input id="_3_7" class="resumeVideo" style="display: none;" value="<%= _3_7 %>" />
-        <input id="_3_8" class="resumeVideo" style="display: none;" value="<%= _3_8 %>" />
-        <input id="_3_9" class="resumeVideo" style="display: none;" value="<%= _3_9 %>" />
-        <input id="_3_10" class="resumeVideo" style="display: none;" value="<%= _3_10 %>" />
     </div>
 
     <!--topnav-->
     <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
         <div>
             <a href="/">
-                <img style="margin-left: 15px;" class="logo" src="https://i.imgur.com/hTKJ0wx.jpg" alt="logo">
+                <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
             </a>
         </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; width: 200px;">
+        <div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
             <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
-                <div><a style="color: white;" href="/">Home</a></div>
+                <div><a style="color: white;" href="/">Dashboard</a></div>
                 <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
                 <div>
                     <a href="#">
@@ -74,7 +54,7 @@
     </div>
 
     <div style="display: flex; justify-content: center;">
-        <div style="width: 100%; max-width: 1200px;">
+        <div class="track-container">
             <h1 style="text-align: center; padding-top: 125px;">The Manual Method:<br />From Auto to Manual in 30 Days</h1>
             <div style="padding-top: 20px;">
                 <div style="font-size: 18px;">
@@ -90,21 +70,21 @@
                 <div style="margin-left: 15px; width: calc(100% - 170px);"><progress id="progress-bar" max="100" value="70"></progress></div>
             </div>
 
-            <div class="" style="padding-top: 50px;">
-                <div class="" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+            <div class="track1" style="padding-top: 50px;">
+                <div class="track-cards-container">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 1</h5>
                                 <h3 style="height: 100px;">
                                     Photography Basics & Terminology | Shooting in Manual Mode
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-1-2.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-1-2.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -134,19 +114,19 @@
                             </div>
                         </div>
                     </div> 
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 2</h5>
                                 <h3 style="height: 100px;">
                                     Camera Gear & Equipment
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-2-10.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-2-10.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -179,19 +159,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 3</h5>
                                 <h3 style="height: 100px;">
                                     Shot Planning & Preparation
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-3-7.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-3-7.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -217,19 +197,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 4</h5>
                                 <h3 style="height: 100px;">
                                     How to Take Your Own Photos
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-4-2.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-4-2.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -249,19 +229,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 5</h5>
                                 <h3 style="height: 100px;">
                                     Situational Photography
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-5-2.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-5-2.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -283,19 +263,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 6</h5>
                                 <h3 style="height: 100px;">
                                     Mobile Photography/Videography
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-6-1.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-6-1.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -315,19 +295,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 7</h5>
                                 <h3 style="height: 100px;">
                                     Drone Photography
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-7-9.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-7-9.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -353,19 +333,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 8</h5>
                                 <h3 style="height: 100px;">
                                     Organizational Workflow From Start to Finish
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-8-3.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-8-3.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -384,19 +364,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 9</h5>
                                 <h3 style="height: 100px;">
                                     Photo Editing on Lightroom
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-9-13.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-9-13.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -434,19 +414,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 10</h5>
                                 <h3 style="height: 100px;">
                                     Photo Editing on Photoshop
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-10-2.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-10-2.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -487,19 +467,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 11</h5>
                                 <h3 style="height: 100px;">
                                     Pixieset
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-11-3.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-11-3.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -523,19 +503,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 12</h5>
                                 <h3 style="height: 100px;">
                                     Intro to Videography | Settings Explained
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-12-13.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-12-13.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -571,19 +551,19 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 13</h5>
                                 <h3 style="height: 100px;">
                                     Drone Videography 
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-13-8.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-13-8.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -610,41 +590,41 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 14</h5>
                                 <h3 style="height: 100px;">
                                     Video Editing on Computer
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-14-4.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-14-4.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Sublessons
                                         </button>
                                         <ul class="dropdown-menu _1_14" style="width: 300px;">
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.1 - Intro to Video Editing</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.2 - Project Organization</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.3 - How to Import/Export Clips</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.4 - Editing Shortcuts</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.5 - How to Color Grade and LUTS</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.6 - How to Use Transitions and Effects</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.7 - How to Adjust Speeds</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.8 - Using Trending Audio</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.9 - Audio Basics</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.10 - Cutting to the beat</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.11 - Adding Movement in Post Production</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">14.12 - Video Workflow Start to End</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">Tutorial #1: Editing Memes</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">Tutorial #2: Editing Voice Over</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">Tutorial #3: Editing Montage</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">Tutorial #4 Editing Transitions</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-1">14.1 - Intro to Video Editing</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-2">14.2 - Project Organization</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-3">14.3 - How to Import/Export Clips</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-4">14.4 - Editing Shortcuts</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-5">14.5 - How to Color Grade and LUTS</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-6">14.6 - How to Use Transitions and Effects</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-7">14.7 - How to Adjust Speeds</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-8">14.8 - Using Trending Audio</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-9">14.9 - Audio Basics</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-10">14.10 - Cutting to the beat</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-11">14.11 - Adding Movement in Post Production</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-12">14.12 - Video Workflow Start to End</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-13">Tutorial #1: Editing Memes</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-14">Tutorial #2: Editing Voice Over</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-15">Tutorial #3: Editing Montage</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-14-16">Tutorial #4 Editing Transitions</a></div></li>
                                         </ul>
                                     </div>
                                     <div class="continueBtn">
@@ -654,31 +634,31 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 15</h5>
                                 <h3 style="height: 100px;">
                                     Mobile Videography and Editing
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-15-1.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-15-1.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Sublessons
                                         </button>
                                         <ul class="dropdown-menu _1_15" style="width: 300px;">
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">15.1 - Intro to Mobile Editing</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">15.2 - Phone Organization</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">15.3 - How to Edit in CapCut</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">15.4 - How to Color Grade in CapCut </a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">15.5 - How to Adjust Captions</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">Tutorial #1: CapCut </a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-15-1">15.1 - Intro to Mobile Editing</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-15-2">15.2 - Phone Organization</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-15-3">15.3 - How to Edit in CapCut</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-15-4">15.4 - How to Color Grade in CapCut </a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-15-5">15.5 - How to Adjust Captions</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-15-6">Tutorial #1: CapCut </a></div></li>
                                         </ul>
                                     </div>
                                     <div class="continueBtn">
@@ -688,32 +668,32 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
-                            <div style="height: 270px; margin-bottom: 15px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
                                 <h5>Module 16</h5>
                                 <h3 style="height: 100px;">
                                     Top Videography Resources
                                 </h3>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
-                                    <img src="../assets/images/1-16-1.png" style="width: 240px; height: auto;" />
+                                    <img src="../assets/images/1-16-1.png" style="width: 300px; height: auto;" />
                                 </div>
                             </div>
                             <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Sublessons
                                         </button>
                                         <ul class="dropdown-menu _1_16" style="width: 300px;">
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.1 - Videography Resources Intro</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.2 - How to Find Royalty Free Music</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.3 - Using Stock Video</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.4 - The Basics of Scripting for Storytelling</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.5 - Using Ai to Help you Script</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.6 - Uploading/Exporting Video Files for Clients</a></div></li>
-                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=">16.7 - Videography Resources Outro</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-1">16.1 - Videography Resources Intro</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-2">16.2 - How to Find Royalty Free Music</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-3">16.3 - Using Stock Video</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-4">16.4 - The Basics of Scripting for Storytelling</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-5">16.5 - Using Ai to Help you Script</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-6">16.6 - Uploading/Exporting Video Files for Clients</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=1-16-7">16.7 - Videography Resources Outro</a></div></li>
                                         </ul>
                                     </div>
                                     <div class="continueBtn">
@@ -725,41 +705,23 @@
                     </div>
                 </div>
             </div>
+
+            
         </div>
     </div>
+
+
+
+
 </body>
 
 <script type="text/javascript">
-    const url = window.location.search;
-    const urlParams = new URLSearchParams(url);
-    const trackSection = urlParams.get('number');
     
-    document.title = trackSection;
+    document.title = "Track 1";
 
 
-    let allModArray = [];
+    let allModArray = ["_1_1","_1_2","_1_3","_1_4","_1_5","_1_6","_1_7","_1_8","_1_9","_1_10","_1_11","_1_12","_1_13","_1_14","_1_15","_1_16"];
     let modIndex = 0;
-
-    // track 1
-    allModArray1 = ["_1_1","_1_2","_1_3","_1_4","_1_5","_1_6","_1_7","_1_8","_1_9","_1_10","_1_11","_1_12","_1_13","_1_14","_1_15","_1_16"];
-    // track 2
-    allModArray2 = ["_2_1","_2_2","_2_3","_2_4","_2_5","_2_6","_2_7","_2_8","_2_9","_2_10","_2_11"];
-    // track 3
-    allModArray3 = ["_3_1","_3_2","_3_3","_3_4","_3_5","_3_6","_3_7","_3_8","_3_9","_3_10"];
-
-    if (Number(trackSection) === 1)
-    {
-        allModArray = allModArray1
-    }
-    else if (Number(module) === 2)
-    {
-        allModArray = allModArray2
-    }
-    else if (Number(module) === 3)
-    {
-        allModArray = allModArray3
-    }
-    else {}
 
     const allModLength = allModArray.length;
     let totalViewed = 0;
@@ -807,7 +769,7 @@
         {
             let btn = document.createElement("div");
             const buttonToClick = document.getElementsByClassName(allModArray[i])[0].getElementsByTagName('li')[lastViewed].firstChild.firstChild;
-            btn.innerHTML = `<button class="btn" type="button" onclick="location.href = '${buttonToClick}';" style="background: #dda15e; color: #FFFFFF;">Continue</button>`;
+            btn.innerHTML = `<button class="btn" type="button" onclick="location.href = '${buttonToClick}';" style="background: #E2B965; color: #FFFFFF;">Continue</button>`;
             document.getElementsByClassName('continueBtn')[i].appendChild(btn);
         }
     }
@@ -821,11 +783,6 @@
         document.getElementById('progress-percentage').innerText = "(" + percentageCompleted + "%)"
 	}
 	progressBar();
-
-    function continueCourse()
-    {
-        
-    }
 
 
 </script>

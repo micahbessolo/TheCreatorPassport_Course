@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
-// mongoose.connect("mongodb://127.0.0.1:27017/LoginSignup")
-// mongoose.connect("mongodb+srv://master:mongodb-master@loginsignup.5mlwogs.mongodb.net/?retryWrites=true&w=majority")
-mongoose.connect("mongodb+srv://bessolomicah:1Cdattcwsm.@loginsignup.5mlwogs.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect(process.env.DATABASECONNECT)
 
 .then(() => 
 {
@@ -33,6 +31,10 @@ const LoginSchema = new mongoose.Schema({
     resetLink: {
         type: String,
         default: ''
+    },
+    likedVideos: {
+        type: Array,
+        default: ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
     },
     _1_1: {
         type: Array,

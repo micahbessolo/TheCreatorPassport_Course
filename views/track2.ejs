@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track 2</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/creatorPassportIcon.ico">
+    <link rel="stylesheet" href="assets/CSS/track.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div>
+        <input id="_2_1" class="resumeVideo" style="display: none;" value="<%= _2_1 %>" />
+        <input id="_2_2" class="resumeVideo" style="display: none;" value="<%= _2_2 %>" />
+        <input id="_2_3" class="resumeVideo" style="display: none;" value="<%= _2_3 %>" />
+        <input id="_2_4" class="resumeVideo" style="display: none;" value="<%= _2_4 %>" />
+        <input id="_2_5" class="resumeVideo" style="display: none;" value="<%= _2_5 %>" />
+        <input id="_2_6" class="resumeVideo" style="display: none;" value="<%= _2_6 %>" />
+        <input id="_2_7" class="resumeVideo" style="display: none;" value="<%= _2_7 %>" />
+        <input id="_2_8" class="resumeVideo" style="display: none;" value="<%= _2_8 %>" />
+        <input id="_2_9" class="resumeVideo" style="display: none;" value="<%= _2_9 %>" />
+        <input id="_2_10" class="resumeVideo" style="display: none;" value="<%= _2_10 %>" />
+        <input id="_2_11" class="resumeVideo" style="display: none;" value="<%= _2_11 %>" />
+    </div>
+
+    <!--topnav-->
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
+        <div>
+            <a href="/">
+                <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
+            </a>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
+                <div><a style="color: white;" href="/">Dashboard</a></div>
+                <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
+                <div>
+                    <a href="#">
+                        <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                            <button type="submit" style="all:unset; color: white;">Log Out</button>
+                        </form>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <div class="track-container">
+            <h1 style="text-align: center; padding-top: 125px;">Grow Like a Pro Blueprint</h1>
+            <div style="padding-top: 20px;">
+                <div style="font-size: 18px;">
+                    Become a master at branding, social media growth strategies, audience retention, short form video organizational workflows and viral video creation. Dive into the world of growing across platforms on Instagram, Tik Tok, Youtube, Blogs, and an Email List.
+                </div>
+            </div>
+
+            <div style="flex-basis: 100%; text-align: center; display: flex; flex-direction: row; padding-top: 30px;">
+                <div style="font-size: 16px;">Course Progress <span id="progress-percentage">(0%)</span></div>
+                <div style="margin-left: 15px; width: calc(100% - 170px);"><progress id="progress-bar" max="100" value="70"></progress></div>
+            </div>                
+
+            <div class="track2" style="padding-top: 50px;">
+                <div class="track-cards-container">
+                    
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 1</h5>
+                                <h3 style="height: 100px;">
+                                    Setting a Strong Brand Foundation | Branding 101
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-1-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_1" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-1">1.1 - Your Brand Name</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-2">1.2 - Market Research and Finding Your Gap in Market (SWOT)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-3">1.3 - Introduction to Branding & Branding Exercises</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-4">1.4 - Identify Target Audience & Creating Your Audience Personas</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-5">1.5 - Finding Your Brand Pillars and Creating Your Content Pillars</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-6">1.6 - Brand Guidelines & Visual Identity (Colors, Trademark, Logo)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-7">1.7 - Setting up Systems</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-1-8">1.8 - Optimizing your Bio</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 2</h5>
+                                <h3 style="height: 100px;">
+                                    Building and Growing Your Instagram
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-2-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_2" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-1">2.1 - Things NOT To Do to Grow</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-2">2.2 - The *Current* IG Growth Formula (Needs to be updated yearly)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-3">2.3 - Why Aren’t You Currently Growing?</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-4">2.4 - What is High Quality Content?</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-5">2.5 - How to Never Run Out of Content Ideas</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-6">2.6 - Posting Frequency & Timing</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-7">2.7 - Caption Writing Best Practices & CTAs</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-8">2.8 - Search Engine Optimization (SEO), Alt Text & Hashtags</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-9">2.9 - How to Identify Trends / Trend Forecasting</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-2-10">2.10 - Growth Strategies & Branding Case Studies</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 3</h5>
+                                <h3 style="height: 100px;">
+                                    Audience Retention Strategies
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-3-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_3" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-3-1">3.1 - Engagement Strategies</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-3-2">3.2 - Instagram Stories & Highlights</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-3-3">3.3 - Giveaways & Giving Back</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-3-4">3.4 - Audience Interactions</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-3-5">3.5 - Audience Feedback</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 4</h5>
+                                <h3 style="height: 100px;">
+                                    Viral Video Creation
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-4-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_4" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-4-1">4.1 - The Anatomy of a Viral Video</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-4-2">4.2 - IG Reels & Tik Tok Algorithms</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-4-3">4.3 - All About Hooks & Production Styles</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-4-4">4.4 - Trending Audios</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-4-5">4.5 - On Screen Text Placement</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-4-6">4.6 - The Art of the Voiceover</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 5</h5>
+                                <h3 style="height: 100px;">
+                                    Viral Video Analytics
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-5-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_5" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-5-1">5.1 - Analytics that Matter</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-5-2">5.2 - Repurposing Content to Your Advantage</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-5-3">5.3 - Video Lengths, Replays & Watch Time</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-5-4">5.4 - Video Engagement & Retention Strategies</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 6</h5>
+                                <h3 style="height: 100px;">
+                                    Editing Viral Videos
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-6-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_6" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-1">6.1 - Reels Daily Workflow</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-2">6.2 - Voice to Text Tutorials on Tik Tok</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-3">6.3 - How to Edit Transitions Together (Top 3 Most Viral)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-4">6.4 - How to Respond to Comments with a Video (TT & IG)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-5">6.5 - Testing Viral Video Variations (Edit 3 Reels at once)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-6">6.6 - Prepping Your IG Reel (Step by Step)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-6-7">6.7 - Prepping Your TikTok (Step by Step)</a></div></li>
+                                            
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 7</h5>
+                                <h3 style="height: 100px;">
+                                    Creating a Content Management & Organization Strategy
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-7-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_7" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-7-1">7.1 - Content Workflow After a Content Trip</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-7-2">7.2 - How to Repurpose Content in Final Cut</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 8</h5>
+                                <h3 style="height: 100px;">
+                                    TikTok Growth
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-8-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_8" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-8-1">8.1 - Our TikTok Strategy</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-8-2">8.2 - The Main Differences Between TikTok & Every Other Platform</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 9</h5>
+                                <h3 style="height: 100px;">
+                                    YouTube Growth
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-9-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_9" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-9-1">9.1 - The YouTube Algorithm & Analytics</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-9-2">9.2 - YouTube SEO & Tube Buddy Keyword Interface</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-9-3">9.3 - The Importance of a Thumbnail</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-9-4">9.4 - Copyright Free Music & Clips for Your Videos</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-9-5">9.5 - YouTube Shorts 101</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-9-6">9.6 - Long Form Video SEO Tutorial (Idaho Tutorial)</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 10</h5>
+                                <h3 style="height: 100px;">
+                                    Blog Growth
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-10-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_10" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-1">10.1 - Intro - The Importance of Having a Blog</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-2">10.2 - Setting Up Your Blog: WordPress & Domain Hosts</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-3">10.3 - Blogging Writing Basics</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-4">10.4 - Formatting Your Blogs</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-5">10.5 - SEO Commandments & Keyword Research</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-6">10.6 - Google Analytics</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-10-7">10.7 - Monetizing Your Blog</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px;">
+                            <div style="height: 270px; margin-bottom: 15px;">
+                                <h5>Module 11</h5>
+                                <h3 style="height: 100px;">
+                                    Growing Pains: Handling Challenges and Building Resilience
+                                </h3>
+                                <div style="display: flex; flex-direction: row; justify-content: center;">
+                                    <img src="../assets/images/2-11-1.png" style="width: 240px; height: auto;" />
+                                </div>
+                            </div>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sublessons
+                                        </button>
+                                        <ul class="dropdown-menu _2_11" style="width: 300px;">
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-11-1">11.1 - Balancing Your Social Media Side Hustle + a Full-Time Job</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-11-2">11.2 - Dealing with Hate Comments, Trolls, and Bullies</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-11-3">11.3 - Comparison Struggles</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=2-11-4">11.4 - Creator Burnout</a></div></li>
+                                        </ul>
+                                    </div>
+                                    <div class="continueBtn">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">    
+    document.title = "Track 3";
+
+
+    let allModArray = ["_2_1","_2_2","_2_3","_2_4","_2_5","_2_6","_2_7","_2_8","_2_9","_2_10","_2_11"];
+    let modIndex = 0;
+
+    const allModLength = allModArray.length;
+    let totalViewed = 0;
+    let allVidLength = 0;
+
+    
+    for (let i = 0; i < allModLength; i++)
+    {
+        // each module
+        let modArray = document.getElementById(allModArray[i]).value.split(",");
+        let modArrayLength = modArray.length;
+        let moduleElement = document.getElementsByClassName(allModArray[i])[0];
+        let completeCount = 0;
+        let lastViewed = 0;
+
+        for (let j = 0; j < modArrayLength; j++)
+        {
+            allVidLength ++;
+            // each lesson
+            if(modArray[j].split("_")[2] !== '' && modArray[j].split("_")[2] > 0)
+            {
+                let node = document.createElement("div");
+
+                if(Number(modArray[j].split("_")[2]) >= .95)
+                {
+                    node.innerHTML = 
+                    `<div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                        <i class="fa-solid fa-check" style="padding-right: 15px; color: green;"></i>
+                    </div>`;
+
+                    moduleElement.getElementsByTagName('li')[j].appendChild(node);
+                    totalViewed += 1;
+                    completeCount +=1;
+                }
+                else
+                {
+                    totalViewed += Number(modArray[j].split("_")[2]);
+                    lastViewed = j;
+                }   
+            }
+        }
+
+        // adds complete button to last lesson started
+        if (completeCount > 0  && completeCount < modArrayLength)
+        {
+            let btn = document.createElement("div");
+            const buttonToClick = document.getElementsByClassName(allModArray[i])[0].getElementsByTagName('li')[lastViewed].firstChild.firstChild;
+            btn.innerHTML = `<button class="btn" type="button" onclick="location.href = '${buttonToClick}';" style="background: #dda15e; color: #FFFFFF;">Continue</button>`;
+            document.getElementsByClassName('continueBtn')[i].appendChild(btn);
+        }
+    }
+
+    // progress bar
+    function progressBar()
+	{
+        const percentageCompleted = Math.round((totalViewed/allVidLength) * 100);
+        document.getElementById('progress-bar').value = totalViewed;
+        document.getElementById('progress-bar').max = allVidLength;
+        document.getElementById('progress-percentage').innerText = "(" + percentageCompleted + "%)"
+	}
+	progressBar();
+
+
+</script>
+
+</html>

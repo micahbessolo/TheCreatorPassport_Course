@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/creatorPassportIcon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
     <link rel="stylesheet" href="assets/CSS/library.css">
@@ -13,6 +14,7 @@
 </head>
 <body style="background-color: #36454F;">
     <div>
+        <input class="likedVideoList" style="display: none;" value="<%= likedVideos %>" />
         <input id="_1_1" class="resumeVideo" style="display: none;" value="<%= _1_1 %>" />
         <input id="_1_2" class="resumeVideo" style="display: none;" value="<%= _1_2 %>" />
         <input id="_1_3" class="resumeVideo" style="display: none;" value="<%= _1_3 %>" />
@@ -56,12 +58,12 @@
     <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
         <div>
             <a href="/">
-                <img class="logo" src="https://i.imgur.com/hTKJ0wx.jpg" alt="logo">
+                <img class="logo" src="../assets/images/creatorPassportIcon.jpeg" alt="logo">
             </a>
         </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; width: 200px;">
+        <div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
             <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
-                <div><a style="color: white;" href="/">Home</a></div>
+                <div><a style="color: white;" href="/">Dashboard</a></div>
                 <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
                 <div>
                     <a href="#">
@@ -124,7 +126,10 @@
                                 <div id="nextLessonTitle" style="font-weight: 700; font-size: 16px;"><!-- gets next lesson title from function --></div>
                             </div>
                         </div>
-                        <div><a id="nextLessonLink" style="color: #2e91fc;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; width: 150px;">
+                            <div><button onclick="likeLesson();" class="noStyle" style="color: red;"><i class="fa-regular fa-heart" id="notLiked"></i><i class="fa-solid fa-heart" id="isLiked" style="display: none;"></i></button></div>
+                            <div><a id="nextLessonLink" style="color: #2e91fc;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                        </div>
                     </div>
                     <div style="margin-top: 20px;">
                         <h3 id="currentLessonTitle"></h3>
@@ -134,7 +139,7 @@
                     </div>
                 </div>
                 <div class="downloadContent">
-                    <h4><b>Downloads</b></h4>
+                    <h4><b>Resources</b></h4>
                     <a href="#">Download 1</a><br />
                     <a href="#">Download 2</a>
                 </div>
@@ -146,14 +151,10 @@
     
     
     <script type="text/javascript">
-
         const url = window.location.search;
         const urlParams = new URLSearchParams(url);
         const module = urlParams.get('module');
-        let videoTime = 12;
-
         let allVidArray = [];
-
 
         // track 1
         allVidArray1 = [
@@ -170,8 +171,8 @@
             "1-11-1","1-11-2","1-11-3","1-11-4","1-11-5","1-11-6","1-11-7","1-11-8",
             "1-12-1","1-12-2","1-12-3","1-12-4","1-12-5","1-12-6","1-12-7","1-12-8","1-12-9","1-12-10","1-12-11","1-12-12","1-12-13","1-12-14","1-12-15","1-12-16","1-12-17","1-12-18","1-12-19","1-12-20",
             "1-13-1","1-13-2","1-13-3","1-13-4","1-13-5","1-13-6","1-13-7","1-13-8","1-13-9","1-13-10","1-13-11",
-            "1-14-1","1-14-2","1-14-3","1-14-4","1-14-5","1-14-6","1-14-7","1-14-8","1-14-9","1-14-10","1-14-11","1-14-12","Tutorial #1: Editing Memes","Tutorial #2: Editing Voice Over","Tutorial #3: Editing Montage","Tutorial #4 Editing Transitions",
-            "1-15-1","1-15-2","1-15-3","1-15-4","1-15-5","Tutorial #1: CapCut",
+            "1-14-1","1-14-2","1-14-3","1-14-4","1-14-5","1-14-6","1-14-7","1-14-8","1-14-9","1-14-10","1-14-11","1-14-12","1-14-13","1-14-14","1-14-15","1-14-16",
+            "1-15-1","1-15-2","1-15-3","1-15-4","1-15-5","1-15-6",
             "1-16-1","1-16-2","1-16-3","1-16-4","1-16-5","1-16-6","1-16-7"          
         ];
         // track 2
@@ -201,8 +202,6 @@
             "3-9-1","3-9-2","3-9-3","3-9-4",
             "3-10-1","3-10-2","3-10-3","3-10-4","3-10-5","3-10-6","3-10-7","3-10-8","3-10-9"
         ];
-
-
         if (Number(module.split("-")[0]) === 1)
         {
             allVidArray = allVidArray1
@@ -217,56 +216,37 @@
         }
         else {}
 
-
-        if (urlParams.has('time'))
-        {
-            videoTime = urlParams.get('time');
-        }
-
-        let videoNumber;
-        let sectionArray;
         let returnObject = {};
 
-        document.getElementById('tracks').href = `/track?number=${module.split("-")[0]}`
+        // styles topnav
+        document.getElementById('tracks').href = `/track${module.split("-")[0]}`
 
         // fetches video list from DB
-        function videoList(section, onload=true)
-        {
-            sectionArray = section.split("-");
-            const trackMod = sectionArray[0] + "-" + sectionArray[1]
-            videoNumber = sectionArray[2] - 1;
-            let notOnload = "";
-            
+        function videoList()
+        {            
             $.ajax({
                 type: "POST",
                 url: "/videoList",
-                data: trackMod,
+                data: module.split("-")[0] + "-" + module.split("-")[1],
                 success: function(res)
-                {
-                    if(onload)
-                    {
-                        returnObject.titles = res.titles;
-                        returnObject.links = res.links;
-                        returnObject.moduleTitle = res.moduleName;
-                        returnObject.copy = res.copy
-                    }
-                    else
-                    {
-                        notOnload = res.titles[0];
-                    }
+                {  
+                    returnObject.titles = res.titles;
+                    returnObject.links = res.links;
+                    returnObject.moduleTitle = res.moduleName;
+                    returnObject.copy = res.copy;
+        
+                    loadYoutubeIFrameApiScript();
                 },
                 error: function(res)
                 {
                     console.log("error" + res);
                 }
             });
-            return notOnload;
         };
-        videoList(module);
-
+        videoList();
 
         // YouTube Player API Reference for iframe Embeds
-        (function loadYoutubeIFrameApiScript()
+        function loadYoutubeIFrameApiScript()
         {
             const tag = document.createElement("script");
             tag.src = "https://www.youtube.com/iframe_api";
@@ -275,21 +255,22 @@
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
             tag.onload = onYouTubeIframeAPIReady;
-        })();
+        };
 
         let player;
         function onYouTubeIframeAPIReady()
         {
             let startPoint;
-            let currentLessonProgress = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[Number(module.split("-")[2]) - 1];
-            
-            if (currentLessonProgress === 0 || currentLessonProgress === "")
+            // gets the start point of the lesson
+            let currentLessonData = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[Number(module.split("-")[2]) - 1];
+
+            if (currentLessonData === 0 || currentLessonData === "" || currentLessonData === "NaN_undefined_NaN")
             {
                 startPoint = 0;
             }
             else
             {
-                startPoint = Math.floor(Number(currentLessonProgress.split("_")[0]));
+                startPoint = Math.floor(Number(currentLessonData.split("_")[0]));
             }
             console.log(startPoint);
 
@@ -299,7 +280,7 @@
                 {
                     height: '100%',
                     width: '100%',
-                    videoId: returnObject.links[videoNumber],
+                    videoId: returnObject.links[Number(module.split("-")[2]) - 1],
                     playerVars:
                     {
                         'playsinline': 1,
@@ -308,7 +289,6 @@
                     events:
                     {
                         'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
                     }
                 });
             });
@@ -319,17 +299,6 @@
         function onPlayerReady(event)
         {
             event.target.playVideo();
-        }
-
-        video = document.getElementById('video');
-        let done = false;
-        function onPlayerStateChange(event)
-        {
-            if (event.data == YT.PlayerState.PLAYING && !done)
-            {
-                setTimeout(stopVideo, 6000);
-                done = true;
-            }
         }
 
         function stopVideo()
@@ -343,14 +312,14 @@
         {
             // gets sidenav progress data
             let progressArray = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",");
-
+            
             for (let i = 0; i < progressArray.length; i++)
             {
-                if (progressArray[i] === "" || Number(progressArray[i]) <= .05)
+                if (progressArray[i] === "" || Number(progressArray[i]) <= .05 || progressArray[i] === "NaN_undefined_NaN")
                 {
                     progressArray[i] = 0;
                 }
-                else if (Number(progressArray[i]) >= .95)
+                else if (Number(progressArray[i].split("_")[2]) >= .95)
                 {
                     progressArray[i] = 1;
                 }
@@ -370,7 +339,7 @@
                     let sideNav =
                     `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; background-color: white;">
                         <div style="font-size: 14px; width: 66%; color: black; padding-left: 15px;" class="d-flex justify-content-center select-video">
-                            Module ${sectionArray[1]} - ${moduleTitle}
+                            Module ${module.split("-")[1]} - ${moduleTitle}
                         </div>
                         <div class="d-flex justify-content-center" style="width: 33%; color: #3d3d3d;">
                             ${titlesLength} Lessons
@@ -380,10 +349,10 @@
                     for (let i = 0; i < titlesLength; i++)
                     {
                         sideNav +=
-                        `<a class="d-flex select-video ps-3" href="./course?module=${sectionArray[0]}-${sectionArray[1]}-${i + 1}">
+                        `<a class="d-flex select-video ps-3" href="./course?module=${module.split("-")[0]}-${module.split("-")[1]}-${i + 1}">
                             <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; width: 100%;">
                                 <div style="width: 45px">${titles[i].split(" - ")[0].split(".")[1]}</div>
-                                <div><img src="../assets/images/${sectionArray[0]}-${sectionArray[1]}-${i + 1}.png" alt="lesson thumbnail" style="width: 120px; height: auto;" /></div>
+                                <div><img src="../assets/images/${module.split("-")[0]}-${module.split("-")[1]}-${i + 1}.png" alt="lesson thumbnail" style="width: 120px; height: auto;" /></div>
                                 <div class="titleFlex" style="width: 100%; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div>${titles[i].split(" - ")[1]}</div>
                                     <div><progress class="progress-bar" max="1" value="${progressArray[i]}"></progress></div>
@@ -412,52 +381,62 @@
                 let nextModuleTitle = "";
 
                 // Styling next lesson, previous lesson buttons
+
+                // last lesson of module
                 if (URLSection === titlesLength)
                 {
                     let index = Number(allVidArray.indexOf(module));
 
-                    if (allVidArray.length > index + 1)
-                    {
-                        nextLesson = allVidArray[Number(index) + 1];
-                        nextModuleTitle = "Next Module";
-                        previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
-                        document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
-                    }
-                    else if (allVidArray.length === index + 1) // last lesson of entire course
+                    // last lesson of entire course
+                    if (allVidArray.length === index + 1)
                     {
                         nextLesson = "#";
                         nextModuleTitle = "Course complete!";
                         previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
                         document.getElementById('nextLessonImage').style.display = "none";
                     }
+                    else if (allVidArray.length > index + 1)
+                    {
+                        nextLesson = allVidArray[Number(index) + 1];
+                        nextModuleTitle = "Next Module";
+                        previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
+                        document.getElementById('nextLessonImage').src = 
+                        `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    }
                     else {}
                 }
+                // first lesson of module
                 else if (URLSection === 1)
                 {
                     let index = Number(allVidArray.indexOf(module));
-
-                    if (index > 0)
-                    {
-                        nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
-                        previousLesson = allVidArray[Number(index) - 1];
-                        nextModuleTitle = titles[URLSection];
-                    }
-                    else if (index === 0)
+                    
+                    // first lesson of entire course
+                    if (index === 0)
                     {
                         nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
                         previousLesson = "#";
                         nextModuleTitle = titles[URLSection];
                     }
+                    else if (index > 0)
+                    {
+                        nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
+                        previousLesson = allVidArray[Number(index) - 1];
+                        nextModuleTitle = titles[URLSection];
+                    }
                     else {}
-                    document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    document.getElementById('nextLessonImage').src = 
+                    `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
                 }
+                // not first or last lesson of module
                 else
                 {
                     nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
                     previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
                     nextModuleTitle = titles[URLSection];
-                    document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    document.getElementById('nextLessonImage').src = 
+                    `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
                 }
+
                 if (nextLesson === "#")
                 {
                     document.getElementById('nextLessonLink').href = `#`;
@@ -469,6 +448,7 @@
                     document.getElementById('nextLessonLink').href = `./course?module=${nextLesson}`;
                     document.getElementById('next-button').href = `./course?module=${nextLesson}`;
                 }
+
                 if (previousLesson === "#")
                 {
                     document.getElementById('back-button').href = `#`;
@@ -478,9 +458,11 @@
                 {
                     document.getElementById('back-button').href = `./course?module=${previousLesson}`;
                 }
+
                 document.getElementById('currentLessonTitle').innerText = titles[URLSection - 1];
                 document.getElementById('lesson-of').innerHTML = `Lesson ${URLSection} of ${titlesLength}`;
                 document.getElementById('copy').innerText = copy[Number(module.split('-')[2]) - 1];
+                document.getElementById('nextLessonTitle').innerText = nextModuleTitle;
 
                 // styles sidenav of current lesson
                 for (let i = 0; i < titlesLength; i++)
@@ -498,10 +480,12 @@
                     else if (Number(document.getElementsByClassName("progress-bar")[i].value) >= .95)
                     {
                         document.getElementsByClassName("progress-bar")[i].style.display = "none";
-                        document.getElementsByClassName("check-container")[i].innerHTML = '<i class="fa-solid fa-check" style="padding-right: 8px; color: green;"></i>';                        
+                        document.getElementsByClassName("check-container")[i].innerHTML = 
+                        '<i class="fa-solid fa-check" style="padding-right: 8px; color: green;"></i>';                        
                     }
                     else {}
                 }
+                seeIfLiked();
             }
         }
 
@@ -525,8 +509,52 @@
                 }
             });
         }
-
+        // when leaving the page runs postState function
         window.addEventListener('beforeunload', postState);
+
+        let isLiked = false;
+        
+        function seeIfLiked()
+        {
+            const likedList = document.getElementsByClassName('likedVideoList')[0].value.split(',');
+            console.log(likedList)
+
+            if (likedList.includes(module))
+            {
+                isLiked = true;
+                document.getElementById('isLiked').style.display = 'block';
+                document.getElementById('notLiked').style.display = 'none';
+            }
+            
+            console.log("this video is liked: " + isLiked);
+        }
+
+        function likeLesson()
+        {
+            $.ajax({
+                type: "patch",
+                url: "/favorites:liked",
+                data: {
+                    'likedVid': module,
+                    'isLiked': isLiked
+                },
+                success: function (data)
+                {
+                    if (isLiked)
+                    {
+                        document.getElementById('notLiked').style.display = 'block';
+                        document.getElementById('isLiked').style.display = 'none';
+                    }
+                    else
+                    {
+                        document.getElementById('notLiked').style.display = 'none';
+                        document.getElementById('isLiked').style.display = 'block';
+                    }
+
+                    console.log(data);
+                }
+            });
+        }
 
     </script>
 

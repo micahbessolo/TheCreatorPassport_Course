@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
-    <link rel="stylesheet" href="assets/CSS/login.css">
+    <link rel="icon" type="image/x-icon" href="../assets/images/creatorPassportIcon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css" />
+    <link rel="stylesheet" href="assets/CSS/login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
-<body onload="getCookieData();">
+<body>
     <div class="content">
         <h1 style="font-size: 38px;">Login</h1>
         <div style="color: red">
@@ -22,71 +24,35 @@
                 <label for="email" class="emailLabel">Email</label><br>
                 <input type="email" id="email" name="email" placeholder="email" required><br>
                 <label for="password" class="pwdLabel pt-3">Password</label><br>
-                <input type="password" id="password" name="password" placeholder="password" required>
+                <input type="password" id="password" name="password" placeholder="password" required style="margin-left: 30px;" />
+                <span class="password-toggle-icon"><i class="fas fa-eye icon1"></i></span>
             </div>
-            <input id="remember" name="remember" type="checkbox" onclick="setCookie()">
-            <label class="pt-1 remember">Remember Me</label>
             <br>
-            <input type="submit" class="submitBtn mt-3 mb-3"><br>
+            <input type="submit" class="submitBtn mt-3 mb-3" />
+            <br>
         </form>
         <a href="/forgot-password" class="pt-2">Forgot Password?</a><br>
-        <a href="/register">Make a new account</a>
     </div>
+
+    <script type="text/javascript">
+        const passwordField = document.getElementById("password");
+        const togglePassword = document.getElementsByClassName("icon1")[0];
+
+        togglePassword.addEventListener("click", function ()
+        {
+            if (passwordField.type === "password")
+            {
+                passwordField.type = "text";
+                togglePassword.classList.remove("fa-eye");
+                togglePassword.classList.add("fa-eye-slash");
+            }
+            else
+            {
+                passwordField.type = "password";
+                togglePassword.classList.remove("fa-eye-slash");
+                togglePassword.classList.add("fa-eye");
+            }
+        });
+    </script>
 </body>
 </html>
-
-<script type="text/javascript">
-    function setCookie()
-    {
-        if (document.getElementById('remember').checked)
-        {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            document.cookie = "myemail="+email+";path=http://localhost:3000/";
-            document.cookie = "mypwd="+password+";path=http://localhost:3000/";
-        }
-        else
-        {
-            document.cookie = "myemail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            document.cookie = "mypwd=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        }
-    }
-
-    function getCookieData()
-    {
-        const email = getCookie('myemail');
-        const pwd = getCookie('mypwd');
-
-        document.getElementById('email').value = email;
-        document.getElementById('password').value = pwd;
-        if(email && pwd)
-        {
-            document.getElementById('remember').checked = true;
-        }
-        else
-        {}
-    }
-
-    function getCookie(cname)
-    {
-        const name = cname + "=";
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        const caLength = ca.length;
-
-        for (let i = 0; i < caLength; i++)
-        {
-            let c = ca[i];
-            while (c.charAt(0) == ' ')
-            {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0)
-            {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-
-</script>

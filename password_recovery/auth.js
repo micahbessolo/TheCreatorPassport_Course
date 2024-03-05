@@ -1,15 +1,16 @@
-const collection = require("../mongodb");
+const {loginCollection} = require("../mongodb");
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const mailgun = require("mailgun-js");
-const DOMAIN = 'sandboxce966cd0186342eba02597c12a52c3d0.mailgun.org';
+// const DOMAIN = 'sandboxce966cd0186342eba02597c12a52c3d0.mailgun.org';
+const DOMAIN = 'mg.thecreatorpassport.com';
 const bcrypt = require('bcrypt');
 const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
 
 // sends forgot-password email with link including token
 exports.forgotPassword = async (req, res) =>
 {
-    await collection.findOne({email: req.body.email}).then((user, err) =>
+    await loginCollection.findOne({email: req.body.email}).then((user, err) =>
     {
         if(err || !user)
         {
@@ -17,6 +18,7 @@ exports.forgotPassword = async (req, res) =>
         }
 
         const token = jwt.sign({_id: user._id}, process.env.RESET_PASSWORD_KEY, {expiresIn: '20m'});
+
         const data =
         {
             from: 'noreply@theloverspassport.com',
@@ -149,7 +151,7 @@ exports.forgotPassword = async (req, res) =>
                 }
                 
                 .button--green {
-                background-color: #07342F;
+                background-color: #22bc66;
                 color: white;
                 border-top: 10px solid #22BC66;
                 border-right: 18px solid #22BC66;
@@ -538,8 +540,7 @@ exports.forgotPassword = async (req, res) =>
             </body>
             </html>
             `
-            };
-
+        };
 
         return user.updateOne({resetLink: token}).then(function(success, err)
         {
@@ -579,7 +580,7 @@ exports.resetPassword = (req, res) =>
                 return res.render('reset-password.ejs', { errorMessage: 'link expired, try resending' });
             }
 
-            collection.findOne({resetLink}).then(async (user, err) =>
+            loginCollection.findOne({resetLink}).then(async (user, err) =>
             {
                 if(err || !user)
                 {
@@ -594,6 +595,7 @@ exports.resetPassword = (req, res) =>
                 };
 
                 user = _.extend(user, obj);
+
                 user.save().then((result, err) =>
                 {
                     if(err)
@@ -602,7 +604,7 @@ exports.resetPassword = (req, res) =>
                     }
                     else
                     {
-                        return res.render('reset-password.ejs', { successMessage: "Your password has been changed"});
+                        return res.render('login.ejs', { successMessage: "Your password has been changed"});
                     }
                 });
             });

@@ -18,39 +18,58 @@ a
     color: #232323;
     transition: color 0.3s ease;
 }
+h3 h5
+{
+    color: #313958 !important;
+    font-family: loubag !important;
+}
+.track-container
+{
+    width: 85%;
+    max-width: 1200px;
+}
+.track-cards-container
+{
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: space-between;
+}
+
+@media (max-width: 1324px)
+{
+    .track-cards-container
+    {
+        justify-content: space-evenly;
+    }
+}
+
+@media (max-width: 821px)
+{
+    .track-cards-container
+    {
+        justify-content: center;
+    }
+}
 
 progress
 {
     border-radius: 7px;
     width: 100%;
-    height: 22px;
-    /* box-shadow: 1px 1px 4px rgba( 0, 0, 0, 0.2 ); */
-    /* margin-top: 15px; */
 }
-
 progress::-webkit-progress-bar
 {
     background-color: #f1f1f1;
     border-radius: 7px;
 }
-
 progress::-webkit-progress-value
 {
-    background-color: #E2BA65;
+    background-color: #E2B965;
     border-radius: 7px 0 0 7px;
-}
-
-progress::-moz-progress-bar 
-{
-    /* style rules */
 }
 .dropdown-item
 {
     white-space: wrap !important;
-}
-h5
-{
-    color: #b1b123 !important;
 }
 .dropdown-menu
 {

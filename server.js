@@ -46,90 +46,25 @@ let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
 
 app.get('/', checkAuthenticated, async (req, res) =>
 {
-    let videoTime;
-    const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+    res.render('library.ejs');
+});
+
+app.get('/favorites', async (req, res) =>
+{
+    let likedVideos;
+
+    const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
     {
-        userEmail = user.email;
-        _1_1 = user._1_1;
-        _1_2 = user._1_2;
-        _1_3 = user._1_3;
-        _1_4 = user._1_4;
-        _1_5 = user._1_5;
-        _1_6 = user._1_6;
-        _1_7 = user._1_7;
-        _1_8 = user._1_8;
-        _1_9 = user._1_9;
-        _1_10 = user._1_10;
-        _1_11 = user._1_11;
-        _1_12 = user._1_12;
-        _1_13 = user._1_13;
-        _1_14 = user._1_14;
-        _1_15 = user._1_15;
-        _1_16 = user._1_16;
-        _2_1 = user._2_1;
-        _2_2 = user._2_2;
-        _2_3 = user._2_3;
-        _2_4 = user._2_4;
-        _2_5 = user._2_5;
-        _2_6 = user._2_6;
-        _2_7 = user._2_7;
-        _2_8 = user._2_8;
-        _2_9 = user._2_9;
-        _2_10 = user._2_10;
-        _2_11 = user._2_11;
-        _3_1 = user._3_1;
-        _3_2 = user._3_2;
-        _3_3 = user._3_3;
-        _3_4 = user._3_4;
-        _3_5 = user._3_5;
-        _3_6 = user._3_6;
-        _3_7 = user._3_7;
-        _3_8 = user._3_8;
-        _3_9 = user._3_9;
-        _3_10 = user._3_10;
-        return user.name;
+        likedVideos = info.likedVideos;
     });
 
-    res.render('library.ejs', { 
-        name: userName, 
-        _1_1: _1_1,
-        _1_2: _1_2,
-        _1_3: _1_3,
-        _1_4: _1_4,
-        _1_5: _1_5,
-        _1_6: _1_6,
-        _1_7: _1_7,
-        _1_8: _1_8,
-        _1_9: _1_9,
-        _1_10: _1_10,
-        _1_11: _1_11,
-        _1_12: _1_12,
-        _1_13: _1_13,
-        _1_14: _1_14,
-        _1_15: _1_15,
-        _1_16: _1_16,
-        _2_1: _2_1,
-        _2_2: _2_2,
-        _2_3: _2_3,
-        _2_4: _2_4,
-        _2_5: _2_5,
-        _2_6: _2_6,
-        _2_7: _2_7,
-        _2_8: _2_8,
-        _2_9: _2_9,
-        _2_10: _2_10,
-        _2_11: _2_11,
-        _3_1: _3_1,
-        _3_2: _3_2,
-        _3_3: _3_3,
-        _3_4: _3_4,
-        _3_5: _3_5,
-        _3_6: _3_6,
-        _3_7: _3_7,
-        _3_8: _3_8,
-        _3_9: _3_9,
-        _3_10: _3_10
-    });
+    res.render('favorites.ejs', {likedVideos: likedVideos});
+});
+
+
+app.get('/community', async (req, res) =>
+{
+    res.render('community.ejs');
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => 
@@ -140,6 +75,11 @@ app.get('/login', checkNotAuthenticated, (req, res) =>
 app.get('/forgot-password', (req, res) => 
 {
     res.render('forgot-password.ejs');
+});
+
+app.get('/create-password', (req, res) =>
+{
+    res.render('create-password.ejs');
 });
 
 app.post('/forgot-password', forgotPassword);
@@ -158,63 +98,32 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local',
     failureFlash: true
 }));
 
-app.get('/register', checkNotAuthenticated, (req, res) => 
-{
-    res.render('register.ejs');
-});
 
-app.post('/register', checkNotAuthenticated, (req, res) =>
-{
-    loginCollection.findOne({email: req.body.email}).then(async (user, err) => 
-    {
-        if (user)
-        {
-            return res.status(400).json({error: "User with this email already exists."});
-        }
-
-        try
-        {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const data = 
-                {
-                    createdDate: Date.now().toString(),
-                    name: req.body.name,
-                    email: req.body.email,
-                    password: hashedPassword
-                }
-            await loginCollection.insertMany([data]);
-            res.redirect('/login');
-        }
-        catch
-        {
-            res.redirect('/register');
-        }
-    });
-});
-
+// save video progress and percentage complete
 app.patch('/video-state:videoState', async (req, res) =>
 {
     let password;
     let email; 
     let userName;
     let createdDate;
+    let likedVideos
     
-    const results = await loginCollection.find({email: userEmail}).then((info, err) =>
+    const results = await loginCollection.findOne({email: userEmail}).then((info, err) =>
     {
-        password = info[0].password;
-        email = info[0].email;
-        userName = info[0].name;
-        createdDate = info[0].createdDate;
-        _1_1 = info[0]._1_1;_1_2 = info[0]._1_2;_1_3 = info[0]._1_3;_1_4 = info[0]._1_4;
-        _1_5 = info[0]._1_5;_1_6 = info[0]._1_6;_1_7 = info[0]._1_7;_1_8 = info[0]._1_8;
-        _1_9 = info[0]._1_9;_1_10 = info[0]._1_10;_1_11 = info[0]._1_11;_1_12 = info[0]._1_12;
-        _1_13 = info[0]._1_13;_1_14 = info[0]._1_14;_1_15 = info[0]._1_15;_1_16 = info[0]._1_16;
-        _2_1 = info[0]._2_1;_2_2 = info[0]._2_2;_2_3 = info[0]._2_3;_2_4 = info[0]._2_4;
-        _2_5 = info[0]._2_5;_2_6 = info[0]._2_6;_2_7 = info[0]._2_7;_2_8 = info[0]._2_8;
-        _2_9 = info[0]._2_9;_2_10 = info[0]._2_10;_2_11 = info[0]._2_11;_3_1 = info[0]._3_1;
-        _3_2 = info[0]._3_2;_3_3 = info[0]._3_3;_3_4 = info[0]._3_4;_3_5 = info[0]._3_5;
-        _3_6 = info[0]._3_6;_3_7 = info[0]._3_7;_3_8 = info[0]._3_8;_3_9 = info[0]._3_9;
-        _3_10 = info[0]._3_10;
+        password = info.password;
+        email = info.email;
+        userName = info.name;
+        createdDate = info.createdDate;
+        _1_1 = info._1_1;_1_2 = info._1_2;_1_3 = info._1_3;_1_4 = info._1_4;
+        _1_5 = info._1_5;_1_6 = info._1_6;_1_7 = info._1_7;_1_8 = info._1_8;
+        _1_9 = info._1_9;_1_10 = info._1_10;_1_11 = info._1_11;_1_12 = info._1_12;
+        _1_13 = info._1_13;_1_14 = info._1_14;_1_15 = info._1_15;_1_16 = info._1_16;
+        _2_1 = info._2_1;_2_2 = info._2_2;_2_3 = info._2_3;_2_4 = info._2_4;
+        _2_5 = info._2_5;_2_6 = info._2_6;_2_7 = info._2_7;_2_8 = info._2_8;
+        _2_9 = info._2_9;_2_10 = info._2_10;_2_11 = info._2_11;_3_1 = info._3_1;
+        _3_2 = info._3_2;_3_3 = info._3_3;_3_4 = info._3_4;_3_5 = info._3_5;
+        _3_6 = info._3_6;_3_7 = info._3_7;_3_8 = info._3_8;_3_9 = info._3_9;
+        _3_10 = info._3_10;
     });
 
     const currentTime = JSON.parse(JSON.stringify(req.body)).currentTime;
@@ -224,18 +133,13 @@ app.patch('/video-state:videoState', async (req, res) =>
     const Lesson = Number(URLData.split('-')[2]) - 1;
     let percentageComplete = Number(currentTime)/Number(videoDuration);
     percentageComplete = percentageComplete.toFixed(2);
-
-
+    // defines one of the lessons (i.e. _1_1 as a new value including currentTime_vidDuration_percentageComplete)
     eval(`_${URLData.split('-')[0]}_${URLData.split('-')[1]}[${Lesson}] = "${currentTime}_${videoDuration}_${percentageComplete}";`);
 
     try
     {
         let data = 
         {
-            password: password,
-            email: email,
-            name: userName,
-            createdDate: createdDate,
             _1_1: _1_1,
             _1_2: _1_2,
             _1_3: _1_3,
@@ -273,6 +177,73 @@ app.patch('/video-state:videoState', async (req, res) =>
             _3_8: _3_8,
             _3_9: _3_9,
             _3_10: _3_10
+        };
+
+        const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
+    }
+    catch(err)
+    {
+        console.log("didn't work: " + err);
+    }
+
+    return res.json({
+        message: 'state updated'
+    });
+});
+
+// save favorites
+app.patch('/favorites:liked', async (req, res) =>
+{
+    let likedVideos;
+    let email; 
+    
+    const results = await loginCollection.findOne({email: userEmail}).then((info, err) =>
+    {
+        likedVideos = info.likedVideos;
+        email = info.email;
+    });
+
+    const likedVid = `${JSON.parse(JSON.stringify(req.body)).likedVid}`; // module
+    const isLiked = JSON.parse(JSON.stringify(req.body)).isLiked; // true or false
+
+    // adds liked video to the array
+    if (isLiked === "false" || isLiked === false)
+    {
+        if (!likedVideos.includes(likedVid))
+        {
+            for (let i = 0; i < likedVideos.length; i++)
+            {
+                if (i === likedVideos.length - 1) // last video
+                {
+                    likedVideos.push(likedVid);
+                }
+                else if (likedVideos[i] === "")
+                {
+                    likedVideos[i] = likedVid;
+                    break;
+                }
+                else {}
+            }
+        }
+    }
+    // removes disliked video from the array
+    else if (isLiked === "true" || isLiked === true)
+    {
+        if (likedVideos.includes(likedVid))
+        {
+            // removes disliked video, adds a new empty string to end
+            let index = Number(likedVideos.indexOf(likedVid));
+            likedVideos.splice(index, 1);
+            likedVideos.push("");
+        }
+    }
+    else {}
+    
+    try
+    {
+        let data = 
+        {
+            likedVideos: likedVideos,
         };
 
         const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
@@ -371,10 +342,10 @@ app.post('/create-checkout-session', async (req, res) =>
 
 app.get('/course', async (req, res) => 
 {
-
     const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
     {
         userEmail = user.email;
+        likedVideos = user.likedVideos,
         _1_1 = user._1_1;
         _1_2 = user._1_2;
         _1_3 = user._1_3;
@@ -417,6 +388,7 @@ app.get('/course', async (req, res) =>
 
     res.render('course.ejs', 
     {
+        likedVideos: likedVideos,
         _1_1: _1_1,
         _1_2: _1_2,
         _1_3: _1_3,
@@ -466,16 +438,16 @@ app.post('/videoList', async (req, res) =>
     {
         return data;
     });
+
     res.json(videoList);
 });
 
-app.get('/track', async (req, res) =>
+app.get('/track1', async (req, res) =>
 {
     let videoTime;
 
     const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
     {
-        userEmail = user.email;
         _1_1 = user._1_1;
         _1_2 = user._1_2;
         _1_3 = user._1_3;
@@ -492,31 +464,10 @@ app.get('/track', async (req, res) =>
         _1_14 = user._1_14;
         _1_15 = user._1_15;
         _1_16 = user._1_16;
-        _2_1 = user._2_1;
-        _2_2 = user._2_2;
-        _2_3 = user._2_3;
-        _2_4 = user._2_4;
-        _2_5 = user._2_5;
-        _2_6 = user._2_6;
-        _2_7 = user._2_7;
-        _2_8 = user._2_8;
-        _2_9 = user._2_9;
-        _2_10 = user._2_10;
-        _2_11 = user._2_11;
-        _3_1 = user._3_1;
-        _3_2 = user._3_2;
-        _3_3 = user._3_3;
-        _3_4 = user._3_4;
-        _3_5 = user._3_5;
-        _3_6 = user._3_6;
-        _3_7 = user._3_7;
-        _3_8 = user._3_8;
-        _3_9 = user._3_9;
-        _3_10 = user._3_10;
         return user.name;
     });
 
-    res.render('track.ejs', 
+    res.render('track1.ejs', 
     {
         _1_1: _1_1,
         _1_2: _1_2,
@@ -534,6 +485,31 @@ app.get('/track', async (req, res) =>
         _1_14: _1_14,
         _1_15: _1_15,
         _1_16: _1_16,
+    });
+});
+
+app.get('/track2', async (req, res) =>
+{
+    let videoTime;
+
+    const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+    {
+        _2_1 = user._2_1;
+        _2_2 = user._2_2;
+        _2_3 = user._2_3;
+        _2_4 = user._2_4;
+        _2_5 = user._2_5;
+        _2_6 = user._2_6;
+        _2_7 = user._2_7;
+        _2_8 = user._2_8;
+        _2_9 = user._2_9;
+        _2_10 = user._2_10;
+        _2_11 = user._2_11;
+        return user.name;
+    });
+
+    res.render('track2.ejs', 
+    {
         _2_1: _2_1,
         _2_2: _2_2,
         _2_3: _2_3,
@@ -544,7 +520,32 @@ app.get('/track', async (req, res) =>
         _2_8: _2_8,
         _2_9: _2_9,
         _2_10: _2_10,
-        _2_11: _2_11,
+        _2_11: _2_11
+    });
+});
+
+app.get('/track3', async (req, res) =>
+{
+    let videoTime;
+
+    const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+    {
+        _3_1 = user._3_1;
+        _3_2 = user._3_2;
+        _3_3 = user._3_3;
+        _3_4 = user._3_4;
+        _3_5 = user._3_5;
+        _3_6 = user._3_6;
+        _3_7 = user._3_7;
+        _3_8 = user._3_8;
+        _3_9 = user._3_9;
+        _3_10 = user._3_10;
+        _3_11 = user._3_11;
+        return user.name;
+    });
+
+    res.render('track3.ejs', 
+    {
         _3_1: _3_1,
         _3_2: _3_2,
         _3_3: _3_3,
@@ -554,7 +555,8 @@ app.get('/track', async (req, res) =>
         _3_7: _3_7,
         _3_8: _3_8,
         _3_9: _3_9,
-        _3_10: _3_10
+        _3_10: _3_10,
+        _3_11: _3_11
     });
 });
 
