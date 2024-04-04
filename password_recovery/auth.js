@@ -5,13 +5,18 @@ const mailgun = require("mailgun-js");
 // const DOMAIN = 'sandboxce966cd0186342eba02597c12a52c3d0.mailgun.org';
 const DOMAIN = 'mg.thecreatorpassport.com';
 const bcrypt = require('bcrypt');
+const axios = require('axios').default;
 const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
 
 // sends forgot-password email with link including token
 exports.forgotPassword = async (req, res) =>
 {
+    let userName;
+
     await loginCollection.findOne({email: req.body.email}).then((user, err) =>
     {
+        userName = user.name;
+
         if(err || !user)
         {
             return res.render('forgot-password.ejs', { messages: 'No user with that email' });
@@ -577,7 +582,7 @@ exports.resetPassword = (req, res) =>
         {
             if(error)
             {
-                return res.render('reset-password.ejs', { errorMessage: 'link expired, try resending' });
+                return res.render('reset-password.ejs', { errorMessage: "This link expired. To resend a new email click 'Back to Login' then 'Forgot Password.'" });
             }
 
             loginCollection.findOne({resetLink}).then(async (user, err) =>

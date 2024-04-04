@@ -18,34 +18,18 @@
     </div>
 
     <!--topnav-->
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: #FFFFFF;">/</div>
+            <div style="color: #649399; text-decoration: underline !important;">Favorites</div>
+        </div>
         <div>
-            <a href="/">
-                <img class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
+                </form>
             </a>
-        </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
-            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
-                <div><a style="color: white;" href="/">Dashboard</a></div>
-                <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
-                <div>
-                    <a href="#">
-                        <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                            <button type="submit" style="all:unset; color: white;">Log Out</button>
-                        </form>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="width: 100vw; height: 75px; position: absolute; top: 80px; background: #111623; color: #FFFFFF;">
-        <div style="position: relative; display: flex; flex-direction: column; justify-content: center; height: 100%;">
-            <div style="display: flex; justify-content: center;">
-                <div><a href="/" class="header-options">dashboard</a></div>
-                <div class="header-options" style="margin-left: 15px; margin-right: 15px; font-size: 20px;">/</div>
-                <div><a href="/favorites" class="header-options" style="text-decoration: underline;">favorites</a></div>
-            </div>
         </div>
     </div>
 
@@ -53,7 +37,9 @@
         <div id="videoAndSidenav">
             <!-- video -->
             <div id="video-container">
-                <div style="aspect-ratio: 16/9;">
+                <div style="aspect-ratio: 16/9; position: relative;">
+                    <div class="video-cover">
+                    </div>
                     <div id="video">
                         <!-- load in video -->
                     </div>
@@ -64,25 +50,6 @@
             <div id="sidenav-container">
                 <div class="sidebarColumn">
                     <!-- load in sidenav -->
-                </div>
-            </div>
-        </div>
-    
-        <!-- player nav -->
-        <div id="player-nav">
-            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 15px;">
-                <div style="width: 100px; height: 48px; background: #2e91fc; display: flex; flex-direction: column; justify-content: center;">
-                    <div style="margin-left: auto; margin-right: auto;">
-                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Back</a>
-                    </div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <div id="lesson-of"></div>
-                </div>
-                <div style="width: 100px; height: 48px; background: #2e91fc; display: flex; flex-direction: column; justify-content: center;">
-                    <div style="margin-left: auto; margin-right: auto;">
-                        <a id="next-button" style="color: white;">Next  <i class="fa-solid fa-chevron-right"></i></a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -102,12 +69,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="downloadContent">
+                <div id="downloadContent">
                     <h4><b>Resources</b></h4>
-                    <a href="#">Download 1</a><br />
-                    <a href="#">Download 2</a>
+                    <div id="resourceList" style="display: flex; flex-direction: column;">
+                        <!--downloadable resources goes here-->
+                    </div>
+                </div>
+                <div class="sidebarColumn mobileNav">
+                    <!-- load in sidenav -->
                 </div>
             </div>
+        </div>
+        <div style="position: relative; bottom: -10px; display: flex; flex-direction: row; justify-content: center; width: 100%;">
+            <div><a href="./terms-and-conditions" style="color: white;">Terms and Conditions</a></div>
         </div>
 
     </div>
@@ -120,15 +94,18 @@
         returnObject.links = [];
         returnObject.copy = [];
         returnObject.module = [];
+        returnObject.resources = [];
 
         let fullDataObj = {};
         fullDataObj.ID = [];
         fullDataObj.titleArray = [];
         fullDataObj.linkArray = [];
         fullDataObj.copyArray = [];
+        fullDataObj.resourcesArray = [];
 
         let currentVideoLink;
         let currentVideoID;
+        let isLiked = true;
 
         function likedVideoListFunction()
         {
@@ -166,13 +143,15 @@
                     url: "/videoList",
                     data: module[i].split("-")[0] + "-" + module[i].split("-")[1],
                     success: function(res)
-                    {  
-                        for (let j = 0; j < res.titles.length; j++)
+                    {
+                        let titlesLength = res.titles.length
+                        for (let j = 0; j < titlesLength; j++)
                         {
                             returnObject.titles.push(res.titles[j]);
                             returnObject.links.push(res.links[j]);
                             returnObject.copy.push(res.copy[j]);
                             returnObject.module.push(module[i]);
+                            returnObject.resources.push(res.resources[j])
                         }
                     },
                     error: function(res)
@@ -182,12 +161,12 @@
                     async: false
                 });
             }
-            sortData(returnObject.titles, returnObject.links, returnObject.copy, returnObject.module);
+            sortData(returnObject.titles, returnObject.links, returnObject.copy, returnObject.module, returnObject.resources);
             loadYoutubeIFrameApiScript();
         };
 
         // gives data of only the liked videos
-        function sortData(titles, links, copy, trackMod)
+        function sortData(titles, links, copy, trackMod, resources)
         {
             let temporaryModule;
             const titleLength = titles.length;
@@ -203,10 +182,10 @@
                             fullDataObj.titleArray.push(titles[h]);
                             fullDataObj.linkArray.push(links[h]);
                             fullDataObj.copyArray.push(copy[h]);
+                            fullDataObj.resourcesArray.push(resources[h]);
                         }
                     }
                 }
-            
             }
 
             let searchParams = new URLSearchParams(window.location.search)
@@ -260,10 +239,30 @@
                     playerVars:
                     {
                         'playsinline': 1,
-                        'start': 0
+                        'start': 0,
+                        'rel': 0,
+                        'showinfo': 0,
+                    },
+                    events:
+                    {
+                        'onStateChange': stateChange
                     }
                 });
             });
+        }
+
+        function stateChange(event)
+        {
+            switch(event.data)
+            {
+                case 0: // ended
+                    // Covers the recommended videos once video ends
+                    document.getElementsByClassName("video-cover")[0].style.display = "block";
+                    break;
+                default:
+                    document.getElementsByClassName("video-cover")[0].style.display = "none";
+                    break;
+            }
         }
 
         // Make Sidenav
@@ -273,31 +272,22 @@
             if (titles)
             {
                 const titlesLength = titles.length;
-
                 if (document.querySelectorAll('.select-video').length <= titlesLength)
                 {
                     let sideNav =
                     `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; background-color: white;">
-                        <div style="font-size: 24px; width: 66%; color: black; padding-left: 15px;" class="d-flex justify-content-center select-video">
-                            <div style="display: flex; justify-content: center; flex-direction: row;">
-                                <div>
-                                    Favorite Videos
-                                </div>
-                            </div>
+                        <div style="font-size: 24px; width: 70%; color: black; padding-left: 15px;" class="d-flex justify-content-center align-items-center select-video">
+                            Favorite Videos
                         </div>
-                        <div class="d-flex justify-content-center" style="width: 33%; color: #3d3d3d;">
-                            <div style="display: flex; flex-direction: column; justify-content: center;">
-                                <div>
-                                    ${titlesLength} Lessons
-                                </div>
-                            </div>
+                        <div class="d-flex justify-content-center align-items-center" style="width: 30%; color: #3d3d3d;">
+                            ${titlesLength} Lessons
                         </div>
                     </div>`;
 
                     for (let i = 0; i < titlesLength; i++)
                     {
                         sideNav +=
-                        `<a class="d-flex select-video ps-3" id="${ID[i]}" href="/favorites?module=${ID[i]}">
+                        `<a class="d-flex select-video ps-3 ${ID[i]}" href="/favorites?module=${ID[i]}">
                             <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; width: 100%;">
                                 <div style="width: 45px">${i + 1}</div>
                                 <div><img src="../assets/images/${ID[i]}.png" alt="lesson thumbnail" style="width: 120px; height: auto;" /></div>
@@ -310,12 +300,13 @@
                             </div>
                         </a>`;
                     }
-                    document.getElementsByClassName("sidebarColumn")[0].innerHTML = sideNav
+                    document.getElementsByClassName("sidebarColumn")[0].innerHTML = sideNav;
+                    document.getElementsByClassName("sidebarColumn")[1].innerHTML = sideNav;
                 }
             }
         }
 
-        // styling active lesson on sidenav and copy
+        // styling active lesson on sidenav, copy, and resources
         function pageStyling(titles, copy, ID)
         {
             const URLSection = currentVideoID;
@@ -324,12 +315,65 @@
             
             if (ID)
             {
-                document.getElementById(currentVideoID).style.background = '#E0E0E0';
-                document.getElementById(currentVideoID).style.color = 'black';
+                document.getElementsByClassName(currentVideoID)[0].style.background = '#f7f6f2';
+                document.getElementsByClassName(currentVideoID)[1].style.background = '#f7f6f2';
+                document.getElementsByClassName(currentVideoID)[0].style.color = 'black';
+                document.getElementsByClassName(currentVideoID)[1].style.color = 'black';
             }
+
+            // generates resources
+            let currentTrack = Number(currentVideoID.split('-')[0]);
+            let trackResource;
+
+            switch(currentTrack)
+            {
+                case 1:
+                    trackResource = "Track_1_Workbook.pdf";
+                    break;
+                case 2:
+                    trackResource = "Track_2_Workbook.pdf";
+                    break;
+                default:
+                    trackResource = "Track_3_Workbook.pdf";
+            }
+
+            let resourcesHTML =
+            `<a id="download1" href="../assets/resources/${trackResource}" target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                <div style="margin-left:6px;">${fullDataObj.resourcesArray[Number(currentVideoID.split('-')[2]) - 1].split(';')[0]}</div>
+            </a>`;
+            
+            if (fullDataObj.resourcesArray[Number(currentVideoID.split('-')[2]) - 1].includes(';'))
+            {
+                const resourceArray = fullDataObj.resourcesArray[Number(currentVideoID.split('-')[2]) - 1].split(';');
+
+                for (let i = 1; i < resourceArray.length; i++)
+                {
+                    if (resourceArray[i].includes('--')) // this splits the link the title is 0 and the link is 1
+                    {
+                        `<a id="download${i}" href="${resourceArray[i].split('--')[1]}"
+                        target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                            <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                            <div style="margin-left:6px;">${resourceArray[i].split('--')[0]}</div>
+                        </a>`;
+                    }
+                    else
+                    {
+                        resourcesHTML +=
+                        `<a id="download${i}" href="../assets/resources/${resourceArray[i].replaceAll(' ', '_')}"
+                        target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                            <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                            <div style="margin-left:6px;">${resourceArray[i]}</div>
+                        </a>`;
+                    }
+                }
+            }
+            document.getElementById("resourceList").innerHTML = resourcesHTML;
         }
 
-        let isLiked = true;
+        console.log(fullDataObj)
+
+        
         // posts the video's current time, and duration when the user leaves page
         function dislikeLesson()
         {

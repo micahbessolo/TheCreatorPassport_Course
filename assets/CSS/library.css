@@ -1,4 +1,13 @@
-/* Hamburger Menu */
+@font-face
+{
+  font-family: "LoubagBold";
+  src: url('../fonts/font.woff2') format('woff2'), url('../fonts/font.woff') format('woff');
+}
+
+.font-title
+{
+  font-family: 'LoubagBold';
+}
 
 body {
   margin: 0;
@@ -9,7 +18,8 @@ body {
   overflow-x: hidden;
 }
 
-#wrapper {
+#wrapper
+{
   position: fixed;
   overflow-x: hidden;
   display: contents;
@@ -30,7 +40,8 @@ body {
   left: 0px;
 }
 
-a {
+a
+{
   text-decoration: none;
   color: #232323;
   transition: color 0.3s ease;
@@ -144,7 +155,6 @@ h3
   color: #303958;
   z-index: 2;
   width: auto;
-  /* min-width: 250px; */
   height: 300px;
   font-family: gopher, sans-serif;
   font-weight: 400;
@@ -223,6 +233,7 @@ progress::-moz-progress-bar {
 .description
 {
   font-size: 1.2rem;
+  font-family: "poppins", sans-serif;
 }
 
 @media (min-width: 640px)
@@ -285,7 +296,15 @@ progress::-moz-progress-bar {
   text-underline-offset: 6px;
   color: #FFFFFF; 
 }
-
+.hero-title-black
+{
+  width: 100vw;
+  height: 250px;
+  position: absolute;
+  top: 60px;
+  background: #111623;
+  color: #FFFFFF;
+}
 .outside-container
 {
 	position: absolute;
@@ -294,12 +313,66 @@ progress::-moz-progress-bar {
 	background: #F1F4FD;
 	width: 100%;
 }
+@media (max-width: 800px)
+{
+  .hero-title-black
+  {
+    height: 350px;
+  }
+  .outside-container
+  {
+    top: 455px;
+  }
+}
+
+h1
+{
+  font-size: 65px;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+@media (max-width: 460px)
+{
+  h1
+  {
+    font-size: 50px;
+  }
+}
+
+.terms-and-conditions
+{
+  position: relative;
+  bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
 .flex-container
 {
 	display: flex;
-	align-items: center;
 	justify-content: center;
 }
+@media (max-width: 967px)
+{
+  .terms-and-conditions
+  {
+    bottom: 10px;
+  }
+  .flex-container
+  {
+    height: 1000px;
+  }
+}
+@media (max-width: 653px)
+{
+  .flex-container
+  {
+    height: 1400px;
+  }
+}
+
 .container
 {
 	max-width: 1200px;

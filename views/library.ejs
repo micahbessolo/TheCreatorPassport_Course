@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <title>Course</title>
@@ -10,117 +11,114 @@
 	<link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
     <link rel="stylesheet" href="assets/CSS/library.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+	<link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
 	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
 <body>
-	<div id="wrapper"  style="z-index: 1; position: relative;"">
+	<div id="wrapper"  style="z-index: 1; position: relative;">
 		<!--topnav-->
-		<div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
-			<div>
+		<div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+			<!-- <div>
 				<a href="/">
 					<img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
 				</a>
-			</div>
-			<div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
-				<div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
-					<div><a style="color: white;" href="/">Dashboard</a></div>
-					<div><a style="color: white;" href="" id="tracks">Tracks</a></div>
-					<div>
-						<a href="#">
-							<form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-								<button type="submit" style="all:unset; color: white;">Log Out</button>
-							</form>
-						</a>
-					</div>
+			</div> -->
+			<!-- <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding-right: 25px; width: 200px;"> -->
+				<div style="color: #649399; text-decoration: underline !important;">Dashboard</div>
+				<div>
+					<a href="#">
+						<form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+							<button type="submit" style="all:unset; color: white;">Log Out</button>
+						</form>
+					</a>
 				</div>
-			</div>
+			<!-- </div> -->
 		</div>
 
-		<div style="width: 100vw; height: 250px; position: absolute; top: 80px; background: #111623; color: #FFFFFF;">
+		<div class="hero-title-black">
 			<div style="top: 30px; position: relative;">
-				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h4>The Creator Passport</h4></div>
-				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h1 class="fw-bold text-uppercase" style="font-size: 65px; letter-spacing: 2px;">Student Dashboard</h1></div>
+				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h4 style="font-family: 'Roboto', sans-serif; font-size: 29px;">The Creator Passport</h4></div>
+				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h1 class="text-uppercase font-title">Student Dashboard</h1></div>
 				<div style="display: flex; justify-content: center;">
 					<div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap; width: 370px;">
 						<div><a href="#" class="header-options text-decoration-underline">dashboard</a></div>
 						<div><a href="/favorites" class="header-options">favorites</a></div>
-						<div><a href="/community" class="header-options">community</a></div>
+						<div><a href="https://www.facebook.com/groups/1055892835736335/" target="_blank" class="header-options">community</a></div>
 					</div>
 				</div>
 			</div>
         </div>
-
-		<div>
-			<div class="outside-container">
-				<div style="display: flex; justify-content: center; padding-bottom: 20px;">
-					<h3 style="font-size: 40px;"><b>creator courses</b></h3>
-				</div>
-				<div class="flex-container">
-					<div class="container">
-						<div class="slider-wrapper">
-							
-							<div class="image-item" style="margin-bottom: 25px;">
-								<a href="/track1">
-									<article style="width: 100%; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; cursor: pointer; border-radius: 2rem; background: #111623;" class="shadow-lg">
-										<img src="../assets/images/1-1-4.png" style="width: 100%; overflow: hidden; object-position: center; object-fit: cover; max-width: 100%; height: 13rem; vertical-align: middle;">
-										<div class="p-3">
-											<div style="color: #FFFFFF; text-align: center;">
-												<h3>Track #1</h3> 
-												<h4><b>The Manual Method</b></h4>
-											</div>
-											<div class="description" style="color: #FFFFFF; text-align: center;">
-												Learn how to go from beginner to pro using a camera by switching from 
-												Auto to Manual.
-											</div>
+		<div class="outside-container">
+			<div style="display: flex; justify-content: center; padding-bottom: 20px;">
+				<h3 style="font-size: 40px; text-align: center;" class="font-title">creator courses</h3>
+			</div>
+			<div class="flex-container">
+				<div class="container">
+					<div class="slider-wrapper">
+						
+						<div class="image-item" style="margin-bottom: 25px;">
+							<a href="/track1">
+								<article style="width: 100%; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; cursor: pointer; border-radius: 2rem; background: #111623;" class="shadow-lg">
+									<img src="../assets/images/1-1-4.png" style="width: 100%; overflow: hidden; object-position: center; object-fit: cover; max-width: 100%; height: 13rem; vertical-align: middle;">
+									<div class="p-3">
+										<div style="color: #FFFFFF; text-align: center;">
+											<h3>Track #1</h3> 
+											<h4 class="font-title">The Manual Method</h4>
 										</div>
-									</article>
-								</a>
-							</div>
-
-							<div class="image-item" style="margin-bottom: 25px;">
-								<a href="/track2">
-									<article style="width: 100%; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; cursor: pointer; border-radius: 2rem; background: #111623;" class="shadow-lg">
-										<img src="../assets/images/2-2-3.png" style="width: 100%; overflow: hidden; object-position: center; object-fit: cover; max-width: 100%; height: 13rem; vertical-align: middle;">
-										<div class="p-3">
-											<div style="color: #FFFFFF; text-align: center;">
-												<h3>Track #2</h3>
-												<h4><b>Grow Like a Pro</b></h4>
-											</div>
-											<div class="description" style="color: #FFFFFF; text-align: center;">
-												Become a master at branding, social media growth strategies, audience 
-												retention, short form video organizational workflows and viral video 
-												creation.
-											</div>
+										<div class="description" style="color: #FFFFFF; text-align: center;">
+											Learn how to go from beginner to pro using a camera by switching from 
+											Auto to Manual.
 										</div>
-									</article>
-								</a>
-							</div>
+									</div>
+								</article>
+							</a>
+						</div>
 
-							<div class="image-item" style="margin-bottom: 25px;">
-								<a href="/track3">
-									<article style="width: 100%; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; cursor: pointer; border-radius: 2rem; background: #111623;" class="shadow-lg">
-										<img src="../assets/images/3-9-3.png" style="width: 100%; overflow: hidden; object-position: center; object-fit: cover; max-width: 100%; height: 13rem; vertical-align: middle;">
-										<div class="p-3">
-											<div style="color: #FFFFFF; text-align: center;">
-												<h3>Track #3</h3>
-												<h4><b>The Six Figure Fast Track</b></h4>
-											</div>
-											<div class="description" style="color: #FFFFFF; text-align: center;">
-												Learn how to set the foundations of a 
-												strong social media business.
-											</div>
+						<div class="image-item" style="margin-bottom: 25px;">
+							<a href="/track2">
+								<article style="width: 100%; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; cursor: pointer; border-radius: 2rem; background: #111623;" class="shadow-lg">
+									<img src="../assets/images/2-2-3.png" style="width: 100%; overflow: hidden; object-position: center; object-fit: cover; max-width: 100%; height: 13rem; vertical-align: middle;">
+									<div class="p-3">
+										<div style="color: #FFFFFF; text-align: center;">
+											<h3>Track #2</h3>
+											<h4 class="font-title"><b>Grow Like a Pro</b></h4>
 										</div>
-									</article>
-								</a>
-							</div>
+										<div class="description" style="color: #FFFFFF; text-align: center;">
+											Become a master at branding, social media growth strategies, audience 
+											retention, short form video organizational workflows and viral video 
+											creation.
+										</div>
+									</div>
+								</article>
+							</a>
+						</div>
+
+						<div class="image-item" style="margin-bottom: 25px;">
+							<a href="/track3">
+								<article style="width: 100%; position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; cursor: pointer; border-radius: 2rem; background: #111623;" class="shadow-lg">
+									<img src="../assets/images/3-9-3.png" style="width: 100%; overflow: hidden; object-position: center; object-fit: cover; max-width: 100%; height: 13rem; vertical-align: middle;">
+									<div class="p-3">
+										<div style="color: #FFFFFF; text-align: center;">
+											<h3>Track #3</h3>
+											<h4 class="font-title"><b>The Six Figure Fast Track</b></h4>
+										</div>
+										<div class="description" style="color: #FFFFFF; text-align: center;">
+											Learn how to set the foundations of a 
+											strong social media business.
+										</div>
+									</div>
+								</article>
+							</a>
 						</div>
 					</div>
 				</div>
-		
+			</div>
+			<div class="terms-and-conditions">
+				<div><a href="./terms-and-conditions">Terms and Conditions</a></div>
 			</div>
 		</div>
-		
     </div>
+	
 
 </body>
 </html>

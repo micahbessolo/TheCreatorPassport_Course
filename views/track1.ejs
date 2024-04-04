@@ -32,30 +32,31 @@
     </div>
 
     <!--topnav-->
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
-        <div>
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; height: 60px; align-items: center; padding-left: 40px; padding-right: 30px;">
+        <!-- <div>
             <a href="/">
                 <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
             </a>
-        </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
-            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
-                <div><a style="color: white;" href="/">Dashboard</a></div>
-                <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
-                <div>
-                    <a href="#">
-                        <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                            <button type="submit" style="all:unset; color: white;">Log Out</button>
-                        </form>
-                    </a>
-                </div>
+        </div> -->
+        <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding-right: 25px; width: 275px;"> -->
+            <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+                <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+                <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 1</div>
             </div>
-        </div>
+            <div>
+                <a href="#">
+                    <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                        <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
+                    </form>
+                </a>
+            </div>
+        <!-- </div> -->
     </div>
 
     <div style="display: flex; justify-content: center;">
         <div class="track-container">
-            <h1 style="text-align: center; padding-top: 125px;">The Manual Method:<br />From Auto to Manual in 30 Days</h1>
+            <h1 style="text-align: center; padding-top: 100px;" class="font-title">The Manual Method:<br />From Auto to Manual in 30 Days</h1>
             <div style="padding-top: 20px;">
                 <div style="font-size: 18px;">
                     Learn how to go from beginner to pro using a camera by switching from Auto to Manual. 
@@ -72,6 +73,7 @@
 
             <div class="track1" style="padding-top: 50px;">
                 <div class="track-cards-container">
+
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
@@ -84,7 +86,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -126,7 +127,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -171,7 +171,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -209,7 +208,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -241,7 +239,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -275,7 +272,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -307,7 +303,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -345,7 +340,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -376,7 +370,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -426,7 +419,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -479,7 +471,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -515,7 +506,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -563,7 +553,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -602,7 +591,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -646,7 +634,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -680,7 +667,6 @@
                                 </div>
                             </div>
                             <div>
-                                <p></p>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -709,7 +695,9 @@
             
         </div>
     </div>
-
+    <div style="position: relative; bottom: 0; display: flex; flex-direction: row; justify-content: center; width: 100%;">
+        <div><a href="./terms-and-conditions" style="color: black;">Terms and Conditions</a></div>
+    </div>
 
 
 

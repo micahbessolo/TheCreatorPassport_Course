@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
     <link rel="stylesheet" href="assets/CSS/library.css">
     <link rel="stylesheet" href="assets/CSS/course.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
 <body style="background-color: #36454F;">
     <div>
@@ -55,33 +56,43 @@
     </div>
 
     <!--topnav-->
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between;">
-        <div>
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+        <!-- <div>
             <a href="/">
-                <img class="logo" src="../assets/images/creatorPassportIcon.jpeg" alt="logo">
+                <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
             </a>
-        </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; width: 250px;">
-            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-right: 25px;">
-                <div><a style="color: white;" href="/">Dashboard</a></div>
-                <div><a style="color: white;" href="" id="tracks">Tracks</a></div>
-                <div>
-                    <a href="#">
-                        <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                            <button type="submit" style="all:unset; color: white;">Log Out</button>
-                        </form>
-                    </a>
-                </div>
+        </div> -->
+        <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding-right: 25px; width: 380px;"> -->
+            <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+                <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+                <div><a class="dashboard-link" style="color: #FFFFFF;" href="" id="tracks">Track</a></div>
+                <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+                <div style="color: #649399; text-decoration: underline !important;">Course</div>
             </div>
-        </div>
+            <div>
+                <a href="#">
+                    <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                        <button type="submit" style="all:unset; color: white;">Log Out</button>
+                    </form>
+                </a>
+            </div>
+        <!-- </div> -->
     </div>
-
 
     <div class="content-container container">
         <div id="videoAndSidenav">
             <!-- video -->
             <div id="video-container">
-                <div style="aspect-ratio: 16/9;">
+                <div style="aspect-ratio: 16/9; position: relative">
+                    <div class="video-cover">
+                        <div style="display: flex; flex-direction: row; justify-content: center; align-content: center; flex-wrap: wrap; height: 100%;">
+                            <div id="video-ended-next" onclick="">
+                                <div class="cover-font">Continue Learning <i class="fa-solid fa-chevron-right" style="color: white;"></i></div>
+                                <div style="margin-top: 10px;"><img id="cover-next-lesson-image" src="" style="max-width: 250px; height: auto;" /></div>
+                            </div>
+                        </div>
+                    </div>
                     <div id="video">
                         <!-- load in video -->
                     </div>
@@ -99,15 +110,15 @@
         <!-- player nav -->
         <div id="player-nav">
             <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 15px;">
-                <div style="width: 100px; height: 48px; background: #2e91fc; display: flex; flex-direction: column; justify-content: center;">
+                <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
                     <div style="margin-left: auto; margin-right: auto;">
-                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Back</a>
+                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Previous</a>
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center;">
                     <div id="lesson-of"></div>
                 </div>
-                <div style="width: 100px; height: 48px; background: #2e91fc; display: flex; flex-direction: column; justify-content: center;">
+                <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
                     <div style="margin-left: auto; margin-right: auto;">
                         <a id="next-button" style="color: white;">Next  <i class="fa-solid fa-chevron-right"></i></a>
                     </div>
@@ -123,27 +134,31 @@
                             <img id="nextLessonImage" src="" style="width: 100px; height: auto;" />
                             <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px;">
                                 <div>Continue learning</div>
-                                <div id="nextLessonTitle" style="font-weight: 700; font-size: 16px;"><!-- gets next lesson title from function --></div>
+                                <div id="nextLessonTitle" style="font-family: 'poppins bold', sans-serif; font-size: 16px;"><!-- gets next lesson title from function --></div>
                             </div>
                         </div>
                         <div style="display: flex; flex-direction: row; justify-content: space-between; width: 150px;">
                             <div><button onclick="likeLesson();" class="noStyle" style="color: red;"><i class="fa-regular fa-heart" id="notLiked"></i><i class="fa-solid fa-heart" id="isLiked" style="display: none;"></i></button></div>
-                            <div><a id="nextLessonLink" style="color: #2e91fc;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                            <div><a id="nextLessonLink" style="color: #649399;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
                         </div>
                     </div>
                     <div style="margin-top: 20px;">
-                        <h3 id="currentLessonTitle"></h3>
+                        <h4 id="currentLessonTitle"></h4>
                         <div id="copy">
                             <!-- copy goes here -->
                         </div>
                     </div>
                 </div>
-                <div class="downloadContent">
-                    <h4><b>Resources</b></h4>
-                    <a href="#">Download 1</a><br />
-                    <a href="#">Download 2</a>
+                <div id="downloadContent">
+                    <h4 style="font-family: 'poppins bold', sans-serif;">Resources</h4>
+                    <div id="resourceList" style="display: flex; flex-direction: column;">
+                        <!--downloadable resources goes here-->
+                    </div>
                 </div>
             </div>
+        </div>
+        <div style="position: relative; bottom: -10px; display: flex; flex-direction: row; justify-content: center; width: 100%;">
+            <div><a href="./terms-and-conditions" style="color: #FFFFFF;">Terms and Conditions</a></div>
         </div>
 
         <button onclick="postState();" id="patch" style="display: none;">PATCH BUTTON</button>
@@ -155,7 +170,10 @@
         const urlParams = new URLSearchParams(url);
         const module = urlParams.get('module');
         let allVidArray = [];
+        let isLiked = false;
+        let returnObject = {};
 
+        // Helps get next/previous videos when it is a last/first video of a module
         // track 1
         allVidArray1 = [
             "1-1-1","1-1-2","1-1-3","1-1-4","1-1-5","1-1-6","1-1-7","1-1-8","1-1-9","1-1-10","1-1-11","1-1-12","1-1-13","1-1-14",
@@ -216,26 +234,25 @@
         }
         else {}
 
-        let returnObject = {};
-
         // styles topnav
-        document.getElementById('tracks').href = `/track${module.split("-")[0]}`
+        document.getElementById('tracks').href = `/track${module.split("-")[0]}`;
+        document.getElementById('tracks').innerHTML = `Track ${module.split("-")[0]}`;
 
-        // fetches video list from DB
+        // Gets video list from DB by URL data (Module)
         function videoList()
         {            
             $.ajax({
                 type: "POST",
                 url: "/videoList",
                 data: module.split("-")[0] + "-" + module.split("-")[1],
+                async: false,
                 success: function(res)
                 {  
                     returnObject.titles = res.titles;
                     returnObject.links = res.links;
                     returnObject.moduleTitle = res.moduleName;
                     returnObject.copy = res.copy;
-        
-                    loadYoutubeIFrameApiScript();
+                    returnObject.resources = res.resources;
                 },
                 error: function(res)
                 {
@@ -245,19 +262,16 @@
         };
         videoList();
 
-        // YouTube Player API Reference for iframe Embeds
-        function loadYoutubeIFrameApiScript()
-        {
-            const tag = document.createElement("script");
-            tag.src = "https://www.youtube.com/iframe_api";
-
-            const firstScriptTag = document.getElementsByTagName("script")[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-            tag.onload = onYouTubeIframeAPIReady;
-        };
-
+        // YouTube Embed API starts here
         let player;
+        let tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+
+        let firstScriptTag = document.getElementsByTagName("script")[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        tag.onload = onYouTubeIframeAPIReady;
+
         function onYouTubeIframeAPIReady()
         {
             let startPoint;
@@ -272,7 +286,6 @@
             {
                 startPoint = Math.floor(Number(currentLessonData.split("_")[0]));
             }
-            console.log(startPoint);
 
             window.YT.ready(function()
             {
@@ -284,11 +297,14 @@
                     playerVars:
                     {
                         'playsinline': 1,
-                        'start': startPoint
+                        'start': startPoint,
+                        'rel': 0,
+                        'showinfo': 0,
                     },
                     events:
                     {
                         'onReady': onPlayerReady,
+                        'onStateChange': stateChange
                     }
                 });
             });
@@ -299,6 +315,25 @@
         function onPlayerReady(event)
         {
             event.target.playVideo();
+        }
+
+        function stateChange(event)
+        {
+            switch(event.data)
+            {
+                case 0: // ended
+                    // Covers the recommended videos once video ends
+                    document.getElementsByClassName("video-cover")[0].style.display = "block";
+                    postState();
+                    break;
+                case 2: // paused
+                    // Updates the video state when the video is paused
+                    postState();
+                    break;
+                default:
+                    document.getElementsByClassName("video-cover")[0].style.display = "none";
+                    break;
+            }
         }
 
         function stopVideo()
@@ -338,10 +373,10 @@
                 {
                     let sideNav =
                     `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; background-color: white;">
-                        <div style="font-size: 14px; width: 66%; color: black; padding-left: 15px;" class="d-flex justify-content-center select-video">
+                        <div style="font-size: 14px; width: 70%; color: black; padding-left: 15px;" class="d-flex justify-content-center align-items-center select-video">
                             Module ${module.split("-")[1]} - ${moduleTitle}
                         </div>
-                        <div class="d-flex justify-content-center" style="width: 33%; color: #3d3d3d;">
+                        <div class="d-flex justify-content-center" style="width: 30%; color: #3d3d3d;">
                             ${titlesLength} Lessons
                         </div>
                     </div>`;
@@ -394,14 +429,15 @@
                         nextModuleTitle = "Course complete!";
                         previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
                         document.getElementById('nextLessonImage').style.display = "none";
+                        document.getElementById('cover-next-lesson-image').style.display = "none";
                     }
                     else if (allVidArray.length > index + 1)
                     {
                         nextLesson = allVidArray[Number(index) + 1];
                         nextModuleTitle = "Next Module";
                         previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
-                        document.getElementById('nextLessonImage').src = 
-                        `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                        document.getElementById('nextLessonImage').src = `../assets/images/${nextLesson}.png`;
+                        document.getElementById('cover-next-lesson-image').src = `../assets/images/${nextLesson}.png`;
                     }
                     else {}
                 }
@@ -424,8 +460,8 @@
                         nextModuleTitle = titles[URLSection];
                     }
                     else {}
-                    document.getElementById('nextLessonImage').src = 
-                    `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    document.getElementById('cover-next-lesson-image').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
                 }
                 // not first or last lesson of module
                 else
@@ -433,25 +469,28 @@
                     nextLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}`;
                     previousLesson = `${module.split('-')[0]}-${module.split('-')[1]}-${URLSection - 1}`;
                     nextModuleTitle = titles[URLSection];
-                    document.getElementById('nextLessonImage').src = 
-                    `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    document.getElementById('nextLessonImage').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
+                    document.getElementById('cover-next-lesson-image').src = `../assets/images/${module.split('-')[0]}-${module.split('-')[1]}-${URLSection + 1}.png`;
                 }
 
                 if (nextLesson === "#")
                 {
-                    document.getElementById('nextLessonLink').href = `#`;
-                    document.getElementById('next-button').href = `#`;
+                    document.getElementById('nextLessonLink').href = '#';
+                    document.getElementById('next-button').href = '#';
                     document.getElementById('next-button').parentNode.parentNode.style.background = "gray";
+                    document.getElementById("video-ended-next").addEventListener("click", function(){location.href = '#'});
                 }
                 else
                 {
                     document.getElementById('nextLessonLink').href = `./course?module=${nextLesson}`;
+                    // document.getElementById('nextLessonLink').setAttribute("onclick”, ”nextLessonRouting(`./course?module=${nextLesson}`)");
                     document.getElementById('next-button').href = `./course?module=${nextLesson}`;
+                    document.getElementById("video-ended-next").addEventListener("click", function(){location.href = `./course?module=${nextLesson}`});
                 }
 
                 if (previousLesson === "#")
                 {
-                    document.getElementById('back-button').href = `#`;
+                    document.getElementById('back-button').href = '#';
                     document.getElementById('back-button').parentNode.parentNode.style.background = "gray";
                 }
                 else
@@ -469,7 +508,7 @@
                 {
                     if (i === URLSection - 1)
                     {
-                        document.getElementsByClassName('select-video')[URLSection].style.background = '#f9f9f9';
+                        document.getElementsByClassName('select-video')[URLSection].style.background = '#f7f6f2';
                         document.getElementsByClassName('select-video')[URLSection].style.color = 'black';
                     }
                     // progress bar and check box sidenav styling
@@ -486,7 +525,66 @@
                     else {}
                 }
                 seeIfLiked();
+
+                // generates resources
+                let currentTrack = Number(module.split('-')[0]);
+                let trackResource;
+
+                switch(currentTrack)
+                {
+                    case 1:
+                        trackResource = "Track_1_Workbook.pdf";
+                        break;
+                    case 2:
+                        trackResource = "Track_2_Workbook.pdf";
+                        break;
+                    default:
+                        trackResource = "Track_3_Workbook.pdf";
+                }
+
+                const resourcesLength = returnObject.resources.length;
+
+                let resourcesHTML =
+                `<a id="download1" href="../assets/resources/${trackResource}" target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                    <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                    <div style="margin-left:6px;">${returnObject.resources[Number(module.split('-')[2]) - 1].split(';')[0]}</div>
+                </a>`;
+                
+                if (returnObject.resources[Number(module.split('-')[2]) - 1].includes(';'))
+                {
+                    const resourceArray = returnObject.resources[Number(module.split('-')[2]) - 1].split(';');
+
+                    for (let i = 1; i < resourceArray.length; i++)
+                    {
+                        if (resourceArray[i].includes('--')) // this splits the link the title is 0 and the link is 1
+                        {
+                            resourcesHTML +=
+                            `<a id="download${i}" href="${resourceArray[i].split('--')[1]}"
+                            target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                                <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                                <div style="margin-left:6px;">${resourceArray[i].split('--')[0]}</div>
+                            </a>`;
+                        }
+                        else
+                        {
+                            resourcesHTML +=
+                            `<a id="download${i}" href="../assets/resources/${resourceArray[i].replaceAll(' ', '_')}.pdf"
+                            target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                                <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                                <div style="margin-left:6px;">${resourceArray[i]}</div>
+                            </a>`;
+                        }
+                    }
+                }
+                document.getElementById("resourceList").innerHTML = resourcesHTML;
             }
+        }
+
+        // makes sure to track progress before redirecting the user to the next lesson
+        function nextLessonRouting(link)
+        {
+            postState();
+            location.href = link;
         }
 
         // posts the video's current time, and duration when the user leaves page
@@ -498,26 +596,31 @@
             $.ajax({
                 type: "patch",
                 url: "/video-state:videoState",
+                async: false,
                 data: {
                     'currentTime': currentTime,
                     'videoDuration': duration,
                     'URLData': module
                 },
                 success: function (data)
-                {
-                    console.log(data);
-                }
+                {}
             });
         }
         // when leaving the page runs postState function
-        window.addEventListener('beforeunload', postState);
+        //this will work only for Chrome
+        $(window).on('beforeunload', function ()
+        {
+            postState();
+        });
+        //this will work for other browsers
+        $(window).on("unload", function ()
+        {
+            postState();
+        });
 
-        let isLiked = false;
-        
         function seeIfLiked()
         {
             const likedList = document.getElementsByClassName('likedVideoList')[0].value.split(',');
-            console.log(likedList)
 
             if (likedList.includes(module))
             {
@@ -525,8 +628,6 @@
                 document.getElementById('isLiked').style.display = 'block';
                 document.getElementById('notLiked').style.display = 'none';
             }
-            
-            console.log("this video is liked: " + isLiked);
         }
 
         function likeLesson()
@@ -534,6 +635,7 @@
             $.ajax({
                 type: "patch",
                 url: "/favorites:liked",
+                async: false,
                 data: {
                     'likedVid': module,
                     'isLiked': isLiked
@@ -550,8 +652,10 @@
                         document.getElementById('notLiked').style.display = 'none';
                         document.getElementById('isLiked').style.display = 'block';
                     }
-
-                    console.log(data);
+                },
+                error: function(err)
+                {
+                    console.log(error)
                 }
             });
         }

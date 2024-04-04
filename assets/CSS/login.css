@@ -14,9 +14,17 @@ body
         background-size: 1100px;
     }
 }
+
+@font-face
+{
+  font-family: "LoubagBold";
+  src: url('../fonts/font.woff2') format('woff2'), url('../fonts/font.woff') format('woff');
+}
+
 h1
 {
     font-family: 'ESRebondGrotesque';
+    /* font-family: 'LoubagBold'; */
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;

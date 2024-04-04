@@ -1,3 +1,13 @@
+*
+{
+    font-family: "poppins", sans-serif;
+}
+@font-face
+{
+  font-family: "LoubagBold";
+  src: url('../fonts/font.woff2') format('woff2'), url('../fonts/font.woff') format('woff');
+}
+
 .button-no-style
 {
     background: none;
@@ -7,6 +17,20 @@
     font: inherit;
     cursor: pointer;
     outline: inherit;
+}
+.dashboard-link:hover
+{
+    text-decoration: underline;
+}
+#copy
+{
+    font-family: "poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+#currentLessonTitle
+{
+    font-family: 'poppins bold', sans-serif;
 }
 
 /* sidenav toggle button styling */
@@ -34,7 +58,6 @@
     border-radius: 3px; 
     padding: 2px;
 }
-
 .active-button
 {
     display: block;
@@ -55,7 +78,6 @@
 {
     width: 100vw;
 }
-
 .content-container
 {
     width: 100vw;
@@ -76,18 +98,15 @@
 }
 #sidenav-container
 {
-    background-color: #07324f;
-    transition: all 0.5s; 
+    background-color: #303958;
+    transition: all 0.5s;
+    overflow-y: auto; 
+    width: 33%; 
+    height: 100%;
 }
 #video-container
 {
     width: 66.6%;
-}
-#sidenav-container
-{
-    overflow-y: auto; 
-    width: 33%; 
-    height: 100%;
 }
 #player-nav
 {
@@ -107,16 +126,19 @@
     background: white; 
     padding: 15px;
 }
-.downloadContent
+#downloadContent
 {
     width: calc(33.33% - 12.5px);
     background: white; 
     padding: 15px;
 }
 
-
 @media (max-width: 999px)
 {
+    #downloadContent
+    {
+        width: 100%;
+    }
     #videoAndSidenav
     {
         aspect-ratio: 16/9;
@@ -212,4 +234,24 @@ progress::-moz-progress-bar
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+}
+.video-cover
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 52px;
+    background-color: black;
+    display: none;
+}
+.cover-font
+{
+    font-family: 'LoubagBold';
+    color: white;
+    text-align: center;
+}
+#video-ended-next
+{
+    cursor: pointer;
 }

@@ -46,7 +46,92 @@ let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
 
 app.get('/', checkAuthenticated, async (req, res) =>
 {
-    res.render('library.ejs');
+    let userName;
+
+    const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+    {
+        userEmail = info.email;
+        userName = info.name;
+        _1_1 = info._1_1;
+        _1_2 = info._1_2;
+        _1_3 = info._1_3;
+        _1_4 = info._1_4;
+        _1_5 = info._1_5;
+        _1_6 = info._1_6;
+        _1_7 = info._1_7;
+        _1_8 = info._1_8;
+        _1_9 = info._1_9;
+        _1_10 = info._1_10;
+        _1_11 = info._1_11;
+        _1_12 = info._1_12;
+        _1_13 = info._1_13;
+        _1_14 = info._1_14;
+        _1_15 = info._1_15;
+        _1_16 = info._1_16;
+        _2_1 = info._2_1;
+        _2_2 = info._2_2;
+        _2_3 = info._2_3;
+        _2_4 = info._2_4;
+        _2_5 = info._2_5;
+        _2_6 = info._2_6;
+        _2_7 = info._2_7;
+        _2_8 = info._2_8;
+        _2_9 = info._2_9;
+        _2_10 = info._2_10;
+        _2_11 = info._2_11;
+        _3_1 = info._3_1;
+        _3_2 = info._3_2;
+        _3_3 = info._3_3;
+        _3_4 = info._3_4;
+        _3_5 = info._3_5;
+        _3_6 = info._3_6;
+        _3_7 = info._3_7;
+        _3_8 = info._3_8;
+        _3_9 = info._3_9;
+        _3_10 = info._3_10;
+        likedVideos = info.likedVideos;
+    });
+
+    res.render('library.ejs', {
+        userName: userName,
+        _1_1: _1_1,
+        _1_2: _1_2,
+        _1_3: _1_3,
+        _1_4: _1_4,
+        _1_5: _1_5,
+        _1_6: _1_6,
+        _1_7: _1_7,
+        _1_8: _1_8,
+        _1_9: _1_9,
+        _1_10: _1_10,
+        _1_11: _1_11,
+        _1_12: _1_12,
+        _1_13: _1_13,
+        _1_14: _1_14,
+        _1_15: _1_15,
+        _1_16: _1_16,
+        _2_1: _2_1,
+        _2_2: _2_2,
+        _2_3: _2_3,
+        _2_4: _2_4,
+        _2_5: _2_5,
+        _2_6: _2_6,
+        _2_7: _2_7,
+        _2_8: _2_8,
+        _2_9: _2_9,
+        _2_10: _2_10,
+        _2_11: _2_11,
+        _3_1: _3_1,
+        _3_2: _3_2,
+        _3_3: _3_3,
+        _3_4: _3_4,
+        _3_5: _3_5,
+        _3_6: _3_6,
+        _3_7: _3_7,
+        _3_8: _3_8,
+        _3_9: _3_9,
+        _3_10: _3_10
+    });
 });
 
 app.get('/favorites', async (req, res) =>
@@ -59,12 +144,6 @@ app.get('/favorites', async (req, res) =>
     });
 
     res.render('favorites.ejs', {likedVideos: likedVideos});
-});
-
-
-app.get('/community', async (req, res) =>
-{
-    res.render('community.ejs');
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => 
@@ -98,6 +177,10 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local',
     failureFlash: true
 }));
 
+app.get('/terms-and-conditions', (req, res) => 
+{
+    res.render('terms-and-conditions.ejs');
+});
 
 // save video progress and percentage complete
 app.patch('/video-state:videoState', async (req, res) =>
@@ -205,6 +288,7 @@ app.patch('/favorites:liked', async (req, res) =>
 
     const likedVid = `${JSON.parse(JSON.stringify(req.body)).likedVid}`; // module
     const isLiked = JSON.parse(JSON.stringify(req.body)).isLiked; // true or false
+    let replace = false;
 
     // adds liked video to the array
     if (isLiked === "false" || isLiked === false)
@@ -213,9 +297,12 @@ app.patch('/favorites:liked', async (req, res) =>
         {
             for (let i = 0; i < likedVideos.length; i++)
             {
-                if (i === likedVideos.length - 1) // last video
+                if (likedVideos[i] !== "")
                 {
-                    likedVideos.push(likedVid);
+                    if (i === Number(likedVideos.length - 1)) // last video
+                    {
+                        replace = true;
+                    }
                 }
                 else if (likedVideos[i] === "")
                 {
@@ -237,25 +324,42 @@ app.patch('/favorites:liked', async (req, res) =>
             likedVideos.push("");
         }
     }
-    else {}
     
-    try
+    if (replace)
     {
-        let data = 
+        try
         {
-            likedVideos: likedVideos,
-        };
-
-        const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
+            const newState = await loginCollection.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
+        }
+        catch(err)
+        {
+            console.log("didn't work: " + err);
+        }
+    
+        return res.json({
+            message: 'state updated'
+        });
     }
-    catch(err)
+    else
     {
-        console.log("didn't work: " + err);
-    }
+        try
+        {
+            let data = 
+            {
+                likedVideos: likedVideos,
+            };
 
-    return res.json({
-        message: 'state updated'
-    });
+            const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
+        }
+        catch(err)
+        {
+            console.log("didn't work: " + err);
+        }
+
+        return res.json({
+            message: 'state updated'
+        });
+    }        
 });
 
 app.delete('/logout', (req, res) =>
