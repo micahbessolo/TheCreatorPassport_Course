@@ -28,25 +28,18 @@
 
     <!--topnav-->
     <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 40px; padding-right: 30px; height: 60px;">
-        <!-- <div>
-            <a href="/">
-                <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: #FFFFFF;">/</div>
+            <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 2</div>
+        </div>
+        <div>
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
+                </form>
             </a>
-        </div> -->
-        <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding-right: 25px; width: 275px;"> -->
-            <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
-                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: #FFFFFF;">/</div>
-                <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 2</div>
-            </div>
-            <div>
-                <a href="#">
-                    <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                        <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
-                    </form>
-                </a>
-            </div>
-        <!-- </div> -->
+        </div>
     </div>
 
     <div style="display: flex; justify-content: center;">
@@ -69,7 +62,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 1</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 1</h5></div>
+                                    <div class="completed_2_1"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Setting a Strong Brand Foundation | Branding 101
                                 </h3>
@@ -104,7 +100,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 2</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 2</h5></div>
+                                    <div class="completed_2_2"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Building and Growing Your Instagram
                                 </h3>
@@ -141,7 +140,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 3</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 3</h5></div>
+                                    <div class="completed_2_3"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Audience Retention Strategies
                                 </h3>
@@ -174,7 +176,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 4</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 4</h5></div>
+                                    <div class="completed_2_4"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Viral Video Creation
                                 </h3>
@@ -207,7 +212,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 5</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 5</h5></div>
+                                    <div class="completed_2_5"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Viral Video Analytics
                                 </h3>
@@ -238,7 +246,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 6</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 6</h5></div>
+                                    <div class="completed_2_6"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Editing Viral Videos
                                 </h3>
@@ -273,7 +284,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 7</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 7</h5></div>
+                                    <div class="completed_2_7"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Creating a Content Management & Organization Strategy
                                 </h3>
@@ -302,7 +316,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 8</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 8</h5></div>
+                                    <div class="completed_2_8"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     TikTok Growth
                                 </h3>
@@ -331,7 +348,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 9</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 9</h5></div>
+                                    <div class="completed_2_9"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     YouTube Growth
                                 </h3>
@@ -364,7 +384,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 10</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 10</h5></div>
+                                    <div class="completed_2_10"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Blog Growth
                                 </h3>
@@ -398,7 +421,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 11</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 11</h5></div>
+                                    <div class="completed_2_11"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Growing Pains: Handling Challenges and Building Resilience
                                 </h3>
@@ -485,13 +511,20 @@
             }
         }
 
-        // adds complete button to last lesson started
+        // adds continue button to last lesson started
         if (completeCount > 0  && completeCount < modArrayLength)
         {
             let btn = document.createElement("div");
             const buttonToClick = document.getElementsByClassName(allModArray[i])[0].getElementsByTagName('li')[lastViewed].firstChild.firstChild;
             btn.innerHTML = `<button class="btn" type="button" onclick="location.href = '${buttonToClick}';" style="background: #dda15e; color: #FFFFFF;">Continue</button>`;
             document.getElementsByClassName('continueBtn')[i].appendChild(btn);
+        }
+        // adds 'complete' icon to completed modules
+        else if (completeCount === modArrayLength)
+        {
+            let completed = document.createElement("div");
+            completed.innerHTML = 'Completed! <i class="fa-regular fa-circle-check" style="color: green; font-size: 1.4rem; font-weight: 600;"></i>'
+            document.getElementsByClassName(`completed${allModArray[i]}`)[0].appendChild(completed);
         }
     }
 

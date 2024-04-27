@@ -66,6 +66,9 @@ div a
 .submitBtn
 {
     width: 120px;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
 }
 .remember
 {

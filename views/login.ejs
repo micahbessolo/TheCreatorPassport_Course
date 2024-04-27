@@ -13,13 +13,13 @@
 </head>
 <body>
     <div class="content">
-        <h1 style="font-size: 34px;">Login</h1>
+        <h1 style="font-size: 34px;">Login Hello</h1>
         <div style="color: red">
             <% if (messages.error) { %>
                 <%= messages.error %>
             <% } %>
         </div>
-        <form action="/login" method="POST">
+        <form id="loginForm" action="/login" method="POST">
             <div class="inputs">
                 <label for="email" class="emailLabel">Email</label><br>
                 <input type="email" id="email" name="email" placeholder="email" required><br>
@@ -28,7 +28,7 @@
                 <span class="password-toggle-icon"><i class="fas fa-eye icon1"></i></span>
             </div>
             <br>
-            <input type="submit" value="Submit" class="submitBtn mt-3 mb-3" />
+            <button type="button" class="submitBtn mt-3 mb-3" onclick="loginSubmit();">Submit</button>
             <br>
         </form>
         <a href="/forgot-password" class="pt-2">Forgot Password?</a><br>
@@ -56,6 +56,12 @@
                 togglePassword.classList.add("fa-eye");
             }
         });
+
+        function loginSubmit()
+        {
+            document.getElementById('email').value = document.getElementById('email').value.toLowerCase().trim();
+            document.getElementById('loginForm').submit();
+        }
     </script>
 </body>
 </html>

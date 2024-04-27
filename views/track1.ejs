@@ -33,25 +33,18 @@
 
     <!--topnav-->
     <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; height: 60px; align-items: center; padding-left: 40px; padding-right: 30px;">
-        <!-- <div>
-            <a href="/">
-                <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+            <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 1</div>
+        </div>
+        <div>
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
+                </form>
             </a>
-        </div> -->
-        <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding-right: 25px; width: 275px;"> -->
-            <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
-                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
-                <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 1</div>
-            </div>
-            <div>
-                <a href="#">
-                    <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                        <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
-                    </form>
-                </a>
-            </div>
-        <!-- </div> -->
+        </div>
     </div>
 
     <div style="display: flex; justify-content: center;">
@@ -77,7 +70,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 1</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 1</h5></div>
+                                    <div class="completed_1_1"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Photography Basics & Terminology | Shooting in Manual Mode
                                 </h3>
@@ -118,7 +114,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 2</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 2</h5></div>
+                                    <div class="completed_1_2"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Camera Gear & Equipment
                                 </h3>
@@ -162,7 +161,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 3</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 3</h5></div>
+                                    <div class="completed_1_3"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Shot Planning & Preparation
                                 </h3>
@@ -199,7 +201,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 4</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 4</h5></div>
+                                    <div class="completed_1_4"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     How to Take Your Own Photos
                                 </h3>
@@ -230,7 +235,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 5</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 5</h5></div>
+                                    <div class="completed_1_5"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Situational Photography
                                 </h3>
@@ -263,7 +271,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 6</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 6</h5></div>
+                                    <div class="completed_1_6"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Mobile Photography/Videography
                                 </h3>
@@ -294,7 +305,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 7</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 7</h5></div>
+                                    <div class="completed_1_7"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Drone Photography
                                 </h3>
@@ -331,7 +345,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 8</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 8</h5></div>
+                                    <div class="completed_1_8"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Organizational Workflow From Start to Finish
                                 </h3>
@@ -361,7 +378,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 9</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 9</h5></div>
+                                    <div class="completed_1_9"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Photo Editing on Lightroom
                                 </h3>
@@ -410,7 +430,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 10</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 10</h5></div>
+                                    <div class="completed_1_10"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Photo Editing on Photoshop
                                 </h3>
@@ -462,7 +485,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 11</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 11</h5></div>
+                                    <div class="completed_1_11"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Pixieset
                                 </h3>
@@ -497,7 +523,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 12</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 12</h5></div>
+                                    <div class="completed_1_12"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Intro to Videography | Settings Explained
                                 </h3>
@@ -544,7 +573,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 13</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 13</h5></div>
+                                    <div class="completed_1_13"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Drone Videography 
                                 </h3>
@@ -582,7 +614,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 14</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 14</h5></div>
+                                    <div class="completed_1_14"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Video Editing on Computer
                                 </h3>
@@ -625,7 +660,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 15</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 15</h5></div>
+                                    <div class="completed_1_15"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Mobile Videography and Editing
                                 </h3>
@@ -658,7 +696,10 @@
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;">
                         <div style="padding: 15px;">
                             <div style="height: 310px; margin-bottom: 15px;">
-                                <h5>Module 16</h5>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 16</h5></div>
+                                    <div class="completed_1_16"></div>
+                                </div>
                                 <h3 style="height: 100px;">
                                     Top Videography Resources
                                 </h3>
@@ -707,9 +748,7 @@
     
     document.title = "Track 1";
 
-
     let allModArray = ["_1_1","_1_2","_1_3","_1_4","_1_5","_1_6","_1_7","_1_8","_1_9","_1_10","_1_11","_1_12","_1_13","_1_14","_1_15","_1_16"];
-    let modIndex = 0;
 
     const allModLength = allModArray.length;
     let totalViewed = 0;
@@ -752,13 +791,20 @@
             }
         }
 
-        // adds complete button to last lesson started
+        // adds 'continue' button to last lesson started
         if (completeCount > 0  && completeCount < modArrayLength)
         {
             let btn = document.createElement("div");
             const buttonToClick = document.getElementsByClassName(allModArray[i])[0].getElementsByTagName('li')[lastViewed].firstChild.firstChild;
             btn.innerHTML = `<button class="btn" type="button" onclick="location.href = '${buttonToClick}';" style="background: #E2B965; color: #FFFFFF;">Continue</button>`;
             document.getElementsByClassName('continueBtn')[i].appendChild(btn);
+        }
+        // adds 'complete' icon to completed modules
+        else if (completeCount === modArrayLength)
+        {
+            let completed = document.createElement("div");
+            completed.innerHTML = 'Completed! <i class="fa-regular fa-circle-check" style="color: green; font-size: 1.4rem; font-weight: 600;"></i>'
+            document.getElementsByClassName(`completed${allModArray[i]}`)[0].appendChild(completed);
         }
     }
 
