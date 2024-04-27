@@ -57,27 +57,20 @@
 
     <!--topnav-->
     <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
-        <!-- <div>
-            <a href="/">
-                <img style="margin-left: 15px;" class="logo" src="../assets/images/creatorPassportIcon.png" alt="logo">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="" id="tracks">Track</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+            <div style="color: #649399; text-decoration: underline !important;">Course</div>
+        </div>
+        <div>
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: white;">Log Out</button>
+                </form>
             </a>
-        </div> -->
-        <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding-right: 25px; width: 380px;"> -->
-            <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
-                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
-                <div><a class="dashboard-link" style="color: #FFFFFF;" href="" id="tracks">Track</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
-                <div style="color: #649399; text-decoration: underline !important;">Course</div>
-            </div>
-            <div>
-                <a href="#">
-                    <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                        <button type="submit" style="all:unset; color: white;">Log Out</button>
-                    </form>
-                </a>
-            </div>
-        <!-- </div> -->
+        </div>
     </div>
 
     <div class="content-container container">
@@ -112,7 +105,7 @@
             <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 15px;">
                 <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
                     <div style="margin-left: auto; margin-right: auto;">
-                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Previous</a>
+                        <a id="back-button" style="color: white; cursor: pointer;"><i class="fa-solid fa-chevron-left"></i>  Previous</a>
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center;">
@@ -120,7 +113,7 @@
                 </div>
                 <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
                     <div style="margin-left: auto; margin-right: auto;">
-                        <a id="next-button" style="color: white;">Next  <i class="fa-solid fa-chevron-right"></i></a>
+                        <a id="next-button" style="color: white; cursor: pointer;">Next  <i class="fa-solid fa-chevron-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -139,7 +132,7 @@
                         </div>
                         <div style="display: flex; flex-direction: row; justify-content: space-between; width: 150px;">
                             <div><button onclick="likeLesson();" class="noStyle" style="color: red;"><i class="fa-regular fa-heart" id="notLiked"></i><i class="fa-solid fa-heart" id="isLiked" style="display: none;"></i></button></div>
-                            <div><a id="nextLessonLink" style="color: #649399;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                            <div><a id="nextLessonLink" style="color: #649399; cursor: pointer;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
                         </div>
                     </div>
                     <div style="margin-top: 20px;">
@@ -232,7 +225,6 @@
         {
             allVidArray = allVidArray3
         }
-        else {}
 
         // styles topnav
         document.getElementById('tracks').href = `/track${module.split("-")[0]}`;
@@ -384,7 +376,7 @@
                     for (let i = 0; i < titlesLength; i++)
                     {
                         sideNav +=
-                        `<a class="d-flex select-video ps-3" href="./course?module=${module.split("-")[0]}-${module.split("-")[1]}-${i + 1}">
+                        `<a class="d-flex select-video ps-3" onclick="postState(); window.location.href='./course?module=${module.split("-")[0]}-${module.split("-")[1]}-${i + 1}'">
                             <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; width: 100%;">
                                 <div style="width: 45px">${titles[i].split(" - ")[0].split(".")[1]}</div>
                                 <div><img src="../assets/images/${module.split("-")[0]}-${module.split("-")[1]}-${i + 1}.png" alt="lesson thumbnail" style="width: 120px; height: auto;" /></div>
@@ -482,10 +474,9 @@
                 }
                 else
                 {
-                    document.getElementById('nextLessonLink').href = `./course?module=${nextLesson}`;
-                    // document.getElementById('nextLessonLink').setAttribute("onclick”, ”nextLessonRouting(`./course?module=${nextLesson}`)");
-                    document.getElementById('next-button').href = `./course?module=${nextLesson}`;
-                    document.getElementById("video-ended-next").addEventListener("click", function(){location.href = `./course?module=${nextLesson}`});
+                    document.getElementById('nextLessonLink').addEventListener('click', function(){postState(); location.href = `./course?module=${nextLesson}`;});
+                    document.getElementById('next-button').addEventListener('click', function(){postState(); location.href = `./course?module=${nextLesson}`;});
+                    document.getElementById("video-ended-next").addEventListener("click", function(){postState(); location.href = `./course?module=${nextLesson}`});
                 }
 
                 if (previousLesson === "#")
@@ -495,7 +486,8 @@
                 }
                 else
                 {
-                    document.getElementById('back-button').href = `./course?module=${previousLesson}`;
+                    document.getElementById('back-button').addEventListener('click', function(){postState(); location.href = `./course?module=${previousLesson}`;});
+                    // document.getElementById('back-button').href = `./course?module=${previousLesson}`;
                 }
 
                 document.getElementById('currentLessonTitle').innerText = titles[URLSection - 1];
@@ -578,13 +570,6 @@
                 }
                 document.getElementById("resourceList").innerHTML = resourcesHTML;
             }
-        }
-
-        // makes sure to track progress before redirecting the user to the next lesson
-        function nextLessonRouting(link)
-        {
-            postState();
-            location.href = link;
         }
 
         // posts the video's current time, and duration when the user leaves page
