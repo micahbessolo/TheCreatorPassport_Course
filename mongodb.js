@@ -11,7 +11,8 @@ mongoose.connect(process.env.DATABASECONNECT)
     console.log("failed to connect to MongoDB: ", err);
 });
 
-const LoginSchema = new mongoose.Schema({
+const LoginSchema = new mongoose.Schema(
+{
     createdDate: {
         type: Date,
         required: true
@@ -183,9 +184,8 @@ const LoginSchema = new mongoose.Schema({
     _3_10: {
         type: Array,
         default: ["","","","","","","","",""]
-    }
-    
-}, {timestamps: true});
+    }      
+},{timestamps: true});
 
 const loginCollection = mongoose.model("logincollections", LoginSchema);
 

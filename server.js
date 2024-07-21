@@ -9,7 +9,6 @@ else
 
 const express = require('express');
 const app = express();
-const bcrypt = require('bcrypt');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
@@ -17,7 +16,6 @@ const methodOverride = require('method-override');
 const {loginCollection} = require("./mongodb");
 const initializePassport = require('./passport-config');
 const {forgotPassword, resetPassword} = require("./password_recovery/auth");
-const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
 initializePassport(passport, 
     email => loginCollection.findOne({email: email}),
@@ -34,7 +32,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); // keeps track of the user's session
 app.use(methodOverride('_method'));
 
 app.get('/login', checkNotAuthenticated, (req, res) => 
@@ -56,6 +54,7 @@ app.get('/reset-password', (req, res) =>
 
 app.post('/reset-password', resetPassword);
 
+// passport.authenticate() function is passport function used as route middleware to authenticate requests
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', 
 {
     successRedirect: '/',
@@ -65,11 +64,10 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local',
 
 function checkAuthenticated(req, res, next)
 {
-    if (req.isAuthenticated())
+    if (req.isAuthenticated()) // req.isAuthenticated() is a passport function that returns true if the user is authenticated
     {
         return next();
     }
-
     res.redirect('/login')
 }
 

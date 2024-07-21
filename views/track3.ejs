@@ -297,6 +297,9 @@
                                         <ul class="dropdown-menu _3_7" style="width: 300px;">
                                             <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=3-7-1">7.1 - The Importance of Professional Communication</a></div></li>
                                             <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=3-7-2">7.2 - Campaign Reports (ROI & KPIs)</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=3-7-3">7.3 - What to do if your Campaign doesn't Perform Well</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=3-7-4">7.4 - Scheduling & Organizing Ads & Remaining True to Your Sponsored Content</a></div></li>
+                                            <li style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between;"><div><a class="dropdown-item" style="padding-right: 7px;" href="/course?module=3-7-5">7.5 - Successful & Unsuccessful Sponsored Post Examples</a></div></li>
                                         </ul>
                                     </div>
                                     <div class="continueBtn">
@@ -447,8 +450,10 @@
         let completeCount = 0;
         let lastViewed = 0;
 
+        // adds checks and how much was viewed for each module
         for (let j = 0; j < modArrayLength; j++)
         {
+            console.log("module: " + i + " lesson: " + j + " module element " + moduleElement.getElementsByTagName('li')[j]);
             allVidLength ++;
             // each lesson
             if(modArray[j].split("_")[2] !== '' && modArray[j].split("_")[2] > 0)
@@ -497,6 +502,10 @@
         const percentageCompleted = Math.round((totalViewed/allVidLength) * 100);
         document.getElementById('progress-bar').value = totalViewed;
         document.getElementById('progress-bar').max = allVidLength;
+        console.log("Total Viewed: " + totalViewed);
+        console.log("All Vid Length: " + allVidLength);
+        console.log("Percentage Completed: " + percentageCompleted);
+
         document.getElementById('progress-percentage').innerText = "(" + percentageCompleted + "%)"
 	}
 	progressBar();

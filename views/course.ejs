@@ -573,6 +573,8 @@
         }
 
         // posts the video's current time, and duration when the user leaves page
+        // TODO: add error handling for player.playerInfo.currentTime as sometimes the playerInfo variables changes (on YouTube API side)
+        // it changed from player.playerInfo to player.v and then back for some reason
         function postState(event)
         {
             const currentTime = Math.floor(player.playerInfo.currentTime);

@@ -18,7 +18,7 @@ function initialize(passport, getUserByEmail, getUserById)
         {
             if (await bcrypt.compare(password, User.password))
             {
-                return done(null, User);
+                return done(null, User); // done function passes null for errors and the User instance
             }
             else
             {
@@ -30,9 +30,11 @@ function initialize(passport, getUserByEmail, getUserById)
             return done(e);
         }
     }
-
-    passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser));
+    // authenticate's requests
+    passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser)); // says that the username field is the email
+    // to maintain the user's session
     passport.serializeUser((User, done) => done(null, User.id));
+    // attaches the user to the req.user object
     passport.deserializeUser((id, done) => {
         return done(null, getUserById(id))
     });
