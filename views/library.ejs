@@ -43,7 +43,13 @@
 					<div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap; width: 370px;">
 						<div><a href="#" class="header-options text-decoration-underline">dashboard</a></div>
 						<div><a href="/favorites" class="header-options">favorites</a></div>
-						<div><a href="https://www.facebook.com/groups/1055892835736335/" target="_blank" class="header-options">community</a></div>
+						<div>
+							<button class="header-options noStyle" onFocus="communityOptions()" onFocusOut="communityOptions()">community</button>
+							<div id="community-options" style="display: none; flex-direction: row; justify-content: space-evenly; position: absolute; width: 240px; height: 40px; background: gray; margin-top: 20px; margin-left: -60px;">
+								<a href="https://www.facebook.com/groups/1055892835736335/" target="_blank" class="header-options">Cohort 1</a>
+								<a href="https://www.facebook.com/groups/creatorpassportcohort2" target="_blank" class="header-options">Cohort 2</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -118,6 +124,21 @@
 			</div>
 		</div>
     </div>
+
+	<script type="text/javascript">
+		function communityOptions()
+		{
+			const communityOptions = document.getElementById("community-options");
+			if (communityOptions.style.display === "none")
+			{
+				communityOptions.style.display = "flex";
+			}
+			else
+			{
+				communityOptions.style.display = "none";
+			}
+		}
+	</script>
 	
 
 </body>
