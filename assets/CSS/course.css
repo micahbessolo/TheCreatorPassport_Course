@@ -255,3 +255,10 @@ progress::-moz-progress-bar
 {
     cursor: pointer;
 }
+@media (max-width: 500px)
+{
+    #nextLessonImage
+    {
+        display: none;
+    }
+}
