@@ -1,4 +1,4 @@
-const {loginCollection} = require("../mongodb");
+const userCollections = require('./models/user-collection');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const mailgun = require("mailgun-js");
@@ -13,7 +13,7 @@ exports.forgotPassword = async (req, res) =>
 {
     let userName;
 
-    await loginCollection.findOne({email: req.body.email}).then((user, err) =>
+    await userCollections.findOne({email: req.body.email}).then((user, err) =>
     {
         userName = user.name;
 
@@ -585,7 +585,7 @@ exports.resetPassword = (req, res) =>
                 return res.render('reset-password.ejs', { errorMessage: "This link expired. To resend a new email click 'Back to Login' then 'Forgot Password.'" });
             }
 
-            loginCollection.findOne({resetLink}).then(async (user, err) =>
+            userCollections.findOne({resetLink}).then(async (user, err) =>
             {
                 if(err || !user)
                 {
