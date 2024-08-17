@@ -9,6 +9,7 @@ else
 
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 6000;
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
@@ -615,4 +616,8 @@ app.get('/track3', async (req, res) =>
     
 });
 
-app.listen(3000);
+app.listen(PORT, () => 
+{
+    console.log(`Server started on http://localhost:${PORT}`);
+    connectMongoDB();
+});
