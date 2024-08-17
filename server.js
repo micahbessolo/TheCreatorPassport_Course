@@ -93,7 +93,6 @@ function checkNotAuthenticated(req, res, next)
 {
     if (req.isAuthenticated())
     {
-        console.log("success")
         return res.redirect('/');
     }
     next();
@@ -104,9 +103,6 @@ app.get('/', checkAuthenticated, async (req, res) =>
     let userEmail;
     let userName;
     let profileImg;
-
-    console.log(userCollections)
-    console.log(req);
 
     const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
     {
