@@ -1,4 +1,4 @@
-const userCollections = require('./models/user-collection');
+const userCollections = require('../models/user-collection');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const mailgun = require("mailgun-js");
