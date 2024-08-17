@@ -104,6 +104,9 @@ app.get('/', checkAuthenticated, async (req, res) =>
     let userName;
     let profileImg;
 
+    console.log(userCollections)
+    console.log(req);
+
     const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
     {
         userEmail = info.email;
