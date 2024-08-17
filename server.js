@@ -120,6 +120,23 @@ app.get('/', checkAuthenticated, async (req, res) =>
     });
 });
 
+app.get('/live-trainings', checkAuthenticated, async (req, res) => 
+{
+    let liveTrainingsProgress;
+    let likedVideoList;
+
+    const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
+    {
+        liveTrainingsProgress = info.liveTrainingsProgress;
+        likedVideoList = info.likedVideos;
+    });
+
+    res.render('live-trainings.ejs', {
+        liveTrainingsProgress: liveTrainingsProgress,
+        likedVideoList: likedVideoList
+    });
+});
+
 app.get('/live-trainings-object', checkAuthenticated, async (req, res) => {
     const results = await videoCollections.findOne({trackMod: "Live Trainings"}).then((info, err) =>
     {
