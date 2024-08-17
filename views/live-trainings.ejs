@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/creatorPassportIcon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
+    <link rel="stylesheet" href="assets/CSS/library.css">
+    <link rel="stylesheet" href="assets/CSS/course.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #36454F;">
+    <!--topnav-->
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+            <div style="color: #649399; text-decoration: underline !important;">Live Trainings</div>
+        </div>
+        <div>
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: white;">Log Out</button>
+                </form>
+            </a>
+        </div>
+    </div>
+
+    <div class="content-container container">
+        <div id="videoAndSidenav">
+            <!-- video -->
+            <div id="video-container">
+                <div style="aspect-ratio: 16/9; position: relative">
+                    <div class="video-cover">
+                        <div style="display: flex; flex-direction: row; justify-content: center; align-content: center; flex-wrap: wrap; height: 100%;">
+                            <div id="video-ended-next" onclick="">
+                                <div class="cover-font">Continue Learning <i class="fa-solid fa-chevron-right" style="color: white;"></i></div>
+                                <div style="margin-top: 10px;"><img id="cover-next-lesson-image" src="" style="max-width: 250px; height: auto;" /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="video">
+                        <!-- load in video -->
+                    </div>
+                </div>
+            </div>
+    
+            <!-- sidenav -->
+            <div id="sidenav-container">
+                <div class="sidebarColumn">
+                    <!-- load in sidenav -->
+                </div>
+            </div>
+        </div>
+    
+        <!-- player nav -->
+        <div id="player-nav">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 15px;">
+                <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="margin-left: auto; margin-right: auto;">
+                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Previous</a>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div id="lesson-of"></div>
+                </div>
+                <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="margin-left: auto; margin-right: auto;">
+                        <a id="next-button" style="color: white;">Next  <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; margin-top: 25px;">
+            <div class="below-vid-content">
+                <div style="width: 100%; background: white; padding: 15px;">
+                    <div style="width: 100%; padding: 15px; background: #E0E0E0; margin-left: auto; margin-right: auto; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <div class="d-flex align-items-center">
+                            <img id="nextLessonImage" src="" style="width: 100px; height: auto;" />
+                            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px;">
+                                <div>Continue learning</div>
+                                <div id="nextLessonTitle" style="font-family: 'poppins bold', sans-serif; font-size: 16px;"><!-- gets next lesson title from function --></div>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; width: 150px;">
+                            <div><button onclick="likeLesson();" class="noStyle" style="color: red;"><i class="fa-regular fa-heart" id="notLiked"></i><i class="fa-solid fa-heart" id="isLiked" style="display: none;"></i></button></div>
+                            <div><a id="nextLessonLink" style="color: #649399;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h4 id="currentLessonTitle"></h4>
+                        <div id="copy">
+                            <!-- copy goes here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position: relative; bottom: -10px; display: flex; flex-direction: row; justify-content: center; width: 100%;">
+            <div><a href="./terms-and-conditions" style="color: #FFFFFF;">Terms and Conditions</a></div>
+        </div>
+
+        <button onclick="postState();" id="patch" style="display: none;">PATCH BUTTON</button>
+    </div>
+    
+    
+    <script type="text/javascript">
+        const url = window.location.search;
+        const urlParams = new URLSearchParams(url);
+        const lesson = urlParams.get('lesson');
+        let isLiked = false;
+        let returnObject = {};
+
+        const liveTrainingsString = '<%=liveTrainingsProgress%>';
+        const liveTrainingsArray = liveTrainingsString.split(',');
+        console.log(liveTrainingsArray)
+        const likedVideoList = '<%=likedVideoList%>';
+        const likedVideoListArray = likedVideoList.split(',')
+
+        $.ajax({
+            url: '/live-trainings-object', // replace with the actual URL
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            success: function(res) {
+                console.log(res);
+                
+                returnObject.titles = res.titles;
+                returnObject.links = res.links;
+                returnObject.moduleTitle = res.moduleName;
+                returnObject.copy = res.copy;
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+
+        // YouTube Embed API starts here
+        let player;
+        let tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+
+        let firstScriptTag = document.getElementsByTagName("script")[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        tag.onload = onYouTubeIframeAPIReady;
+
+        function onYouTubeIframeAPIReady()
+        {
+            let startPoint;
+            // gets the start point of the lesson
+            let currentLessonData = liveTrainingsArray[lesson - 1];
+
+            if (currentLessonData === 0 || currentLessonData === "" || currentLessonData === "NaN_undefined_NaN")
+            {
+                startPoint = 0;
+            }
+            else
+            {
+                startPoint = Math.floor(Number(currentLessonData.split("_")[0]));
+            }
+
+            window.YT.ready(function()
+            {
+                player = new window.YT.Player('video',
+                {
+                    height: '100%',
+                    width: '100%',
+                    videoId: returnObject.links[lesson - 1],
+                    playerVars:
+                    {
+                        'playsinline': 1,
+                        'start': startPoint,
+                        'rel': 0,
+                        'showinfo': 0,
+                    },
+                    events:
+                    {
+                        'onReady': onPlayerReady,
+                        'onStateChange': stateChange
+                    }
+                });
+            });
+            addToSidenav(returnObject.titles, returnObject.moduleTitle);
+            pageStyling(returnObject.titles, returnObject.copy);
+        }
+
+        function onPlayerReady(event)
+        {
+            event.target.playVideo();
+        }
+
+        function stateChange(event)
+        {
+            switch(event.data)
+            {
+                case 0: // ended
+                    // Covers the recommended videos once video ends
+                    document.getElementsByClassName("video-cover")[0].style.display = "block";
+                    postState();
+                    break;
+                case 2: // paused
+                    // Updates the video state when the video is paused
+                    postState();
+                    break;
+                default:
+                    document.getElementsByClassName("video-cover")[0].style.display = "none";
+                    break;
+            }
+        }
+
+        function stopVideo()
+        {
+            // updates video progress
+            document.getElementById("patch").click();
+        }
+
+        // Make Sidenav
+        function addToSidenav(titles, moduleTitle)
+        {
+            for (let i = 0; i < liveTrainingsArray.length; i++)
+            {
+                if (liveTrainingsArray[i] === "" || Number(liveTrainingsArray[i]) <= .05 || liveTrainingsArray[i] === "NaN_undefined_NaN")
+                {
+                    liveTrainingsArray[i] = 0;
+                }
+                else if (Number(liveTrainingsArray[i].split("_")[2]) >= .95)
+                {
+                    liveTrainingsArray[i] = 1;
+                }
+                else
+                {
+                    liveTrainingsArray[i] = Number(liveTrainingsArray[i].split("_")[2]);
+                }
+            }
+            
+            // generates sidenav
+            if (titles)
+            {
+                const titlesLength = titles.length;
+
+                if (document.querySelectorAll('.select-video').length <= titlesLength)
+                {
+                    let sideNav =
+                    `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; background-color: white;">
+                        <div style="font-size: 14px; width: 70%; color: black; padding-left: 15px;" class="d-flex align-items-center select-video">
+                            Training ${lesson}
+                        </div>
+                        <div class="d-flex justify-content-center" style="width: 30%; color: #3d3d3d;">
+                            ${titlesLength} Lessons
+                        </div>
+                    </div>`;
+
+                    for (let i = 0; i < titlesLength; i++)
+                    {
+                        sideNav +=
+                        `<a class="d-flex select-video ps-3" href="./live-trainings?lesson=${i + 1}">
+                            <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; width: 100%;">
+                                <div style="width: 45px">${titles[i].split(" - ")[0]}</div>
+                                <div><img src="../assets/images/live-training-${i + 1}.png" alt="lesson thumbnail" style="width: 120px; height: auto;" /></div>
+                                <div class="titleFlex" style="width: 100%; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <div>${titles[i].split(" - ")[1]}</div>
+                                    <div><progress class="progress-bar" max="1" value="${liveTrainingsArray[i]}"></progress></div>
+                                </div>
+                                <div style="width: 24px;" class="check-container">
+                                    
+                                </div>
+                            </div>
+                        </a>`;
+                    }
+                    document.getElementsByClassName("sidebarColumn")[0].innerHTML = sideNav
+                }
+            }
+        }
+
+        // styling including image, title, and link for next lesson, active lesson on sidenav, copy
+        function pageStyling(titles, copy)
+        {
+            if (titles)
+            {
+                let titlesLength = titles.length;
+                let nextLesson = "";
+                let previousLesson = "";
+                let nextModuleTitle = "";
+
+                // Styling next lesson, previous lesson buttons
+
+                // last lesson of module
+                if (Number(lesson) === titlesLength)
+                {
+                    nextLesson = "#";
+                    nextModuleTitle = "Course complete!";
+                    previousLesson = `${Number(lesson) - 1}`;
+                    document.getElementById('nextLessonImage').style.display = "none";
+                    document.getElementById('cover-next-lesson-image').style.display = "none";
+                }
+                // first lesson of module
+                else if (Number(lesson) === 1)
+                {                    
+                    nextLesson = `${Number(lesson) + 1}`;
+                    previousLesson = "#";
+                    nextModuleTitle = titles[Number(lesson)];
+                    document.getElementById('nextLessonImage').src = `../assets/images/live-training-${Number(lesson) + 1}.png`;
+                    document.getElementById('cover-next-lesson-image').src = `../assets/images/live-training-${Number(lesson) + 1}.png`;
+                }
+                // not first or last lesson of module
+                else
+                {
+                    nextLesson = `${Number(lesson) + 1}`;
+                    previousLesson = `${Number(lesson) - 1}`;
+                    nextModuleTitle = titles[Number(lesson)];
+                    document.getElementById('nextLessonImage').src = `../assets/images/live-training-${Number(lesson) + 1}.png`;
+                    document.getElementById('cover-next-lesson-image').src = `../assets/images/live-training-${Number(lesson) + 1}.png`;
+                }
+
+                if (nextLesson === "#")
+                {
+                    document.getElementById('nextLessonLink').href = '#';
+                    document.getElementById('next-button').href = '#';
+                    document.getElementById('next-button').parentNode.parentNode.style.background = "gray";
+                    document.getElementById("video-ended-next").addEventListener("click", function(){location.href = '#'});
+                }
+                else
+                {
+                    document.getElementById('nextLessonLink').href = `./live-trainings?lesson=${nextLesson}`;
+                    document.getElementById('next-button').href = `./live-trainings?lesson=${nextLesson}`;
+                    document.getElementById("video-ended-next").addEventListener("click", function(){location.href = `./live-trainings?lesson=${nextLesson}`});
+                }
+
+                if (previousLesson === "#")
+                {
+                    document.getElementById('back-button').href = '#';
+                    document.getElementById('back-button').parentNode.parentNode.style.background = "gray";
+                }
+                else
+                {
+                    document.getElementById('back-button').href = `./live-trainings?lesson=${previousLesson}`;
+                }
+
+                document.getElementById('currentLessonTitle').innerText = titles[lesson - 1];
+                document.getElementById('lesson-of').innerHTML = `Lesson ${lesson} of ${titlesLength}`;
+                document.getElementById('copy').innerText = copy[lesson - 1];
+                document.getElementById('nextLessonTitle').innerText = nextModuleTitle;
+
+                // styles sidenav of current lesson
+                for (let i = 0; i < titlesLength; i++)
+                {
+                    if (i === lesson - 1)
+                    {
+                        document.getElementsByClassName('select-video')[lesson].style.background = '#f7f6f2';
+                        document.getElementsByClassName('select-video')[lesson].style.color = 'black';
+                    }
+                    // progress bar and check box sidenav styling
+                    if (Number(document.getElementsByClassName("progress-bar")[i].value) === 0)
+                    {
+                        document.getElementsByClassName("progress-bar")[i].style.display = "none";
+                    }
+                    else if (Number(document.getElementsByClassName("progress-bar")[i].value) >= .95)
+                    {
+                        document.getElementsByClassName("progress-bar")[i].style.display = "none";
+                        document.getElementsByClassName("check-container")[i].innerHTML = 
+                        '<i class="fa-solid fa-check" style="padding-right: 8px; color: green;"></i>';                        
+                    }
+                    else {}
+                }
+                seeIfLiked();
+            }
+        }
+
+        // makes sure to track progress before redirecting the user to the next lesson
+        function nextLessonRouting(link)
+        {
+            postState();
+            location.href = link;
+        }
+
+        // posts the video's current time, and duration when the user leaves page
+        function postState(event)
+        {
+            const currentTime = Math.floor(player.playerInfo.currentTime);
+            const duration = player.playerInfo.duration;
+
+            $.ajax({
+                type: "patch",
+                url: "/live-trainings-state:videoState",
+                async: false,
+                data: {
+                    'currentTime': currentTime,
+                    'videoDuration': duration,
+                    'URLData': lesson
+                },
+                success: function (data)
+                {}
+            });
+        }
+        // when leaving the page runs postState function
+        //this will work only for Chrome
+        $(window).on('beforeunload', function ()
+        {
+            postState();
+        });
+        //this will work for other browsers
+        $(window).on("unload", function ()
+        {
+            postState();
+        });
+
+        function seeIfLiked()
+        {
+            console.log(likedVideoListArray)
+            if (likedVideoListArray.includes(lesson))
+            {
+                isLiked = true;
+                document.getElementById('isLiked').style.display = 'block';
+                document.getElementById('notLiked').style.display = 'none';
+            }
+        }
+
+        function likeLesson()
+        {
+            $.ajax({
+                type: "patch",
+                url: "/favorites:liked",
+                async: false,
+                data: {
+                    'likedVid': lesson,
+                    'isLiked': isLiked
+                },
+                success: function (data)
+                {
+                    if (isLiked)
+                    {
+                        document.getElementById('notLiked').style.display = 'block';
+                        document.getElementById('isLiked').style.display = 'none';
+                    }
+                    else
+                    {
+                        document.getElementById('notLiked').style.display = 'none';
+                        document.getElementById('isLiked').style.display = 'block';
+                    }
+                },
+                error: function(err)
+                {
+                    console.log(error)
+                }
+            });
+        }
+
+    </script>
+
+</body>
+</html>
+
+

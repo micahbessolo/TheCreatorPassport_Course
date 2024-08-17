@@ -1,0 +1,79 @@
+const { text } = require("express");
+const mongoose = require("mongoose");
+
+const postCollectionSchema = new mongoose.Schema(
+	{
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "logincollections",
+			required: true,
+		},
+		text: {
+			type: String,
+		},
+		img: {
+			type: String,
+		},
+		likes: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "logincollections",
+			},
+		],
+		comments: [
+			{
+				text: {
+					type: String,
+					required: true,
+				},
+				user: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "logincollections",
+					required: true,
+				},
+				likes: [
+					{
+						type: mongoose.Schema.Types.ObjectId,
+						ref: "logincollections",
+					},
+				],
+				comments: [
+					{
+						text: {
+							type: String,
+							required: true,
+						},
+						user: {
+							type: mongoose.Schema.Types.ObjectId,
+							ref: "logincollections",
+							required: true,
+						},
+						likes: [
+							{
+								type: mongoose.Schema.Types.ObjectId,
+								ref: "logincollections",
+							},
+						],
+						createdAt: {
+							type: Date,
+							default: Date.now,
+							required: true,
+						},
+					},
+				],
+				createdAt: [
+					{
+						type: Date,
+						default: Date.now,
+						required: true,
+					},
+				]
+			},
+		],
+	},
+	{ timestamps: true }
+);
+
+const postCollections = mongoose.model("Post", postCollectionSchema);
+
+module.exports = postCollections;

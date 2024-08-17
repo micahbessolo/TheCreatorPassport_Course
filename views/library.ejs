@@ -40,7 +40,7 @@
 				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h4 style="font-family: 'Roboto', sans-serif; font-size: 29px;">The Creator Passport</h4></div>
 				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h1 class="text-uppercase font-title">Student Dashboard</h1></div>
 				<div style="display: flex; justify-content: center;">
-					<div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap; width: 370px;">
+					<div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap; width: 520px;">
 						<div><a href="#" class="header-options text-decoration-underline">dashboard</a></div>
 						<div><a href="/favorites" class="header-options">favorites</a></div>
 						<div>
@@ -51,6 +51,7 @@
 								<a href="https://www.facebook.com/groups/creatorpassportcohort2" target="_blank" class="community-options">Cohort 2</a>
 							</div>
 						</div>
+						<div><a href="" class="header-options" id="liveTrainingsAnchor">Live Trainings</a></div>
 					</div>
 				</div>
 			</div>
@@ -139,6 +140,24 @@
 				communityOptions.style.display = "none";
 			}
 		}
+
+		function liveTrainingsAnchor()
+		{
+			const liveTrainingsString = '<%=liveTrainingsProgress%>';
+			const liveTrainingsArray = liveTrainingsString.split(',');
+
+			let lastSeen = 1;
+			for (let i = 0; i < liveTrainingsArray.length; i++)
+			{
+				if (liveTrainingsArray[i].length)
+				{
+					lastSeen = i + 1;
+				}
+			}
+		
+			document.getElementById("liveTrainingsAnchor").href = `/live-trainings?lesson=${lastSeen}`;
+		}
+		liveTrainingsAnchor();
 	</script>
 	
 
