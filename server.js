@@ -9,7 +9,7 @@ else
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 6000;
+const PORT = 3000;
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
