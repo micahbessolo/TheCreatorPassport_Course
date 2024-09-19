@@ -487,12 +487,14 @@
                 else
                 {
                     document.getElementById('back-button').addEventListener('click', function(){postState(); location.href = `./course?module=${previousLesson}`;});
-                    // document.getElementById('back-button').href = `./course?module=${previousLesson}`;
                 }
+
+                let videoDescription = copy[Number(module.split('-')[2]) - 1];
+
 
                 document.getElementById('currentLessonTitle').innerText = titles[URLSection - 1];
                 document.getElementById('lesson-of').innerHTML = `Lesson ${URLSection} of ${titlesLength}`;
-                document.getElementById('copy').innerText = copy[Number(module.split('-')[2]) - 1];
+                document.getElementById('copy').innerHTML = videoDescription;
                 document.getElementById('nextLessonTitle').innerText = nextModuleTitle;
 
                 // styles sidenav of current lesson
