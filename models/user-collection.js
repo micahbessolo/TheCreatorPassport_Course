@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     createdDate: {
-        type: Date,
+        type: String,
         required: true
     },
     name: {
@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema({
     resetLink: {
         type: String,
         default: ''
+    },
+    cohort: {
+        type: Number,
     },
     likedVideos: {
         type: Array,

@@ -1,0 +1,135 @@
+.button-disabled
+{
+    color: #BCC0C4 !important;
+    background: #e4e6eb !important;
+}
+
+.button-enabled
+{
+    background: #0866FF !important; 
+    color: white !important;
+}
+
+.input-group
+{
+    position: relative;
+    width: 100%;
+}
+
+.input-group-append
+{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.likeCommentButton
+{
+    padding: 7px 0 7px 0;
+    border-radius: 10px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.likeCommentButton:hover
+{
+    background: #F0F2F5;
+}
+
+.commentButtons
+{
+    color: #65676b;
+    font-size: 14px;
+    margin-left: 12px;
+    font-weight: 600;
+}
+.commentButtons:hover
+{
+    text-decoration: underline;
+}
+.hiddenReply
+{
+    color: #65676b;
+    font-size: 15px;
+    margin-left: 12px;
+    font-weight: 500;
+}
+.hiddenReply:hover
+{
+    cursor: pointer;
+}
+
+.modalWidth
+{
+    width: calc(100% - 30px);
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    margin-bottom: 20px;
+}
+
+.modal-body
+{
+    background-color: #F0F2F5;
+}
+
+.currentImgURL
+{
+    height: auto;
+    width: 100%; 
+    object-fit: contain;
+    border-radius: 50%;
+    min-height: 50px;
+}
+
+.community-content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #F0F2F5;
+    margin-top: 350px;
+}
+
+@media (max-width: 800px)
+{
+    .community-content
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #F0F2F5;
+        margin-top: 450px;
+    }
+}
+
+.menu-options
+{
+  display: flex; 
+  flex-direction: row; 
+  justify-content: space-between; 
+  flex-wrap: nowrap;
+  width: 520px;
+}
+
+.menu-options div
+{
+  padding: 0 10px 10px 10px;
+}
+
+@media (max-width: 600px)
+{
+  .menu-options
+  {
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    flex-wrap: wrap;
+    width: 90%;
+  }
+}

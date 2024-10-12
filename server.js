@@ -9,27 +9,41 @@ else
 
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 6000;
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
+const cloudinary = require('cloudinary').v2;
 
-
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // mongodb connection and models
 const connectMongoDB = require("./mongodb");
-const userCollections = require('./models/user-collection');
-const videoCollections = require('./models/video-collections');
-const postCollections = require('./models/post-collection');
-const Notification = require('./models/notification-collection');
+const userCollection = require('./models/user-collection');
+const videosCollection = require('./models/video-collections');
+const postsCollection = require('./models/post-collection');
+const notificationsCollection = require('./models/notification-collection');
 
+const { topNav, topNavNotifications, markNotificationRead } = require('./topnav');
 const initializePassport = require('./passport-config');
 const {forgotPassword, resetPassword} = require("./password_recovery/auth");
+const multer  = require('multer');
+const storage = multer.diskStorage({
+    filename: function (req, file, cb)
+    {
+        cb(null, file.originalname)
+    }
+});
+const upload = multer({storage: storage});
 
 initializePassport(passport, 
-    email => userCollections.findOne({email: email}),
-    id => userCollections.findOne({_id: id})
+    email => userCollection.findOne({email: email}),
+    id => userCollection.findOne({_id: id})
 );
 
 app.set('view-engine', 'ejs');
@@ -48,6 +62,22 @@ app.use(methodOverride('_method'));
 app.get('/login', checkNotAuthenticated, (req, res) => 
 {
     res.render('login.ejs');
+});
+
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', 
+{
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
+
+app.delete('/logout', (req, res) =>
+{
+    req.logout(req.user, err =>
+    {
+        if(err) return next(err);
+        res.redirect("/login");
+    });
 });
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', 
@@ -103,8 +133,18 @@ app.get('/', checkAuthenticated, async (req, res) =>
     let userEmail;
     let userName;
     let profileImg;
+    let isTestUser = false;
 
-    const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
+    if (userEmail == "mbessolo@westmont.edu"
+    || userEmail == "ryanleebanksmedia@gmail.com"
+    || userEmail == "dani@theloverspassport.com"
+    || userEmail == "dreamwithlo@gmail.com"
+    || userEmail == "maggie@theloverspassport.com")
+    {
+        isTestUser = true;
+    }
+
+    const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
     {
         userEmail = info.email;
         userName = info.name;
@@ -112,12 +152,80 @@ app.get('/', checkAuthenticated, async (req, res) =>
         liveTrainingsProgress = info.liveTrainingsProgress;
     });
 
-    res.render('library.ejs', {
+    res.render('dashboard.ejs', {
         userName: userName,
         email: userEmail,
         profileImg: profileImg,
-        liveTrainingsProgress: liveTrainingsProgress
+        liveTrainingsProgress: liveTrainingsProgress,
+        isTestUser: isTestUser
     });
+});
+
+app.get('/topNav/:page', checkAuthenticated, async (req, res) => 
+{
+    res.send(await topNav(req));
+});
+
+app.get('/topNavNotifications/:type', checkAuthenticated, async (req, res) =>
+{
+    res.send(await topNavNotifications(req));
+});
+
+app.post('/mark-notification-read', checkAuthenticated, async (req, res) =>
+{
+    res.send(await markNotificationRead(req));
+});
+
+app.post('/update-user', checkAuthenticated, upload.single('profileImg'), async (req, res) =>
+{
+    const { email } = req.body;
+    let profileImg = req.file;
+    const userId = req.user._conditions._id.toString();
+
+    try
+    {
+        let user = await userCollection.findById(userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (profileImg)
+        {
+            if (user.profileImg)
+            {
+                await cloudinary.uploader.destroy(user.profileImg.split("/").pop().split(".")[0]);
+            }
+
+            const uploadedResponse = await cloudinary.uploader.upload(req.file.path, 
+            { 
+                transformation: [
+                    { width: 200, height: 200, crop: "limit" }
+                ]
+            }, 
+            function (err)
+            {
+                if(err)
+                {
+                    console.log(err);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Error"
+                    })
+                }
+            });
+            profileImg = uploadedResponse.secure_url;
+        }
+
+        user.email = email || user.email;
+        user.profileImg = profileImg || user.profileImg;
+
+        user = await user.save();
+
+        return res.json({profileImg: user.profileImg, email: user.email})
+    }
+    catch (error)
+    {
+        console.log("Error in updateUser: ", error.message);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.get('/live-trainings', checkAuthenticated, async (req, res) => 
@@ -125,7 +233,7 @@ app.get('/live-trainings', checkAuthenticated, async (req, res) =>
     let liveTrainingsProgress;
     let likedVideoList;
 
-    const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
+    const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
     {
         liveTrainingsProgress = info.liveTrainingsProgress;
         likedVideoList = info.likedVideos;
@@ -138,12 +246,69 @@ app.get('/live-trainings', checkAuthenticated, async (req, res) =>
 });
 
 app.get('/live-trainings-object', checkAuthenticated, async (req, res) => {
-    const results = await videoCollections.findOne({trackMod: "Live Trainings"}).then((info, err) =>
+    const results = await videosCollection.findOne({trackMod: "Live Trainings"}).then((info, err) =>
     {
         return info;
     });
 
     res.json(results);
+});
+
+app.get('/community-page', checkAuthenticated, async (req, res) =>
+{
+    let userEmail;
+    let userName;
+    let profileImg;
+    const userID = req.user._conditions._id;
+
+    const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+    {
+        userEmail = info.email;
+        userName = info.name;
+        profileImg = info.profileImg;
+        liveTrainingsProgress = info.liveTrainingsProgress;
+    });
+
+    res.render('community.ejs', {
+        userName: userName,
+        _1_1: _1_1,
+        _1_2: _1_2,
+        _1_3: _1_3,
+        _1_4: _1_4,
+        _1_5: _1_5,
+        _1_6: _1_6,
+        _1_7: _1_7,
+        _1_8: _1_8,
+        _1_9: _1_9,
+        _1_10: _1_10,
+        _1_11: _1_11,
+        _1_12: _1_12,
+        _1_13: _1_13,
+        _1_14: _1_14,
+        _1_15: _1_15,
+        _1_16: _1_16,
+        _2_1: _2_1,
+        _2_2: _2_2,
+        _2_3: _2_3,
+        _2_4: _2_4,
+        _2_5: _2_5,
+        _2_6: _2_6,
+        _2_7: _2_7,
+        _2_8: _2_8,
+        _2_9: _2_9,
+        _2_10: _2_10,
+        _2_11: _2_11,
+        _3_1: _3_1,
+        _3_2: _3_2,
+        _3_3: _3_3,
+        _3_4: _3_4,
+        _3_5: _3_5,
+        _3_6: _3_6,
+        _3_7: _3_7,
+        _3_8: _3_8,
+        _3_9: _3_9,
+        _3_10: _3_10
+    });
 });
 
 app.get('/favorites', async (req, res) =>
@@ -152,7 +317,7 @@ app.get('/favorites', async (req, res) =>
 
     try
     {
-        const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
         {
             likedVideos = info.likedVideos;
         });
@@ -181,7 +346,7 @@ app.patch('/video-state:videoState', async (req, res) =>
     
     try
     {
-        const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
         {
             email = info.email;
             _1_1 = info._1_1;_1_2 = info._1_2;_1_3 = info._1_3;_1_4 = info._1_4;
@@ -246,7 +411,7 @@ app.patch('/video-state:videoState', async (req, res) =>
             _3_9: _3_9,
             _3_10: _3_10
         };
-        const newState = await userCollections.findOneAndUpdate({email: email}, data, {new: true});
+        const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
     }
     catch(err)
     {
@@ -258,34 +423,6 @@ app.patch('/video-state:videoState', async (req, res) =>
     });
 });
 
-app.patch('/live-trainings-state:videoState', async (req, res) =>
-{
-    let email;
-    let liveTrainingsProgress
-    const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) => 
-    {
-        email = info.email;
-        liveTrainingsProgress = info.liveTrainingsProgress;
-    });
-
-    const currentTime = JSON.parse(JSON.stringify(req.body)).currentTime;
-    const videoDuration = JSON.parse(JSON.stringify(req.body)).videoDuration;
-    const URLData = JSON.parse(JSON.stringify(req.body)).URLData;
-    const Training = Number(URLData) - 1;
-    let percentageComplete = Number(currentTime)/Number(videoDuration);
-    percentageComplete = percentageComplete.toFixed(2);
-
-    // Update the specific training progress
-    liveTrainingsProgress[Training] = `${currentTime}_${videoDuration}_${percentageComplete}`;
-
-    let data = {
-        liveTrainingsProgress: liveTrainingsProgress
-    };
-
-    const newState = await userCollections.findOneAndUpdate({email: email}, data, {new: true});
-    res.send(newState);
-});
-
 // save favorites
 app.patch('/favorites:liked', async (req, res) =>
 {
@@ -294,7 +431,7 @@ app.patch('/favorites:liked', async (req, res) =>
     
     try
     {
-        const results = await userCollections.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
         {
             likedVideos = info.likedVideos;
             email = info.email;
@@ -343,7 +480,7 @@ app.patch('/favorites:liked', async (req, res) =>
         {
             try
             {
-                const newState = await userCollections.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
+                const newState = await loginCollection.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
             }
             catch(err)
             {
@@ -363,7 +500,7 @@ app.patch('/favorites:liked', async (req, res) =>
                     likedVideos: likedVideos,
                 };
     
-                const newState = await userCollections.findOneAndUpdate({email: email}, data, {new: true});
+                const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
             }
             catch(err)
             {
@@ -389,7 +526,7 @@ app.get('/course', async (req, res) =>
     let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
     try
     {
-        const results = await userCollections.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
         {
             userEmail = user.email;
             likedVideos = user.likedVideos,
@@ -481,11 +618,11 @@ app.get('/course', async (req, res) =>
 });
 
 // gets list of video titles with their links
-app.post('/videoList', async (req, res) => 
+app.get('/videoList/:lesson', async (req, res) => 
 {
-    let request = Object.keys(JSON.parse(JSON.stringify(req.body)))[0];
+    const lesson = req.params.lesson.toString();
 
-    const videoList = await videoCollections.findOne({trackMod: request}).then((data, err) =>
+    const videoList = await loginCollection.findOne({trackMod: request}).then((data, err) =>
     {
         return data;
     });
@@ -495,12 +632,9 @@ app.post('/videoList', async (req, res) =>
 
 app.get('/track1', async (req, res) =>
 {
-    let _1_1;let _1_2;let _1_3;let _1_4;let _1_5;let _1_6;let _1_7;let _1_8;let _1_9;let _1_10;
-    let _1_11;let _1_12;let _1_13;let _1_14;let _1_15;let _1_16;
-
     try
     {
-        const result = await userCollections.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const result = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
         {
             _1_1 = user._1_1;
             _1_2 = user._1_2;
@@ -520,39 +654,19 @@ app.get('/track1', async (req, res) =>
             _1_16 = user._1_16;
         });
 
-        res.render('track1.ejs', 
-        {
-            _1_1: _1_1,
-            _1_2: _1_2,
-            _1_3: _1_3,
-            _1_4: _1_4,
-            _1_5: _1_5,
-            _1_6: _1_6,
-            _1_7: _1_7,
-            _1_8: _1_8,
-            _1_9: _1_9,
-            _1_10: _1_10,
-            _1_11: _1_11,
-            _1_12: _1_12,
-            _1_13: _1_13,
-            _1_14: _1_14,
-            _1_15: _1_15,
-            _1_16: _1_16,
-        });
-    }
+        res.render('track1.ejs', data);
+    } 
     catch
     {
-        res.render('login.ejs')
+        res.render('login.ejs');
     }
 });
 
 app.get('/track2', async (req, res) =>
 {
-    let _2_1;let _2_2;let _2_3;let _2_4;let _2_5;let _2_6;let _2_7;let _2_8;let _2_9;let _2_10;let _2_11;
-
     try
     {
-        const result = await userCollections.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const result = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
         {
             _2_1 = user._2_1;
             _2_2 = user._2_2;
@@ -567,34 +681,19 @@ app.get('/track2', async (req, res) =>
             _2_11 = user._2_11;
         });
 
-        res.render('track2.ejs', 
-        {
-            _2_1: _2_1,
-            _2_2: _2_2,
-            _2_3: _2_3,
-            _2_4: _2_4,
-            _2_5: _2_5,
-            _2_6: _2_6,
-            _2_7: _2_7,
-            _2_8: _2_8,
-            _2_9: _2_9,
-            _2_10: _2_10,
-            _2_11: _2_11
-        });
-    }
+        res.render('track2.ejs', data);
+    } 
     catch
     {
-        res.render('login.ejs')
+        res.render('login.ejs');
     }
 });
 
 app.get('/track3', async (req, res) =>
 {
-    let _3_1;let _3_2;let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
-
     try
     {
-        const userName = await userCollections.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
         {
             _3_1 = user._3_1;
             _3_2 = user._3_2;
@@ -624,9 +723,8 @@ app.get('/track3', async (req, res) =>
     }
     catch
     {
-        res.render('login.ejs')
+        res.render('login.ejs');
     }
-    
 });
 
 app.listen(PORT, () => 

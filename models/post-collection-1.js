@@ -73,6 +73,6 @@ const postCollectionSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-const postCollections = mongoose.model("posts", postCollectionSchema);
+const postCollections = mongoose.model("posts-1", postCollectionSchema);
 
 module.exports = postCollections;
