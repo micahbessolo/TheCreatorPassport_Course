@@ -57,6 +57,16 @@
             }
         });
 
+        // does loginSubmit() when enter key is pressed
+        const password = document.getElementById("password");
+        password.onkeyup = function(e)
+        {
+            if(e.keyCode == 13)
+            {
+                loginSubmit();
+            }
+        }
+
         function loginSubmit()
         {
             document.getElementById('email').value = document.getElementById('email').value.toLowerCase().trim();
