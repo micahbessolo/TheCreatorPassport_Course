@@ -80,22 +80,6 @@ app.delete('/logout', (req, res) =>
     });
 });
 
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', 
-{
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}));
-
-app.delete('/logout', (req, res) =>
-{
-    req.logout(req.user, err =>
-    {
-        if(err) return next(err);
-        res.redirect("/login");
-    });
-});
-
 app.get('/forgot-password', (req, res) => 
 {
     res.render('forgot-password.ejs');
@@ -265,50 +249,651 @@ app.get('/community-page', checkAuthenticated, async (req, res) =>
     {
         userEmail = info.email;
         userName = info.name;
-        profileImg = info.profileImg;
-        liveTrainingsProgress = info.liveTrainingsProgress;
+        profileImg = info.profileImg
     });
 
     res.render('community.ejs', {
         userName: userName,
-        _1_1: _1_1,
-        _1_2: _1_2,
-        _1_3: _1_3,
-        _1_4: _1_4,
-        _1_5: _1_5,
-        _1_6: _1_6,
-        _1_7: _1_7,
-        _1_8: _1_8,
-        _1_9: _1_9,
-        _1_10: _1_10,
-        _1_11: _1_11,
-        _1_12: _1_12,
-        _1_13: _1_13,
-        _1_14: _1_14,
-        _1_15: _1_15,
-        _1_16: _1_16,
-        _2_1: _2_1,
-        _2_2: _2_2,
-        _2_3: _2_3,
-        _2_4: _2_4,
-        _2_5: _2_5,
-        _2_6: _2_6,
-        _2_7: _2_7,
-        _2_8: _2_8,
-        _2_9: _2_9,
-        _2_10: _2_10,
-        _2_11: _2_11,
-        _3_1: _3_1,
-        _3_2: _3_2,
-        _3_3: _3_3,
-        _3_4: _3_4,
-        _3_5: _3_5,
-        _3_6: _3_6,
-        _3_7: _3_7,
-        _3_8: _3_8,
-        _3_9: _3_9,
-        _3_10: _3_10
+        email: userEmail,
+        profileImg: profileImg,
+        userID: userID
     });
+});
+
+app.get('/get-all-posts', checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+		const posts = await postsCollection.find()
+			.sort({ createdAt: -1 })
+            // .limit(10) to limit to 10 most recent posts
+			.populate({
+				path: "user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+			})
+			.populate({
+				path: "comments.user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+			})
+            .populate({
+				path: "comments.comments.user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+			});
+
+		if (posts.length === 0)
+        {
+			return res.status(200).json([]);
+		}
+
+		res.status(200).json(posts);
+	}
+    catch (error)
+    {
+		console.log("Error in getAllPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+app.get('/get-posts', checkAuthenticated, async (req, res) => {
+    const pageSize = 10; // number of posts per page
+    const page = Number(req.query.page) || 1; // page number
+
+    try {
+        const totalPosts = await postsCollection.countDocuments({});
+        const posts = await postsCollection.find()
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+            .populate({
+				path: "user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+			})
+			.populate({
+				path: "comments.user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+			})
+            .populate({
+				path: "comments.comments.user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+			});
+
+        if (posts.length === 0) {
+            return res.status(200).json([]);
+        }
+
+        res.status(200).json({
+            posts,
+            page,
+            totalPages: Math.ceil(totalPosts / pageSize),
+        });
+    } catch (error) {
+        console.log("Error in getPosts controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/get-post/:id', checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const post = await postsCollection.findById(req.params.id)
+            .populate({
+                path: "user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            })
+            .populate({
+                path: "comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            })
+            .populate({
+                path: "comments.comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            });
+
+        if (!post)
+        {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        res.status(200).json(post);
+    } 
+    catch (error)
+    {
+        console.log("Error in getPost controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post('/create-post', checkAuthenticated, upload.single('image-post'), async (req, res) =>
+{
+    const { postText } = req.body;
+    let img = req.file;
+    const userId = req.user._conditions._id.toString();
+
+    try
+    {
+		let user = await userCollection.findById(userId);
+		if (!user) return res.status(404).json({ message: "User not found" });
+
+		if (!postText && !img)
+        {
+			return res.status(400).json({ error: "Post must have text or image" });
+		}
+
+		if (img)
+        {
+            const uploadedResponse = await cloudinary.uploader.upload(req.file.path, function (err, result)
+            {
+                if(err)
+                {
+                    console.log(err);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Error"
+                    })
+                }
+                else
+                {
+                    //uploaded
+                }
+            });
+            img = uploadedResponse.secure_url;
+		}
+
+		const newPost = new postsCollection({
+			user: userId,
+			text: postText,
+			img,
+		});
+
+		await newPost.save();
+
+		res.status(201).json(newPost);
+	}
+    catch (error)
+    {
+		res.status(500).json({ error: "Internal server error" });
+		console.log("Error in createPost controller: ", error);
+	}
+});
+
+// Comment on post
+app.post("/comment/:id", checkAuthenticated, async (req, res) => 
+{
+	try
+    {
+		const { text } = req.body;
+		const postId = req.params.id;
+		const userId = req.user._conditions._id.toString();
+        const currentTime = new Date().toISOString();
+
+		if (!text)
+        {
+			return res.status(400).json({ error: "Text field is required" });
+		}
+        
+		const post = await postsCollection.findById(postId);
+
+		if (!post)
+        {
+			return res.status(404).json({ error: "Post not found" });
+		}
+
+		const comment = { user: userId, text, createdAt: currentTime};
+
+		post.comments.push(comment);
+		await post.save();
+
+
+        const notification = new notificationsCollection({
+            from: userId,
+            fromName: req.user._conditions.name,
+            to: post.user,
+            type: "comment",
+            post: postId,
+        });
+        await notification.save();
+
+
+		res.status(200).json(post);
+	}
+    catch (error)
+    {
+		console.log("Error in commentOnPost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+// Reply on comment
+app.post("/comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const { text } = req.body;
+        const postId = req.params.postId;
+        const commentId = req.params.commentId;
+        const userId = req.user._conditions._id.toString();
+        const currentTime = new Date().toISOString();
+
+        if (!text)
+        {
+            return res.status(400).json({ error: "Text field is required" });
+        }
+        
+        const post = await postsCollection.findById(postId);
+        if (!post)
+        {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const comment = post.comments.id(commentId);
+        if (!comment)
+        {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        const newComment = { user: userId, text, createdAt: currentTime };
+
+        comment.comments.push(newComment);
+		await post.save();
+        
+        if (userId.toString() !== post.user.toString())
+        {
+            const notification = new notificationsCollection({
+                from: userId,
+                fromName: req.user._conditions.name,
+                to: post.user,
+                type: "reply",
+                post: postId,
+            });
+            await notification.save();
+        }
+
+		res.status(200).json(post);
+    }
+    catch (error)
+    {
+        console.log("Error in commentOnComment controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Like or unlike post
+app.post("/like/:id", checkAuthenticated,  async (req, res) =>
+{
+	try
+    {
+		const userId = req.user._conditions._id;
+		const { id: postId } = req.params;
+
+		const post = await postsCollection.findById(postId);
+
+		if (!post)
+        {
+			return res.status(404).json({ error: "Post not found" });
+		}
+
+		const userLikedPost = post.likes.includes(userId);
+
+		if (userLikedPost)
+        {
+			await postsCollection.updateOne({ _id: postId }, { $pull: { likes: userId } });
+			await userCollection.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
+
+			const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+			res.status(200).json(updatedLikes);
+		}
+        else
+        {
+			// Like post
+			post.likes.push(userId);
+			await userCollection.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
+			await post.save();
+
+            if (userId.toString() !== post.user.toString())
+            {
+                const notification = new notificationsCollection({
+                    from: userId,
+                    fromName: req.user._conditions.name,
+                    to: post.user,
+                    type: "like",
+                    post: postId,
+                });
+                await notification.save();
+            }
+
+			const updatedLikes = post.likes;
+			res.status(200).json(updatedLikes);
+		}
+	}
+    catch (error)
+    {
+		console.log("Error in likeUnlikePost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+app.post("/like-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const userId = req.user._conditions._id;
+        const { postId, commentId } = req.params;
+
+        const post = await postsCollection.findById(postId);
+
+        if (!post)
+        {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const comment = post.comments.id(commentId);
+
+        if (!comment)
+        {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        const userLikedComment = comment.likes.includes(userId);
+
+        if (userLikedComment)
+        {
+            comment.likes.pull(userId);
+            await post.save();
+
+            const updatedLikes = comment.likes;
+            res.status(200).json(updatedLikes);
+        }
+        else
+        {
+            comment.likes.push(userId);
+            await post.save();
+
+            if (userId.toString() !== post.user.toString())
+            {
+                const notification = new notificationsCollection({
+                    from: userId,
+                    to: comment.user,
+                    type: "like comment",
+                    post: postId,
+                    comment: commentId,
+                });
+                await notification.save();
+            }
+
+            const updatedLikes = comment.likes;
+            res.status(200).json(updatedLikes);
+        }
+    } 
+    catch (error)
+    {
+        console.log("Error in likeUnlikeComment controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post("/like-reply/:postId/:commentId/:replyId", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const userId = req.user._conditions._id;
+        const { postId, commentId, replyId } = req.params;
+
+        const post = await postsCollection.findById(postId);
+        if (!post)
+        {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const comment = post.comments.id(commentId);
+        if (!comment)
+        {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        const reply = comment.comments.id(replyId);
+        if (!reply)
+        {
+            return res.status(404).json({ error: "reply not found" });
+        }
+
+        const userLikedreply = reply.likes.includes(userId);
+        if (userLikedreply)
+        {
+            reply.likes.pull(userId);
+            await post.save();
+
+            const updatedLikes = reply.likes;
+            res.status(200).json(updatedLikes);
+        } 
+        else
+        {
+            reply.likes.push(userId);
+            await post.save();
+
+            if (userId.toString() !== post.user.toString())
+            {
+                const notification = new notificationsCollection({
+                    from: userId,
+                    to: reply.user,
+                    type: "like comment",
+                    post: postId,
+                    comment: commentId,
+                });
+                await notification.save();
+            }
+
+            const updatedLikes = reply.likes;
+            res.status(200).json(updatedLikes);
+        }
+    }
+    catch (error)
+    {
+        console.log("Error in likeUnlikereply controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get("/getProgress", async (req, res) =>
+{
+    try
+    {
+        const allUsers = await userCollection.find({ trackMod: { $exists: false } });
+        let totalValueArray = [];
+
+        for (let i = 0; i < allUsers.length; i++)
+        {
+            if (allUsers[i].name !== 
+                "Micah Bessolo" && allUsers[i].name !== "Dani Rod"
+                && allUsers[i].name !== "Stephen Jiroch" && allUsers[i].name !== "test sixteen"
+                && allUsers[i].name !== "Lotte Leers" && allUsers[i].name !== "Jill Langley"
+                && allUsers[i].name !== "Jonah Magness" && allUsers[i].name !== "Danielle Rodr"
+                && allUsers[i].name !== "Dani R" && allUsers[i].name !== "D Rod"
+                && allUsers[i].name !== "Dani R" && allUsers[i].name !== "Dani Rodriguez"
+                && allUsers[i].name !== "Noam Koren" && allUsers[i].name !== "Stephen"
+                && allUsers[i].name !== "Testing Tester" && allUsers[i].name !== "Edward Mann"
+            )
+            {
+                let object = allUsers[i];
+
+                const track1 = ["_1_1", "_1_2", "_1_3", "_1_4", "_1_5", "_1_6", "_1_7", "_1_8", "_1_9", "_1_10", "_1_11", "_1_12", "_1_13", "_1_14", "_1_15", "_1_16"];
+                const track2 = ["_2_1", "_2_2", "_2_3", "_2_4", "_2_5", "_2_6", "_2_7", "_2_8", "_2_9", "_2_10", "_2_11"];
+                const track3 = ["_3_1", "_3_2", "_3_3", "_3_4", "_3_5", "_3_6", "_3_7", "_3_8", "_3_9", "_3_10"];
+    
+                let values1 = track1.map(key => object[key]);
+                let values2 = track2.map(key => object[key]);
+                let values3 = track3.map(key => object[key]);
+    
+                value1Total = 0;
+                for (let i = 0; i < values1.length; i++)
+                {
+                    for (let j = 0; j < values1[i].length; j++)
+                    {
+                        if (values1[i][j] !== "")
+                        {
+                            if (values1[i][j].split('_')[2] !== "NaN" && values1[i][j].split('_')[2] !== "Infinity")
+                            {
+                                value1Total += Number(values1[i][j].split('_')[2]);
+                            }
+                        }
+                    }
+                }
+    
+                value2Total = 0;
+                for (let i = 0; i < values2.length; i++)
+                {
+                    for (let j = 0; j < values2[i].length; j++)
+                    {
+                        if (values2[i][j] !== "")
+                        {
+                            if (values2[i][j].split('_')[2] !== "NaN" && values2[i][j].split('_')[2] !== "Infinity")
+                            {
+                                value2Total += Number(values2[i][j].split('_')[2]);
+                            }
+                        }
+                    }
+                }
+    
+                value3Total = 0;
+                for (let i = 0; i < values3.length; i++)
+                {
+                    for (let j = 0; j < values3[i].length; j++)
+                    {
+                        if (values3[i][j] !== "")
+                        {
+                            if (values3[i][j].split('_')[2] !== "NaN" && values3[i][j].split('_')[2] !== "Infinity")
+                            {
+                                value3Total += Number(values3[i][j].split('_')[2]);
+                            }
+                        }
+                    }
+                }
+    
+                const clientValue = [object.name, (value1Total/183 * 100).toFixed(2), (value2Total/61 * 100).toFixed(2), (value3Total/59 * 100).toFixed(2)];
+    
+                totalValueArray.push(clientValue)
+            }
+        }
+
+        res.status(200).json(totalValueArray);
+    }
+    catch (error)
+    {
+        console.log("Error in getProgress controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get("/name/:id", async (req, res) =>
+{
+    try
+    {
+        const user = await userCollection.findById(req.params.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        res.status(200).json(user.name);
+    }
+    catch (error)
+    {
+        console.log("Error in getName controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Delete post
+app.delete("/:id", checkAuthenticated, async (req, res) =>
+{
+	try
+    {
+        
+		const post = await postsCollection.findById(req.params.id);
+		
+        if (!post)
+        {
+			return res.status(404).json({ error: "Post not found" });
+		}
+
+		if (post.user.toString() !== req.user._conditions._id.toString())
+        {
+			return res.status(401).json({ error: "You are not authorized to delete this post" });
+		}
+
+		if (post.img)
+        {
+			const imgId = post.img.split("/").pop().split(".")[0];
+			await cloudinary.uploader.destroy(imgId);
+		}
+
+		await postsCollection.findByIdAndDelete(req.params.id);
+        await notificationsCollection.deleteMany({ post: req.params.id });
+
+		res.status(200).json({ message: "Post deleted successfully" });
+	}
+    catch (error)
+    {
+		console.log("Error in deletePost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+// Get user posts
+app.get("/user/:username", checkAuthenticated, async (req, res) =>
+{
+	try
+    {
+		const username = req.params.username;
+
+		const user = await userCollection.findOne({ name: username });
+
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		const posts = await postsCollection.find({ user: user._id })
+			.sort({ createdAt: -1 })
+			.populate({
+				path: "user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+			})
+			.populate({
+				path: "comments.user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+			});
+
+		res.status(200).json(posts);
+	}
+    catch (error)
+    {
+		console.log("Error in getUserPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+// Get liked posts
+app.get("/likes/:id", checkAuthenticated, async (req, res) =>
+{
+    const userId = req.user._conditions._id;
+
+	try
+    {
+		const user = await userCollection.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		const likedPosts = await postsCollection.find({ _id: { $in: user.likedPosts } })
+			.populate({
+				path: "user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+			})
+			.populate({
+				path: "comments.user",
+				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+			});
+
+		res.status(200).json(likedPosts);
+	}
+    catch (error)
+    {
+		console.log("Error in getLikedPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
 });
 
 app.get('/favorites', async (req, res) =>
@@ -317,7 +902,7 @@ app.get('/favorites', async (req, res) =>
 
     try
     {
-        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
         {
             likedVideos = info.likedVideos;
         });
@@ -346,7 +931,7 @@ app.patch('/video-state:videoState', async (req, res) =>
     
     try
     {
-        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
         {
             email = info.email;
             _1_1 = info._1_1;_1_2 = info._1_2;_1_3 = info._1_3;_1_4 = info._1_4;
@@ -411,7 +996,7 @@ app.patch('/video-state:videoState', async (req, res) =>
             _3_9: _3_9,
             _3_10: _3_10
         };
-        const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
+        const newState = await userCollection.findOneAndUpdate({email: email}, data, {new: true});
     }
     catch(err)
     {
@@ -423,6 +1008,34 @@ app.patch('/video-state:videoState', async (req, res) =>
     });
 });
 
+app.patch('/live-trainings-state:videoState', async (req, res) =>
+{
+    let email;
+    let liveTrainingsProgress
+    const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) => 
+    {
+        email = info.email;
+        liveTrainingsProgress = info.liveTrainingsProgress;
+    });
+
+    const currentTime = JSON.parse(JSON.stringify(req.body)).currentTime;
+    const videoDuration = JSON.parse(JSON.stringify(req.body)).videoDuration;
+    const URLData = JSON.parse(JSON.stringify(req.body)).URLData;
+    const Training = Number(URLData) - 1;
+    let percentageComplete = Number(currentTime)/Number(videoDuration);
+    percentageComplete = percentageComplete.toFixed(2);
+
+    // Update the specific training progress
+    liveTrainingsProgress[Training] = `${currentTime}_${videoDuration}_${percentageComplete}`;
+
+    let data = {
+        liveTrainingsProgress: liveTrainingsProgress
+    };
+
+    const newState = await userCollection.findOneAndUpdate({email: email}, data, {new: true});
+    res.send(newState);
+});
+
 // save favorites
 app.patch('/favorites:liked', async (req, res) =>
 {
@@ -431,7 +1044,7 @@ app.patch('/favorites:liked', async (req, res) =>
     
     try
     {
-        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
         {
             likedVideos = info.likedVideos;
             email = info.email;
@@ -480,7 +1093,7 @@ app.patch('/favorites:liked', async (req, res) =>
         {
             try
             {
-                const newState = await loginCollection.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
+                const newState = await userCollection.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
             }
             catch(err)
             {
@@ -500,7 +1113,7 @@ app.patch('/favorites:liked', async (req, res) =>
                     likedVideos: likedVideos,
                 };
     
-                const newState = await loginCollection.findOneAndUpdate({email: email}, data, {new: true});
+                const newState = await userCollection.findOneAndUpdate({email: email}, data, {new: true});
             }
             catch(err)
             {
@@ -526,7 +1139,7 @@ app.get('/course', async (req, res) =>
     let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
     try
     {
-        const results = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
         {
             userEmail = user.email;
             likedVideos = user.likedVideos,
@@ -621,12 +1234,23 @@ app.get('/course', async (req, res) =>
 app.get('/videoList/:lesson', async (req, res) => 
 {
     const lesson = req.params.lesson.toString();
+    let videoList;
 
-    const videoList = await loginCollection.findOne({trackMod: request}).then((data, err) =>
+    if(lesson.includes('-'))
     {
-        return data;
-    });
-
+        videoList = await videosCollection.findOne({trackMod: lesson}).then((data, err) =>
+        {
+            return data;
+        });
+    }
+    else
+    {
+        videoList = await videosCollection.findOne({trackMod: "Live Trainings"}).then((data, err) =>
+        {
+            return data;
+        });
+    }
+    
     res.json(videoList);
 });
 
@@ -634,25 +1258,14 @@ app.get('/track1', async (req, res) =>
 {
     try
     {
-        const result = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const user = await userCollection.findOne({_id: req.user._conditions._id});
+        if (!user) throw new Error('User not found');
+
+        const data = {};
+        for (let i = 1; i <= 16; i++)
         {
-            _1_1 = user._1_1;
-            _1_2 = user._1_2;
-            _1_3 = user._1_3;
-            _1_4 = user._1_4;
-            _1_5 = user._1_5;
-            _1_6 = user._1_6;
-            _1_7 = user._1_7;
-            _1_8 = user._1_8;
-            _1_9 = user._1_9;
-            _1_10 = user._1_10;
-            _1_11 = user._1_11;
-            _1_12 = user._1_12;
-            _1_13 = user._1_13;
-            _1_14 = user._1_14;
-            _1_15 = user._1_15;
-            _1_16 = user._1_16;
-        });
+            data[`_1_${i}`] = user[`_1_${i}`];
+        }
 
         res.render('track1.ejs', data);
     } 
@@ -666,20 +1279,14 @@ app.get('/track2', async (req, res) =>
 {
     try
     {
-        const result = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const user = await userCollection.findOne({_id: req.user._conditions._id});
+        if (!user) throw new Error('User not found');
+
+        const data = {};
+        for (let i = 1; i <= 11; i++)
         {
-            _2_1 = user._2_1;
-            _2_2 = user._2_2;
-            _2_3 = user._2_3;
-            _2_4 = user._2_4;
-            _2_5 = user._2_5;
-            _2_6 = user._2_6;
-            _2_7 = user._2_7;
-            _2_8 = user._2_8;
-            _2_9 = user._2_9;
-            _2_10 = user._2_10;
-            _2_11 = user._2_11;
-        });
+            data[`_2_${i}`] = user[`_2_${i}`];
+        }
 
         res.render('track2.ejs', data);
     } 
@@ -693,33 +1300,16 @@ app.get('/track3', async (req, res) =>
 {
     try
     {
-        const userName = await loginCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
+        const user = await userCollection.findOne({_id: req.user._conditions._id});
+        if (!user) throw new Error('User not found');
+
+        const data = {};
+        for (let i = 1; i <= 10; i++)
         {
-            _3_1 = user._3_1;
-            _3_2 = user._3_2;
-            _3_3 = user._3_3;
-            _3_4 = user._3_4;
-            _3_5 = user._3_5;
-            _3_6 = user._3_6;
-            _3_7 = user._3_7;
-            _3_8 = user._3_8;
-            _3_9 = user._3_9;
-            _3_10 = user._3_10;
-        });
-    
-        res.render('track3.ejs', 
-        {
-            _3_1: _3_1,
-            _3_2: _3_2,
-            _3_3: _3_3,
-            _3_4: _3_4,
-            _3_5: _3_5,
-            _3_6: _3_6,
-            _3_7: _3_7,
-            _3_8: _3_8,
-            _3_9: _3_9,
-            _3_10: _3_10,
-        });
+            data[`_3_${i}`] = user[`_3_${i}`];
+        }
+
+        res.render('track3.ejs', data);
     }
     catch
     {
