@@ -56,7 +56,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(passport.initialize());
-app.use(passport.session()); // keeps track of the user's session
+app.use(passport.session());
 app.use(methodOverride('_method'));
 
 app.get('/login', checkNotAuthenticated, (req, res) => 
@@ -119,6 +119,14 @@ app.get('/', checkAuthenticated, async (req, res) =>
     let profileImg;
     let isTestUser = false;
 
+    await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
+    {
+        userEmail = info.email;
+        userName = info.name;
+        profileImg = info.profileImg;
+        liveTrainingsProgress = info.liveTrainingsProgress;
+    });
+
     if (userEmail == "mbessolo@westmont.edu"
     || userEmail == "ryanleebanksmedia@gmail.com"
     || userEmail == "dani@theloverspassport.com"
@@ -127,14 +135,6 @@ app.get('/', checkAuthenticated, async (req, res) =>
     {
         isTestUser = true;
     }
-
-    const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
-    {
-        userEmail = info.email;
-        userName = info.name;
-        profileImg = info.profileImg;
-        liveTrainingsProgress = info.liveTrainingsProgress;
-    });
 
     res.render('dashboard.ejs', {
         userName: userName,
@@ -230,7 +230,7 @@ app.get('/live-trainings', checkAuthenticated, async (req, res) =>
 });
 
 app.get('/live-trainings-object', checkAuthenticated, async (req, res) => {
-    const results = await videosCollection.findOne({trackMod: "Live Trainings"}).then((info, err) =>
+    const results = await videosCollection.findOne({trackMod: "Live Trainings"}).then((info) =>
     {
         return info;
     });
@@ -245,7 +245,7 @@ app.get('/community-page', checkAuthenticated, async (req, res) =>
     let profileImg;
     const userID = req.user._conditions._id;
 
-    const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+    await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
     {
         userEmail = info.email;
         userName = info.name;
@@ -264,34 +264,34 @@ app.get('/get-all-posts', checkAuthenticated, async (req, res) =>
 {
     try
     {
-		const posts = await postsCollection.find()
-			.sort({ createdAt: -1 })
+        const posts = await postsCollection.find()
+            .sort({ createdAt: -1 })
             // .limit(10) to limit to 10 most recent posts
-			.populate({
-				path: "user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
-			})
-			.populate({
-				path: "comments.user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
-			})
             .populate({
-				path: "comments.comments.user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
-			});
+                path: "user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            })
+            .populate({
+                path: "comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            })
+            .populate({
+                path: "comments.comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            });
 
-		if (posts.length === 0)
+        if (posts.length === 0)
         {
-			return res.status(200).json([]);
-		}
+            return res.status(200).json([]);
+        }
 
-		res.status(200).json(posts);
-	}
+        res.status(200).json(posts);
+    }
     catch (error)
     {
-		console.log("Error in getAllPosts controller: ", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+        console.log("Error in getAllPosts controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 app.get('/get-posts', checkAuthenticated, async (req, res) => {
@@ -305,17 +305,17 @@ app.get('/get-posts', checkAuthenticated, async (req, res) => {
             .limit(pageSize)
             .skip(pageSize * (page - 1))
             .populate({
-				path: "user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
-			})
-			.populate({
-				path: "comments.user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
-			})
+                path: "user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            })
             .populate({
-				path: "comments.comments.user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
-			});
+                path: "comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            })
+            .populate({
+                path: "comments.comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10"
+            });
 
         if (posts.length === 0) {
             return res.status(200).json([]);
@@ -372,15 +372,15 @@ app.post('/create-post', checkAuthenticated, upload.single('image-post'), async 
 
     try
     {
-		let user = await userCollection.findById(userId);
-		if (!user) return res.status(404).json({ message: "User not found" });
+        let user = await userCollection.findById(userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-		if (!postText && !img)
+        if (!postText && !img)
         {
-			return res.status(400).json({ error: "Post must have text or image" });
-		}
+            return res.status(400).json({ error: "Post must have text or image" });
+        }
 
-		if (img)
+        if (img)
         {
             const uploadedResponse = await cloudinary.uploader.upload(req.file.path, function (err, result)
             {
@@ -398,52 +398,47 @@ app.post('/create-post', checkAuthenticated, upload.single('image-post'), async 
                 }
             });
             img = uploadedResponse.secure_url;
-		}
+        }
 
-		const newPost = new postsCollection({
-			user: userId,
-			text: postText,
-			img,
-		});
-
-		await newPost.save();
-
-		res.status(201).json(newPost);
-	}
+        const newPost = new postsCollection({
+            user: userId,
+            text: postText,
+            img,
+        });
+        await newPost.save();
+        res.status(201).json(newPost);
+    }
     catch (error)
     {
-		res.status(500).json({ error: "Internal server error" });
-		console.log("Error in createPost controller: ", error);
-	}
+        res.status(500).json({ error: "Internal server error" });
+        console.log("Error in createPost controller: ", error);
+    }
 });
 
 // Comment on post
 app.post("/comment/:id", checkAuthenticated, async (req, res) => 
 {
-	try
+    try
     {
-		const { text } = req.body;
-		const postId = req.params.id;
-		const userId = req.user._conditions._id.toString();
+        const { text } = req.body;
+        const postId = req.params.id;
+        const userId = req.user._conditions._id.toString();
         const currentTime = new Date().toISOString();
 
-		if (!text)
+        if (!text)
         {
-			return res.status(400).json({ error: "Text field is required" });
-		}
+            return res.status(400).json({ error: "Text field is required" });
+        }
         
-		const post = await postsCollection.findById(postId);
-
-		if (!post)
+        const post = await postsCollection.findById(postId);
+        if (!post)
         {
-			return res.status(404).json({ error: "Post not found" });
-		}
+            return res.status(404).json({ error: "Post not found" });
+        }
 
-		const comment = { user: userId, text, createdAt: currentTime};
-
-		post.comments.push(comment);
-		await post.save();
-
+        const comment = { user: userId, text, createdAt: currentTime};
+        post.comments.push(comment);
+        await post.save();
 
         const notification = new notificationsCollection({
             from: userId,
@@ -454,14 +449,13 @@ app.post("/comment/:id", checkAuthenticated, async (req, res) =>
         });
         await notification.save();
 
-
-		res.status(200).json(post);
-	}
+        res.status(200).json(post);
+    }
     catch (error)
     {
-		console.log("Error in commentOnPost controller: ", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+        console.log("Error in commentOnPost controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 // Reply on comment
@@ -495,7 +489,7 @@ app.post("/comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
         const newComment = { user: userId, text, createdAt: currentTime };
 
         comment.comments.push(newComment);
-		await post.save();
+        await post.save();
         
         if (userId.toString() !== post.user.toString())
         {
@@ -509,7 +503,7 @@ app.post("/comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
             await notification.save();
         }
 
-		res.status(200).json(post);
+        res.status(200).json(post);
     }
     catch (error)
     {
@@ -521,34 +515,33 @@ app.post("/comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
 // Like or unlike post
 app.post("/like/:id", checkAuthenticated,  async (req, res) =>
 {
-	try
+    try
     {
-		const userId = req.user._conditions._id;
-		const { id: postId } = req.params;
+        const userId = req.user._conditions._id;
+        const { id: postId } = req.params;
+        const post = await postsCollection.findById(postId);
 
-		const post = await postsCollection.findById(postId);
-
-		if (!post)
+        if (!post)
         {
-			return res.status(404).json({ error: "Post not found" });
-		}
+            return res.status(404).json({ error: "Post not found" });
+        }
 
-		const userLikedPost = post.likes.includes(userId);
+        const userLikedPost = post.likes.includes(userId);
 
-		if (userLikedPost)
+        if (userLikedPost)
         {
-			await postsCollection.updateOne({ _id: postId }, { $pull: { likes: userId } });
-			await userCollection.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
+            await postsCollection.updateOne({ _id: postId }, { $pull: { likes: userId } });
+            await userCollection.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
 
-			const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
-			res.status(200).json(updatedLikes);
-		}
+            const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+            res.status(200).json(updatedLikes);
+        }
         else
         {
-			// Like post
-			post.likes.push(userId);
-			await userCollection.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
-			await post.save();
+            // Like post
+            post.likes.push(userId);
+            await userCollection.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
+            await post.save();
 
             if (userId.toString() !== post.user.toString())
             {
@@ -562,17 +555,17 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
                 await notification.save();
             }
 
-			const updatedLikes = post.likes;
-			res.status(200).json(updatedLikes);
-		}
-	}
+            const updatedLikes = post.likes;
+            res.status(200).json(updatedLikes);
+        }
+    }
     catch (error)
     {
-		console.log("Error in likeUnlikePost controller: ", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+        console.log("Error in likeUnlikePost controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
-
+    
 app.post("/like-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
 {
     try
@@ -768,13 +761,10 @@ app.get("/getProgress", async (req, res) =>
                         }
                     }
                 }
-    
                 const clientValue = [object.name, (value1Total/183 * 100).toFixed(2), (value2Total/61 * 100).toFixed(2), (value3Total/59 * 100).toFixed(2)];
-    
                 totalValueArray.push(clientValue)
             }
         }
-
         res.status(200).json(totalValueArray);
     }
     catch (error)
@@ -803,68 +793,67 @@ app.get("/name/:id", async (req, res) =>
 // Delete post
 app.delete("/:id", checkAuthenticated, async (req, res) =>
 {
-	try
+    try
     {
+        const post = await postsCollection.findById(req.params.id);
         
-		const post = await postsCollection.findById(req.params.id);
-		
         if (!post)
         {
-			return res.status(404).json({ error: "Post not found" });
-		}
+            return res.status(404).json({ error: "Post not found" });
+        }
 
-		if (post.user.toString() !== req.user._conditions._id.toString())
+        if (post.user.toString() !== req.user._conditions._id.toString())
         {
-			return res.status(401).json({ error: "You are not authorized to delete this post" });
-		}
+            return res.status(401).json({ error: "You are not authorized to delete this post" });
+        }
 
-		if (post.img)
+        if (post.img)
         {
-			const imgId = post.img.split("/").pop().split(".")[0];
-			await cloudinary.uploader.destroy(imgId);
-		}
+            const imgId = post.img.split("/").pop().split(".")[0];
+            await cloudinary.uploader.destroy(imgId);
+        }
 
-		await postsCollection.findByIdAndDelete(req.params.id);
+        await postsCollection.findByIdAndDelete(req.params.id);
         await notificationsCollection.deleteMany({ post: req.params.id });
 
-		res.status(200).json({ message: "Post deleted successfully" });
-	}
+        res.status(200).json({ message: "Post deleted successfully" });
+    }
     catch (error)
     {
-		console.log("Error in deletePost controller: ", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+        console.log("Error in deletePost controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 // Get user posts
 app.get("/user/:username", checkAuthenticated, async (req, res) =>
 {
-	try
+    try
     {
-		const username = req.params.username;
+        const username = req.params.username;
 
-		const user = await userCollection.findOne({ name: username });
+        const user = await userCollection.findOne({ name: username });
 
-		if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(404).json({ error: "User not found" });
 
-		const posts = await postsCollection.find({ user: user._id })
-			.sort({ createdAt: -1 })
-			.populate({
-				path: "user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
-			})
-			.populate({
-				path: "comments.user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
-			});
+        const posts = await postsCollection.find({ user: user._id })
+            .sort({ createdAt: -1 })
+            .populate({
+                path: "user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+            })
+            .populate({
+                path: "comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+            });
 
-		res.status(200).json(posts);
-	}
+        res.status(200).json(posts);
+    }
     catch (error)
     {
-		console.log("Error in getUserPosts controller: ", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+        console.log("Error in getUserPosts controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 // Get liked posts
@@ -872,28 +861,28 @@ app.get("/likes/:id", checkAuthenticated, async (req, res) =>
 {
     const userId = req.user._conditions._id;
 
-	try
+    try
     {
-		const user = await userCollection.findById(userId);
-		if (!user) return res.status(404).json({ error: "User not found" });
+        const user = await userCollection.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
 
-		const likedPosts = await postsCollection.find({ _id: { $in: user.likedPosts } })
-			.populate({
-				path: "user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
-			})
-			.populate({
-				path: "comments.user",
-				select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
-			});
+        const likedPosts = await postsCollection.find({ _id: { $in: user.likedPosts } })
+            .populate({
+                path: "user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+            })
+            .populate({
+                path: "comments.user",
+                select: "-password -resetLink -likedVideos -email -_1_1 -_1_2 -_1_3 -_1_4 -_1_5 -_1_6 -_1_7 -_1_8 -_1_9 -_1_10 -_1_11 -_1_12 -_1_13 -_1_14 -_1_15 -_1_16 -_2_1 -_2_2 -_2_3 -_2_4 -_2_5 -_2_6 -_2_7 -_2_8 -_2_9 -_2_10 -_2_11 -_3_1 -_3_2 -_3_3 -_3_4 -_3_5 -_3_6 -_3_7 -_3_8 -_3_9 -_3_10",
+            });
 
-		res.status(200).json(likedPosts);
-	}
+        res.status(200).json(likedPosts);
+    }
     catch (error)
     {
-		console.log("Error in getLikedPosts controller: ", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+        console.log("Error in getLikedPosts controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 app.get('/favorites', async (req, res) =>
@@ -923,28 +912,10 @@ app.get('/terms-and-conditions', (req, res) =>
 // save video progress and percentage complete
 app.patch('/video-state:videoState', async (req, res) =>
 {
-    let email; 
-    let _1_1;let _1_2;let _1_3;let _1_4;let _1_5;let _1_6;let _1_7;let _1_8;let _1_9;let _1_10;
-    let _1_11;let _1_12;let _1_13;let _1_14;let _1_15;let _1_16;let _2_1;let _2_2;let _2_3;
-    let _2_4;let _2_5;let _2_6;let _2_7;let _2_8;let _2_9;let _2_10;let _2_11;let _3_1;let _3_2;
-    let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
-    
     try
     {
-        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
-        {
-            email = info.email;
-            _1_1 = info._1_1;_1_2 = info._1_2;_1_3 = info._1_3;_1_4 = info._1_4;
-            _1_5 = info._1_5;_1_6 = info._1_6;_1_7 = info._1_7;_1_8 = info._1_8;
-            _1_9 = info._1_9;_1_10 = info._1_10;_1_11 = info._1_11;_1_12 = info._1_12;
-            _1_13 = info._1_13;_1_14 = info._1_14;_1_15 = info._1_15;_1_16 = info._1_16;
-            _2_1 = info._2_1;_2_2 = info._2_2;_2_3 = info._2_3;_2_4 = info._2_4;
-            _2_5 = info._2_5;_2_6 = info._2_6;_2_7 = info._2_7;_2_8 = info._2_8;
-            _2_9 = info._2_9;_2_10 = info._2_10;_2_11 = info._2_11;_3_1 = info._3_1;
-            _3_2 = info._3_2;_3_3 = info._3_3;_3_4 = info._3_4;_3_5 = info._3_5;
-            _3_6 = info._3_6;_3_7 = info._3_7;_3_8 = info._3_8;_3_9 = info._3_9;
-            _3_10 = info._3_10;
-        });
+        const user = await userCollection.findOne({_id: req.user._conditions._id});
+        if (!user) throw new Error('User not found');
 
         const currentTime = JSON.parse(JSON.stringify(req.body)).currentTime;
         const videoDuration = JSON.parse(JSON.stringify(req.body)).videoDuration;
@@ -953,50 +924,10 @@ app.patch('/video-state:videoState', async (req, res) =>
         const Lesson = Number(URLData.split('-')[2]) - 1;
         let percentageComplete = Number(currentTime)/Number(videoDuration);
         percentageComplete = percentageComplete.toFixed(2);
-        // defines one of the lessons (i.e. _1_1 as a new value including currentTime_vidDuration_percentageComplete)
-        eval(`_${URLData.split('-')[0]}_${URLData.split('-')[1]}[${Lesson}] = "${currentTime}_${videoDuration}_${percentageComplete}";`);
 
-        let data = 
-        {
-            _1_1: _1_1,
-            _1_2: _1_2,
-            _1_3: _1_3,
-            _1_4: _1_4,
-            _1_5: _1_5,
-            _1_6: _1_6,
-            _1_7: _1_7,
-            _1_8: _1_8,
-            _1_9: _1_9,
-            _1_10: _1_10,
-            _1_11: _1_11,
-            _1_12: _1_12,
-            _1_13: _1_13,
-            _1_14: _1_14,
-            _1_15: _1_15,
-            _1_16: _1_16,
-            _2_1: _2_1,
-            _2_2: _2_2,
-            _2_3: _2_3,
-            _2_4: _2_4,
-            _2_5: _2_5,
-            _2_6: _2_6,
-            _2_7: _2_7,
-            _2_8: _2_8,
-            _2_9: _2_9,
-            _2_10: _2_10,
-            _2_11: _2_11,
-            _3_1: _3_1,
-            _3_2: _3_2,
-            _3_3: _3_3,
-            _3_4: _3_4,
-            _3_5: _3_5,
-            _3_6: _3_6,
-            _3_7: _3_7,
-            _3_8: _3_8,
-            _3_9: _3_9,
-            _3_10: _3_10
-        };
-        const newState = await userCollection.findOneAndUpdate({email: email}, data, {new: true});
+        user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
+
+        await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
     }
     catch(err)
     {
@@ -1093,7 +1024,7 @@ app.patch('/favorites:liked', async (req, res) =>
         {
             try
             {
-                const newState = await userCollection.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
+                await userCollection.findOneAndUpdate({email: email}, { $addToSet: {likedVideos: likedVid}});
             }
             catch(err)
             {
@@ -1113,7 +1044,7 @@ app.patch('/favorites:liked', async (req, res) =>
                     likedVideos: likedVideos,
                 };
     
-                const newState = await userCollection.findOneAndUpdate({email: email}, data, {new: true});
+                await userCollection.findOneAndUpdate({email: email}, data, {new: true});
             }
             catch(err)
             {
@@ -1129,104 +1060,32 @@ app.patch('/favorites:liked', async (req, res) =>
     {}     
 });
 
-app.get('/course', async (req, res) => 
+app.get('/course', async (req, res) =>
 {
-    let userEmail;
-    let likedVideos;
-    let _1_1;let _1_2;let _1_3;let _1_4;let _1_5;let _1_6;let _1_7;let _1_8;let _1_9;let _1_10;
-    let _1_11;let _1_12;let _1_13;let _1_14;let _1_15;let _1_16;let _2_1;let _2_2;let _2_3;
-    let _2_4;let _2_5;let _2_6;let _2_7;let _2_8;let _2_9;let _2_10;let _2_11;let _3_1;let _3_2;
-    let _3_3;let _3_4;let _3_5;let _3_6;let _3_7;let _3_8;let _3_9;let _3_10;
-    try
+    try 
     {
-        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((user, err) =>
-        {
-            userEmail = user.email;
-            likedVideos = user.likedVideos,
-            _1_1 = user._1_1;
-            _1_2 = user._1_2;
-            _1_3 = user._1_3;
-            _1_4 = user._1_4;
-            _1_5 = user._1_5;
-            _1_6 = user._1_6;
-            _1_7 = user._1_7;
-            _1_8 = user._1_8;
-            _1_9 = user._1_9;
-            _1_10 = user._1_10;
-            _1_11 = user._1_11;
-            _1_12 = user._1_12;
-            _1_13 = user._1_13;
-            _1_14 = user._1_14;
-            _1_15 = user._1_15;
-            _1_16 = user._1_16;
-            _2_1 = user._2_1;
-            _2_2 = user._2_2;
-            _2_3 = user._2_3;
-            _2_4 = user._2_4;
-            _2_5 = user._2_5;
-            _2_6 = user._2_6;
-            _2_7 = user._2_7;
-            _2_8 = user._2_8;
-            _2_9 = user._2_9;
-            _2_10 = user._2_10;
-            _2_11 = user._2_11;
-            _3_1 = user._3_1;
-            _3_2 = user._3_2;
-            _3_3 = user._3_3;
-            _3_4 = user._3_4;
-            _3_5 = user._3_5;
-            _3_6 = user._3_6;
-            _3_7 = user._3_7;
-            _3_8 = user._3_8;
-            _3_9 = user._3_9;
-            _3_10 = user._3_10;
-        });
+        const user = await userCollection.findOne({_id: req.user._conditions._id});
+        if (!user) throw new Error('User not found');
 
-        res.render('course.ejs', 
+        const data = { likedVideos: user.likedVideos };
+        for (let i = 1; i <= 16; i++)
         {
-            likedVideos: likedVideos,
-            _1_1: _1_1,
-            _1_2: _1_2,
-            _1_3: _1_3,
-            _1_4: _1_4,
-            _1_5: _1_5,
-            _1_6: _1_6,
-            _1_7: _1_7,
-            _1_8: _1_8,
-            _1_9: _1_9,
-            _1_10: _1_10,
-            _1_11: _1_11,
-            _1_12: _1_12,
-            _1_13: _1_13,
-            _1_14: _1_14,
-            _1_15: _1_15,
-            _1_16: _1_16,
-            _2_1: _2_1,
-            _2_2: _2_2,
-            _2_3: _2_3,
-            _2_4: _2_4,
-            _2_5: _2_5,
-            _2_6: _2_6,
-            _2_7: _2_7,
-            _2_8: _2_8,
-            _2_9: _2_9,
-            _2_10: _2_10,
-            _2_11: _2_11,
-            _3_1: _3_1,
-            _3_2: _3_2,
-            _3_3: _3_3,
-            _3_4: _3_4,
-            _3_5: _3_5,
-            _3_6: _3_6,
-            _3_7: _3_7,
-            _3_8: _3_8,
-            _3_9: _3_9,
-            _3_10: _3_10
-        });
+            data[`_1_${i}`] = user[`_1_${i}`];
+        }
+        for (let i = 1; i <= 11; i++)
+        {
+            data[`_2_${i}`] = user[`_2_${i}`];
+        }
+        for (let i = 1; i <= 10; i++)
+        {
+            data[`_3_${i}`] = user[`_3_${i}`];
+        }
+
+        res.render('course.ejs', data);
     }
-    catch(e)
+    catch
     {
-        res.render('login.ejs')
+        res.render('login.ejs');
     }
 });
 

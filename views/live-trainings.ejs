@@ -15,8 +15,19 @@
 </head>
 <body style="background-color: #36454F;">
     <!--topnav-->
-    <div id="topNavWrapper">
-        <!--loaded from backend-->
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
+            <div style="color: #649399; text-decoration: underline !important;">Live Trainings</div>
+        </div>
+        <div>
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: white;">Log Out</button>
+                </form>
+            </a>
+        </div>
     </div>
 
     <div class="content-container container">
@@ -96,12 +107,8 @@
 
         <button onclick="postState();" id="patch" style="display: none;">PATCH BUTTON</button>
     </div>
-    
-    <script type="text/javascript" src="assets/JS/topnav.js"></script>
-    
+        
     <script type="text/javascript">
-        topNav('live-trainings');
-
         const url = window.location.search;
         const urlParams = new URLSearchParams(url);
         const lesson = urlParams.get('lesson');
@@ -110,7 +117,6 @@
 
         const liveTrainingsString = '<%=liveTrainingsProgress%>';
         const liveTrainingsArray = liveTrainingsString.split(',');
-        console.log(liveTrainingsArray)
         const likedVideoList = '<%=likedVideoList%>';
         const likedVideoListArray = likedVideoList.split(',')
 

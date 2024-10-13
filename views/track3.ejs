@@ -27,8 +27,19 @@
     </div>
 
     <!--topnav-->
-    <div id="topNavWrapper">
-        <!--loaded from backend-->
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 40px; padding-right: 30px; height: 60px;">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+            <div style="padding-left: 10px; padding-right: 10px; color: #FFFFFF;">/</div>
+            <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 3</div>
+        </div>
+        <div>
+            <a href="#">
+                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+                    <button type="submit" style="all:unset; color: #FFFFFF;">Log Out</button>
+                </form>
+            </a>
+        </div>
     </div>
 
     <div style="display: flex; justify-content: center;">
@@ -419,11 +430,7 @@
 
 </body>
 
-<script type="text/javascript" src="assets/JS/topnav.js"></script>
-
 <script type="text/javascript">    
-    topNav('track-3');
-
     document.title = "Track 3";
 
     let allModArray = ["_3_1","_3_2","_3_3","_3_4","_3_5","_3_6","_3_7","_3_8","_3_9","_3_10"];

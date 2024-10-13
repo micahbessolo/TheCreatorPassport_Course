@@ -21,11 +21,16 @@
 <body>
 	<div id="wrapper"  style="z-index: 1; position: relative;">
 		<!--topnav-->
-		<div id="topNavWrapper">
-            <!--loaded from backend-->
-        </div>
-		<div id="emailTesting"><%=email %></div>
-		<!--hero-->
+		<div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+			<div style="color: #649399; text-decoration: underline !important;">Dashboard</div>
+			<div>
+				<a href="#">
+					<form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
+						<button type="submit" style="all:unset; color: white;">Log Out</button>
+					</form>
+				</a>
+			</div>
+		</div>
 		<div class="hero-title-black">
 			<div style="top: 30px; position: relative;">
 				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h4 style="font-family: 'Roboto', sans-serif; font-size: 29px;">The Creator Passport</h4></div>
@@ -123,11 +128,7 @@
 		</div>
     </div>
 
-	<script type="text/javascript" src="assets/JS/topnav.js"></script>
-
 	<script type="text/javascript">
-
-		topNav('dashboard');
 
 		function communityOptions()
 		{
