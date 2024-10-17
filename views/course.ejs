@@ -159,6 +159,8 @@
     </div>
     
     <script type="text/javascript">    
+        topNav('course');
+
         const url = window.location.search;
         const urlParams = new URLSearchParams(url);
         const module = urlParams.get('module');
@@ -232,10 +234,10 @@
 
         // Gets video list from DB by URL data (Module)
         function videoList()
-        {            
+        {
             $.ajax({
                 type: "GET",
-                url: `/videoList/${module.split("-")[0]}/${module.split("-")[1]}`,
+                url: `/videoList/${module.split("-")[0]}-${module.split("-")[1]}`,
                 async: false,
                 success: function(res)
                 {  
@@ -652,5 +654,3 @@
 
 </body>
 </html>
-
-

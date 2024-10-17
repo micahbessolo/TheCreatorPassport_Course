@@ -187,6 +187,10 @@ const UserSchema = new mongoose.Schema({
     liveTrainingsProgress: {
         type: Array,
         default: ["","","","","","","","","","",""]
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
     
 }, {timestamps: true});

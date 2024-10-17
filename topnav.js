@@ -1,7 +1,7 @@
 const userCollection = require('./models/user-collection');
 const notificationsCollection = require('./models/notification-collection');
 
-async function topNav(req, res)
+async function topNav(req)
 {
     const page = req.params.page;
     const id = req.user._conditions._id;
@@ -112,9 +112,16 @@ async function topNav(req, res)
     `<link rel="stylesheet" type="text/css" href="./assets/CSS/topnav.css" />
     <input class="hide" id="currentUser" value="${userName}" />
 
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 20px; padding-right: 20px; height: 60px;">
         ${breadCrumb}
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 90px;">
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 250px;">
+
+            <div class="input-group" style="width: 150px;">
+                <input type="text" class="form-control" id="videoSearch" placeholder="search video" style="width: 150px; height: 35px; border-radius: 20px;">
+                <button class="noStyle input-group-append" type="button" onclick="">
+                    <i class="fa-solid fa-magnifying-glass" id="videoSearchButton"></i>
+                </button>
+            </div>
 
             <div id="notificationsWrapper" style="color: white; margin-top: 4px; position: relative;" onFocus="showNotifications()" onfocusout="hideNotifications();" tabindex="-1">
                 <i class="fa-regular fa-bell topNavbuttons" style="font-size: 1.6rem;"></i>

@@ -19,6 +19,10 @@ const postCollectionSchema = new mongoose.Schema(
 				ref: "logincollections",
 			},
 		],
+		pin: {
+			type: Boolean,
+			default: false,
+		},
 		comments: [
 			{
 				text: {
