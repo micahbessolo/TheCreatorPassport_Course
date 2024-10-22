@@ -44,6 +44,16 @@ function topNav(page)
     });
 }
 
+function showSearchResults()
+{
+    document.getElementById('searchResultsDropdown').classList.remove('hide');
+}
+
+function hideSearchResults()
+{
+    document.getElementById('searchResultsDropdown').classList.add('hide');
+}
+
 function showNotifications()
 {
     document.getElementById('notifications-dropdown').classList.remove('hide');
@@ -1111,7 +1121,7 @@ function getUserPostsNav(username)
                 else
                 {
                     profileImg =
-                    `<img src="${profileImg}" class="currentImgURL" alt="profile Image" />`;
+                    `<img src="${profileImg}" class="currentImgURL square-image" alt="profile Image" />`;
                 }
 
                 $('#profileAndUser').html(
@@ -1174,6 +1184,7 @@ function submitUpdate()
 
 function changeProfile(data)
 {
+    console.log(data);
     if (data.profileImg)
     {
         document.getElementById('currentImgURL').src = data.profileImg;
@@ -1185,19 +1196,21 @@ function changeProfile(data)
         document.getElementById('editEmail').style.display = 'none';
     }
 }
-
-document.getElementById('profileImg').addEventListener('change', function(event)
+document.addEventListener('DOMContentLoaded', function()
 {
-    const reader = new FileReader();
-
-    reader.onload = function(e)
+    document.getElementById('profileImg').addEventListener('change', function(event)
     {
-        // The file's text will be printed here
-        document.getElementById('currentImgURL').src = e.target.result;
-    };
+        const reader = new FileReader();
 
-    // read the file as text
-    reader.readAsDataURL(event.target.files[0]);
+        reader.onload = function(e)
+        {
+            // The file's text will be printed here
+            document.getElementById('currentImgURL').src = e.target.result;
+        };
+
+        // read the file as text
+        reader.readAsDataURL(event.target.files[0]);
+    });
 });
 
 function editEmail()
@@ -1350,4 +1363,60 @@ function markAsRead(notificationID, clickedElement, id)
             console.error('Error:', error);
         }
     });
+}
+
+function displaySearchResults()
+{
+    const searchInput = document.getElementById('videoSearch').value;
+
+    if (searchInput !== '') {
+        $.ajax({
+            url: `/search-videos/${searchInput}`,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(response)
+            {
+                console.log(response)
+
+                const dropdown = $('#searchResultsDropdown');
+                dropdown.empty(); // Clear previous results
+
+                if (response.length > 0)
+                {
+                    response.forEach(result =>
+                    {
+                        const item = $('<div></div>').css({
+                            padding: '8px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }).on('click', function() {
+                            location.href = `./course?module=${result.module}`;
+                        });
+                    
+                        const thumbnail = $('<img>').attr('src', result.thumbnail).css({
+                            width: '80px',
+                            height: 'auto',
+                            marginRight: '8px'
+                        });
+                    
+                        const text = $('<span></span>').text(result.title);
+                    
+                        item.append(thumbnail);
+                        item.append(text);
+                        dropdown.append(item);
+                    });
+                    $('#searchWrapper').focus();
+                } 
+                else
+                {
+                    dropdown.hide();
+                }
+            },
+            error: function(error)
+            {
+                console.error('Error:', error);
+            }
+        });
+    }
 }

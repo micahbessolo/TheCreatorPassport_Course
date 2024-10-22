@@ -84,7 +84,11 @@ async function topNav(req)
             <img src="${profileImg}" style="height: auto; width: 100%; object-fit: contain; border-radius: 50%; min-height: 40px;" alt="profile Image"/>
         </div>`;
 
-        profileImg = `<img src="${profileImg}" id="currentImgURL" class="currentImgURL" alt="profile Image" style="height: auto; object-fit: contain; border-radius: 50%; height: auto; width: 100%; min-height: 50px;" />`;
+        profileImg = 
+        `<div style="height: 150px; width: 150px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%;">
+            <img src="${profileImg}" id="currentImgURL" class="currentImgURL square-image" alt="profile Image" style="height: 100%; object-fit: contain; width: auto; min-height: 50px;" />
+        </div>`;
+    
     }
     else
     {
@@ -112,15 +116,21 @@ async function topNav(req)
     `<link rel="stylesheet" type="text/css" href="./assets/CSS/topnav.css" />
     <input class="hide" id="currentUser" value="${userName}" />
 
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 20px; padding-right: 20px; height: 60px;">
+    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 20px; padding-right: 30px; height: 60px;">
         ${breadCrumb}
         <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 250px;">
 
-            <div class="input-group" style="width: 150px;">
-                <input type="text" class="form-control" id="videoSearch" placeholder="search video" style="width: 150px; height: 35px; border-radius: 20px;">
-                <button class="noStyle input-group-append" type="button" onclick="">
-                    <i class="fa-solid fa-magnifying-glass" id="videoSearchButton"></i>
-                </button>
+            <div id="searchWrapper" onFocus="showSearchResults()" onfocusout="hideSearchResults();" tabindex="-1">
+                <div class="input-group" style="width: 150px;">
+                    <input type="text" class="form-control" id="videoSearch" placeholder="search video" style="width: 150px; height: 35px; border-radius: 20px;"
+                    onkeydown="if (event.key === 'Enter') displaySearchResults();" />
+                    <button class="noStyle input-group-append" type="button" onclick="displaySearchResults()">
+                        <i class="fa-solid fa-magnifying-glass" id="videoSearchButton"></i>
+                    </button>
+                </div>
+                <div id="searchResultsDropdown" class="dropdown-content hide" style="position: absolute; top: 60px; right: 50px; width: 450px; max-height: calc(100vh - 70px); background-color: white; border: 1px solid #ccc; z-index: 1000; overflow-y: auto;">
+
+                </div>
             </div>
 
             <div id="notificationsWrapper" style="color: white; margin-top: 4px; position: relative;" onFocus="showNotifications()" onfocusout="hideNotifications();" tabindex="-1">
@@ -589,6 +599,7 @@ function formatDate(dateString)
         }
     }
 }
+
 
 module.exports = {
     topNav,

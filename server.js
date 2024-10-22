@@ -173,7 +173,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 const uploadedResponse = await cloudinary.uploader.upload(req.file.path, 
                 { 
                     transformation: [
-                        { width: 200, height: 200, crop: "limit" }
+                        { width: 200, height: 200, crop: "thumb", gravity: "center" }
                     ]
                 }, 
                 function (err)
@@ -201,6 +201,48 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         {
             console.log("Error in updateUser: ", error.message);
             res.status(500).json({ error: error.message });
+        }
+    });
+
+    app.get('/search-videos/:searchInput', checkAuthenticated, async (req, res) =>
+    {
+        const searchInput = req.params.searchInput;
+    
+        try
+        {
+            const results = await videosCollection.find({
+                titles: {
+                    $elemMatch: {
+                        $regex: searchInput,
+                        $options: 'i' // Case-insensitive search
+                    }
+                }
+            });
+    
+            let resultsArray = [];
+    
+            for (let i = 0; i < results.length; i++)
+            {            
+                for (let j = 0; j < results[i].titles.length; j++)
+                {
+                    if (results[i].titles[j].toLowerCase().includes(searchInput.toLowerCase()))
+                    {
+                        let obj = {};
+                        obj.title = results[i].titles[j].split(' - ')[1];
+                        const trackMod = results[i].trackMod;
+                        obj.module = `${trackMod}-${results[i].titles[j].split(' - ')[0].split('.')[1]}`;
+                        obj.thumbnail = `./assets/images/${obj.module}.png`;
+    
+                        resultsArray.push(obj);
+                    }
+                }
+            }
+            res.json(resultsArray);
+        } 
+        catch (error)
+        {
+            console.error('Error searching videos:', error);
+            res.status(500).send('Internal Server Error');
         }
     });
     
@@ -385,7 +427,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 const uploadedResponse = await cloudinary.uploader.upload(req.file.path,
                 {
                     transformation: [
-                        { width: 600, height: 600, crop: "limit" }
+                        { width: 800, height: 800, crop: "limit" }
                     ]
                 },
                 function (err)
@@ -442,14 +484,17 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             post.comments.push(comment);
             await post.save();
     
-            const notification = new notificationsCollection({
-                from: userId,
-                fromName: req.user._conditions.name,
-                to: post.user,
-                type: "comment",
-                post: postId,
-            });
-            await notification.save();
+            if (userId.toString() !== post.user.toString())
+            {
+                const notification = new notificationsCollection({
+                    from: userId,
+                    fromName: req.user._conditions.name,
+                    to: post.user,
+                    type: "comment",
+                    post: postId,
+                });
+                await notification.save();
+            }
     
             res.status(200).json(post);
         }
@@ -493,7 +538,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             comment.comments.push(newComment);
             await post.save();
             
-            if (userId.toString() !== post.user.toString())
+            if (userId.toString() !== comment.user.toString())
             {
                 const notification = new notificationsCollection({
                     from: userId,
@@ -515,7 +560,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
     });
     
     // Like or unlike post
-    app.post("/like/:id", checkAuthenticated,  async (req, res) =>
+app.post("/like/:id", checkAuthenticated,  async (req, res) =>
     {
         try
         {
@@ -532,8 +577,17 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
     
             if (userLikedPost)
             {
+                // Unlike post
                 await postsCollection.updateOne({ _id: postId }, { $pull: { likes: userId } });
                 await userCollection.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
+    
+                await notificationsCollection.findOneAndDelete({
+                    from: userId,
+                    fromName: req.user._conditions.name,
+                    to: post.user,
+                    type: "like",
+                    post: postId
+                });
     
                 const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
                 res.status(200).json(updatedLikes);
@@ -596,6 +650,14 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 comment.likes.pull(userId);
                 await post.save();
     
+                await notificationsCollection.findOneAndDelete({
+                    from: userId,
+                    to: comment.user,
+                    type: "like comment",
+                    post: postId,
+                    comment: commentId,
+                });
+    
                 const updatedLikes = comment.likes;
                 res.status(200).json(updatedLikes);
             }
@@ -604,7 +666,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 comment.likes.push(userId);
                 await post.save();
     
-                if (userId.toString() !== post.user.toString())
+                if (userId.toString() !== comment.user.toString())
                 {
                     const notification = new notificationsCollection({
                         from: userId,
@@ -658,6 +720,14 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 reply.likes.pull(userId);
                 await post.save();
     
+                await notificationsCollection.findOneAndDelete({
+                    from: userId,
+                    to: reply.user,
+                    type: "like comment",
+                    post: postId,
+                    comment: commentId,
+                });
+    
                 const updatedLikes = reply.likes;
                 res.status(200).json(updatedLikes);
             } 
@@ -666,7 +736,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 reply.likes.push(userId);
                 await post.save();
     
-                if (userId.toString() !== post.user.toString())
+                if (userId.toString() !== reply.user.toString())
                 {
                     const notification = new notificationsCollection({
                         from: userId,
@@ -878,7 +948,8 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
     {
         let email;
         let liveTrainingsProgress
-        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) => 
+        
+        await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) => 
         {
             email = info.email;
             liveTrainingsProgress = info.liveTrainingsProgress;
@@ -891,10 +962,16 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         let percentageComplete = Number(currentTime)/Number(videoDuration);
         percentageComplete = percentageComplete.toFixed(2);
     
+        while (liveTrainingsProgress.length <= Training)
+        {
+            liveTrainingsProgress.push("");
+        }
+    
         // Update the specific training progress
         liveTrainingsProgress[Training] = `${currentTime}_${videoDuration}_${percentageComplete}`;
     
-        let data = {
+        let data =
+        {
             liveTrainingsProgress: liveTrainingsProgress
         };
     

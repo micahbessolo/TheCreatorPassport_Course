@@ -1,7 +1,7 @@
-*
+.text
 {
     font-family: "poppins", sans-serif;
-    font-weight: 300;
+    font-weight: 300 !important;
     font-style: normal;
 }
 
@@ -17,7 +17,7 @@
 .dropdown-item
 {
     font-family: "poppins", sans-serif;
-    font-weight: 300;
+    font-weight: 300 !important;
     font-style: normal;
 }
 

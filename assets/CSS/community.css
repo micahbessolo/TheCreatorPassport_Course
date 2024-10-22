@@ -76,15 +76,6 @@
     background-color: #F0F2F5;
 }
 
-.currentImgURL
-{
-    height: auto;
-    width: 100%; 
-    object-fit: contain;
-    border-radius: 50%;
-    min-height: 50px;
-}
-
 .community-content
 {
     display: flex;

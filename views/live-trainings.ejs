@@ -15,19 +15,8 @@
 </head>
 <body style="background-color: #36454F;">
     <!--topnav-->
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px; height: 60px;">
-        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
-            <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-            <div style="padding-left: 10px; padding-right: 10px; color: white;">/</div>
-            <div style="color: #649399; text-decoration: underline !important;">Live Trainings</div>
-        </div>
-        <div>
-            <a href="#">
-                <form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-                    <button type="submit" style="all:unset; color: white;">Log Out</button>
-                </form>
-            </a>
-        </div>
+    <div id="topNavWrapper">
+        <!--loaded from backend-->
     </div>
 
     <div class="content-container container">
@@ -107,8 +96,12 @@
 
         <button onclick="postState();" id="patch" style="display: none;">PATCH BUTTON</button>
     </div>
-        
+    
+    <script type="text/javascript" src="assets/JS/topnav.js"></script>
+    
     <script type="text/javascript">
+        topNav('live-trainings');
+
         const url = window.location.search;
         const urlParams = new URLSearchParams(url);
         const lesson = urlParams.get('lesson');
@@ -125,15 +118,15 @@
             type: 'GET',
             dataType: 'json',
             async: false,
-            success: function(res) {
-                console.log(res);
-                
+            success: function(res)
+            {
                 returnObject.titles = res.titles;
                 returnObject.links = res.links;
                 returnObject.moduleTitle = res.moduleName;
                 returnObject.copy = res.copy;
             },
-            error: function(error) {
+            error: function(error)
+            {
                 console.log('Error:', error);
             }
         });
@@ -154,7 +147,10 @@
             // gets the start point of the lesson
             let currentLessonData = liveTrainingsArray[lesson - 1];
 
-            if (currentLessonData === 0 || currentLessonData === "" || currentLessonData === "NaN_undefined_NaN")
+            if (currentLessonData === 0 
+            || currentLessonData === "" 
+            || currentLessonData === "NaN_undefined_NaN"
+            || typeof currentLessonData === "undefined")
             {
                 startPoint = 0;
             }
@@ -223,7 +219,10 @@
         {
             for (let i = 0; i < liveTrainingsArray.length; i++)
             {
-                if (liveTrainingsArray[i] === "" || Number(liveTrainingsArray[i]) <= .05 || liveTrainingsArray[i] === "NaN_undefined_NaN")
+                if (liveTrainingsArray[i] === ""
+                || Number(liveTrainingsArray[i]) <= .05 
+                || liveTrainingsArray[i] === "NaN_undefined_NaN"
+                || typeof liveTrainingsArray[i] === "undefined")
                 {
                     liveTrainingsArray[i] = 0;
                 }
@@ -392,8 +391,7 @@
                     'videoDuration': duration,
                     'URLData': lesson
                 },
-                success: function (data)
-                {}
+                success: function (data) {}
             });
         }
         // when leaving the page runs postState function
@@ -410,7 +408,6 @@
 
         function seeIfLiked()
         {
-            console.log(likedVideoListArray)
             if (likedVideoListArray.includes(lesson))
             {
                 isLiked = true;
@@ -453,5 +450,3 @@
 
 </body>
 </html>
-
-
