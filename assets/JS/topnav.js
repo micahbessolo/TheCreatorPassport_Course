@@ -297,8 +297,8 @@ function createTableRowNav(result, isNewComment=false, isModal=false)
     {
         postElement +=
         `<div style="margin-top: 15px; display: flex; flex-direction: row; justify-content: center;">
-            <div>
-                <img src="${result.img}" alt="post image" style="border-radius: 10px;" />
+            <div style="width: 100%">
+                <img src="${result.img}" alt="post image" style="border-radius: 10px; max-width: 100%;" />
             </div>
         </div>`;
     }
