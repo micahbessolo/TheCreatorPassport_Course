@@ -61,6 +61,10 @@
 {
     cursor: pointer;
 }
+.likedPost
+{
+    color: #0866FF !important;
+}
 
 .modalWidth
 {
@@ -75,7 +79,6 @@
 {
     background-color: #F0F2F5;
 }
-
 .community-content
 {
     display: flex;
