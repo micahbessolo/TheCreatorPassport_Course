@@ -1190,8 +1190,6 @@
         {
             const formData = new FormData(document.getElementById('postForm'));
 
-            alert(formData.postText);
-
             if ([...formData.entries()].length > 0)
             {
                 fetch('/create-post',
@@ -1219,7 +1217,6 @@
             }
             else
             {
-                alert('There is post data');
             }
         }
 
