@@ -117,7 +117,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         let userEmail;
         let userName;
         let profileImg;
-        let isAdmin;
+        let isAdmin = false;
     
         await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
         {
@@ -125,9 +125,15 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             userName = info.name;
             profileImg = info.profileImg;
             liveTrainingsProgress = info.liveTrainingsProgress;
-            isAdmin = info.admin;
         });
-    
+
+        if (userEmail === "ryanleebanksmedia@gmail.com" || userEmail === "dani@theloverspassport.com" 
+        || userEmail === "dreamwithlo@gmail.com" || userEmail === "maggie@theloverspassport.com"
+        || userEmail === "bessolomicah@gmail.com" || userEmail === "stephenjiroch99@gmail.com")
+        {
+            isAdmin = true;
+        }
+
         res.render('dashboard.ejs', {
             userName: userName,
             email: userEmail,
@@ -921,7 +927,7 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         {
             const user = await userCollection.findOne({_id: req.user._conditions._id});
             if (!user) throw new Error('User not found');
-    
+
             const currentTime = JSON.parse(JSON.stringify(req.body)).currentTime;
             const videoDuration = JSON.parse(JSON.stringify(req.body)).videoDuration;
             const URLData = JSON.parse(JSON.stringify(req.body)).URLData;
@@ -929,10 +935,13 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
             const Lesson = Number(URLData.split('-')[2]) - 1;
             let percentageComplete = Number(currentTime)/Number(videoDuration);
             percentageComplete = percentageComplete.toFixed(2);
-    
-            user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
-    
-            await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+            
+            // only updates if the new progress is higher than the initial progress
+            if (Number(user[sectionArray][Lesson].split('_')[2]) < percentageComplete)
+            {
+                user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
+                await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+            }
         }
         catch(err)
         {
