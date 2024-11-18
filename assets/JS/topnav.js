@@ -1420,3 +1420,16 @@ function displaySearchResults()
         });
     }
 }
+
+function searchInputDisplay()
+{
+    const searchButton = document.getElementsByClassName('desktop-search-button')[0];
+    if (searchButton.style.display === 'flex')
+    {
+        searchButton.style.display = 'none';
+    }
+    else
+    {
+        searchButton.style.display = 'flex';
+    }
+}
