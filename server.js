@@ -933,24 +933,39 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
             const URLData = JSON.parse(JSON.stringify(req.body)).URLData;
             const sectionArray = `_${URLData.split('-')[0]}_${URLData.split('-')[1]}`;
             const Lesson = Number(URLData.split('-')[2]) - 1;
-            let percentageComplete = Number(currentTime)/Number(videoDuration);
-            percentageComplete = percentageComplete.toFixed(2);
-            
-            // only updates if the new progress is higher than the initial progress
-            if (Number(user[sectionArray][Lesson].split('_')[2]) < percentageComplete)
+
+            // video Complete Marked
+            if (currentTime === videoDuration)
             {
-                user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
+                user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${1}`;
                 await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+
+                return res.json({
+                    message: 'Lesson Complete Marked'
+                });
+            }
+            else
+            {
+                let percentageComplete = Number(currentTime)/Number(videoDuration);
+                percentageComplete = percentageComplete.toFixed(2);
+                
+                // only updates if the new progress is higher than the initial progress
+                if (user[sectionArray][Lesson] === "" ||
+                    Number(user[sectionArray][Lesson].split('_')[2]) < percentageComplete)
+                {
+                    user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
+                    await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+
+                    return res.json({
+                        message: 'state updated'
+                    });
+                }
             }
         }
         catch(err)
         {
             console.log("didn't work: " + err);
         }
-    
-        return res.json({
-            message: 'state updated'
-        });
     });
     
     app.patch('/live-trainings-state:videoState', async (req, res) =>
