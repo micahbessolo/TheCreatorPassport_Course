@@ -927,22 +927,18 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         {
             const user = await userCollection.findOne({_id: req.user._conditions._id});
             if (!user) throw new Error('User not found');
-
+    
             const currentTime = JSON.parse(JSON.stringify(req.body)).currentTime;
             const videoDuration = JSON.parse(JSON.stringify(req.body)).videoDuration;
             const URLData = JSON.parse(JSON.stringify(req.body)).URLData;
             const sectionArray = `_${URLData.split('-')[0]}_${URLData.split('-')[1]}`;
             const Lesson = Number(URLData.split('-')[2]) - 1;
-
+    
             // video Complete Marked
             if (currentTime === videoDuration)
             {
                 user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${1}`;
                 await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
-
-                return res.json({
-                    message: 'Lesson Complete Marked'
-                });
             }
             else
             {
@@ -955,12 +951,11 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
                 {
                     user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
                     await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
-
-                    return res.json({
-                        message: 'state updated'
-                    });
                 }
             }
+            return res.json({
+                message: 'state updated'
+            });
         }
         catch(err)
         {
