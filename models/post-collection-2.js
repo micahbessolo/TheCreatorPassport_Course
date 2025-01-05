@@ -16,7 +16,7 @@ const postCollectionSchema = new mongoose.Schema(
 		pdfName: {
 			type: String,
 			default: "",
-			required: true
+			required: false
 		},
 		likes: [
 			{

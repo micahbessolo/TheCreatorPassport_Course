@@ -530,13 +530,14 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         const text = parsedBody.text;
         let image = req.file;
         const userId = req.user._conditions._id.toString();
+        const user = await userCollection.findById(req.user._conditions._id);
     
         try 
         {
             let post = await postsCollection.findById(postID);
             if (!post) return res.status(404).json({ message: "Post not found" });
     
-            if (post.user.toString() !== userId)
+            if (post.user.toString() !== userId && !user.admin)
             {
                 return res.status(403).json({ message: "You are not authorized to edit this post" });
             }
@@ -635,6 +636,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             const { text } = req.body;
             const { postId, commentId } = req.params;
             const userId = req.user._conditions._id.toString();
+            const user = await userCollection.findById(req.user._conditions._id);
     
             if (!text)
             {
@@ -653,7 +655,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 return res.status(404).json({ error: "Comment not found" });
             }
     
-            if (comment.user.toString() !== userId)
+            if (comment.user.toString() !== userId && !user.admin)
             {
                 return res.status(403).json({ error: "You are not authorized to edit this comment" });
             }
@@ -678,6 +680,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             const { postId, commentId } = req.params;
             const userId = req.user._conditions._id.toString();
             const post = await postsCollection.findById(postId);
+            const user = await userCollection.findById(req.user._conditions._id);
     
             if (!post)
             {
@@ -691,7 +694,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 return res.status(404).json({ error: "Comment not found" });
             }
     
-            if (comment.user.toString() !== userId)
+            if (comment.user.toString() !== userId  && !user.admin)
             {
                 return res.status(403).json({ error: "You are not authorized to delete this comment" });
             }
@@ -771,6 +774,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             const { text } = req.body;
             const { postId, commentId, replyId } = req.params;
             const userId = req.user._conditions._id.toString();
+            const user = await userCollection.findById(req.user._conditions._id);
     
             if (!text)
             {
@@ -795,7 +799,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 return res.status(404).json({ error: "Reply not found" });
             }
     
-            if (reply.user.toString() !== userId)
+            if (reply.user.toString() !== userId && !user.admin)
             {
                 return res.status(403).json({ error: "You are not authorized to edit this reply" });
             }
@@ -820,6 +824,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             const { postId, commentId, replyId } = req.params;
             const userId = req.user._conditions._id.toString();
             const post = await postsCollection.findById(postId);
+            const user = await userCollection.findById(req.user._conditions._id);
     
             if (!post)
             {
@@ -838,7 +843,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
                 return res.status(404).json({ error: "Reply not found" });
             }
     
-            if (reply.user.toString() !== userId)
+            if (reply.user.toString() !== userId  && !user.admin)
             {
                 return res.status(403).json({ error: "You are not authorized to delete this reply" });
             }
