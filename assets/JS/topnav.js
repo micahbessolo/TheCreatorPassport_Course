@@ -685,13 +685,16 @@ function createTableRowNav(result, isNewComment=false, isModal=false)
     }
     else
     {
+        const comment1 = result.comments[0];
+        let profileImg4 = userProfileImageNav(40, comment1.user);
+
         if (result.comments[0])
         {
             postElement +=
             `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; width: 100%;">
                 <div style="display: flex; flex-direction: column;">
                     <div style="margin-top: 15px; padding-right: 10px;">
-                        ${profileImg2}
+                        ${profileImg4}
                     </div>
                     <div class="${result.comments[0]._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: calc(100% - 40px); width: 50px; padding-top: 5px;">
                         <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>

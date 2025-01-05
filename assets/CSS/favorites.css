@@ -30,6 +30,10 @@
     cursor: pointer;
     outline: inherit;
 }
+.dashboard-link
+{
+    white-space: nowrap;
+}
 .dashboard-link:hover
 {
     text-decoration: underline !important;

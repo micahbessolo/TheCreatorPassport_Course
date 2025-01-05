@@ -21,7 +21,7 @@ async function topNav(req)
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
                 <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
                 <div style="color: #649399; text-decoration: underline !important;">Favorites</div>
             </div>`;
             break;
@@ -29,7 +29,7 @@ async function topNav(req)
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
                 <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
                 <div id="tracks" style="color: #649399; text-decoration: underline !important;">Community</div>
             </div>`;
             break;
@@ -37,7 +37,7 @@ async function topNav(req)
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
                 <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
                 <div style="color: #649399; text-decoration: underline !important;">Live Trainings</div>
             </div>`;
             break;
@@ -45,7 +45,7 @@ async function topNav(req)
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
                 <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
                 <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 1</div>
             </div>`;
             break;
@@ -53,7 +53,7 @@ async function topNav(req)
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
                 <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
                 <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 2</div>
             </div>`;
             break;
@@ -61,18 +61,18 @@ async function topNav(req)
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
                 <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
                 <div id="tracks" style="color: #649399; text-decoration: underline !important;">Track 3</div>
             </div>`;
             break;
         case 'course':
             breadCrumb =
             `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
-                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
-                <div><a class="dashboard-link" style="color: #FFFFFF;" href="" id="tracks">Track</a></div>
-                <div style="padding-left: 10px; padding-right: 10px; color: white;"><i class="fa-solid fa-chevron-right"></i></div>
-                <div style="color: #649399; text-decoration: underline !important;">Course</div>
+                <div class="adjustable-text"><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-text"><a class="dashboard-link" style="color: #FFFFFF;" href="" id="tracks">Track</a></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="adjustable-text" style="color: #649399; text-decoration: underline !important;">Course</div>
             </div>`;
             break;
     }
@@ -88,7 +88,6 @@ async function topNav(req)
         `<div style="height: 150px; width: 150px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%;">
             <img src="${profileImg}" id="currentImgURL" class="currentImgURL square-image" alt="profile Image" style="height: 100%; object-fit: contain; width: auto; min-height: 50px;" />
         </div>`;
-    
     }
     else
     {
@@ -116,22 +115,29 @@ async function topNav(req)
     `<link rel="stylesheet" type="text/css" href="./assets/CSS/topnav.css" />
     <input class="hide" id="currentUser" value="${userName}" />
 
-    <div class="topNav" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding-left: 20px; padding-right: 30px; height: 60px;">
+    <div class="topNav">
         ${breadCrumb}
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 250px;">
+        <div class="topnav-right-wrapper">
+            
+            <div class="mobile-search-button noStyle">
+                <button class="noStyle" type="button" onclick="searchInputDisplay();">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
 
-            <div id="searchWrapper" onFocus="showSearchResults()" onfocusout="hideSearchResults();" tabindex="-1">
-                <div class="input-group" style="width: 150px;">
-                    <input type="text" class="form-control" id="videoSearch" placeholder="search video" style="width: 150px; height: 35px; border-radius: 20px;"
+            <div id="searchWrapper" class="desktop-search-button" onFocus="showSearchResults()" onfocusout="hideSearchResults();" tabindex="-1">
+                <div class="input-group desktop-search-input-wrapper">
+                    <input type="text" class="form-control desktop-search-input" id="videoSearch" placeholder="search video"
                     onkeydown="if (event.key === 'Enter') displaySearchResults();" />
-                    <button class="noStyle input-group-append" type="button" onclick="displaySearchResults()">
+                    <button class="noStyle input-group-append" type="button" onclick="displaySearchResults();">
                         <i class="fa-solid fa-magnifying-glass" id="videoSearchButton"></i>
                     </button>
                 </div>
-                <div id="searchResultsDropdown" class="dropdown-content hide" style="position: absolute; top: 60px; right: 50px; width: 450px; max-height: calc(100vh - 70px); background-color: white; border: 1px solid #ccc; z-index: 1000; overflow-y: auto;">
+                <div id="searchResultsDropdown" class="dropdown-content hide">
 
                 </div>
             </div>
+
 
             <div id="notificationsWrapper" style="color: white; margin-top: 4px; position: relative;" onFocus="showNotifications()" onfocusout="hideNotifications();" tabindex="-1">
                 <i class="fa-regular fa-bell topNavbuttons" style="font-size: 1.6rem;"></i>
@@ -199,30 +205,12 @@ async function topNav(req)
             </div>
             
         </div>
-    </div>
-    
-    <!--notification post modal-->
-    <div class="modal fade" onfocusin="onActive();" onFocusOut="onActiveOut();" id="notificationPost" role="dialog" aria-labelledby="notificationPost" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <!--- Modal content --->
-            <div class="modal-content">
-                <div class="modal-header" style="border-bottom: none !important;">
-                    <div id="profileAndUser-notification"></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" background-color: #F0F2F5;>
-                    <div id="thePost" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>`;
     
     return htmlContent;
 }
 
-async function topNavNotifications(req, res)
+async function topNavNotifications(req)
 {
     const type = req.params.type;
     const id = req.user._conditions._id;
@@ -599,7 +587,6 @@ function formatDate(dateString)
         }
     }
 }
-
 
 module.exports = {
     topNav,

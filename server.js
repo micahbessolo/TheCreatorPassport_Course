@@ -257,7 +257,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         let liveTrainingsProgress;
         let likedVideoList;
     
-        const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+        await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
         {
             liveTrainingsProgress = info.liveTrainingsProgress;
             likedVideoList = info.likedVideos;
@@ -337,7 +337,8 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         }
     });
     
-    app.get('/get-posts', checkAuthenticated, async (req, res) => {
+    app.get('/get-posts', checkAuthenticated, async (req, res) =>
+    {
         const pageSize = 10; // number of posts per page
         const page = Number(req.query.page) || 1; // page number
         const isPinned = req.query.isPinned || false;
@@ -411,11 +412,42 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             res.status(500).json({ error: "Internal server error" });
         }
     });
+
+    app.get('/get-pdf-files', async (req, res) =>
+    {
+        try
+        {
+            const pdfFiles = await postsCollection.find({
+                pdfName: { $regex: /^.{1,}$/ },
+                img: { $regex: /\.pdf$/ }
+            }).sort({ updatedAt: -1 });
+    
+            let results = [];
+    
+            for (let i = 0; i < pdfFiles.length; i++)
+            {
+                let resultObject = {};
+                resultObject.img = pdfFiles[i].img;
+                resultObject.pdfName = pdfFiles[i].pdfName;
+                resultObject.updatedAt = pdfFiles[i].updatedAt;
+                let user = await userCollection.findById(pdfFiles[i].user);
+                resultObject.user = user.name;
+                results.push(resultObject);
+            }
+    
+            res.status(200).json(results);
+        }
+        catch (error)
+        {
+            res.status(500).json({ error: "Internal server error" });
+            console.log("Error in get-pdf-files controller: ", error);
+        }
+    });
     
     app.post('/create-post', checkAuthenticated, upload.single('image-post'), async (req, res) =>
     {
-        const { postText } = req.body;
-        let img = req.file;
+        const { postText, pdfName } = req.body;
+        let file = req.file;
         const userId = req.user._conditions._id.toString();
     
         try
@@ -423,37 +455,62 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             let user = await userCollection.findById(userId);
             if (!user) return res.status(404).json({ message: "User not found" });
     
-            if (!postText && !img)
+            if (!postText && !file)
             {
-                return res.status(400).json({ error: "Post must have text or image" });
+                return res.status(400).json({ error: "Post must have text or file" });
             }
     
-            if (img)
+            if (file)
             {
-                const uploadedResponse = await cloudinary.uploader.upload(req.file.path,
+                let uploadedResponse;
+                if (file.mimetype === 'application/pdf')
                 {
-                    transformation: [
-                        { width: 800, height: 800, crop: "limit" }
-                    ]
-                },
-                function (err)
-                {
-                    if(err)
+                    // Handle PDF upload
+                    uploadedResponse = await cloudinary.uploader.upload(req.file.path,
                     {
-                        console.log(err);
-                        return res.status(500).json({
-                            success: false,
-                            message: "Error"
-                        })
-                    }
-                });
-                img = uploadedResponse.secure_url;
+                        resource_type: 'raw'
+                    },
+                    function (err)
+                    {
+                        if (err)
+                        {
+                            console.log(err);
+                            return res.status(500).json({
+                                success: false,
+                                message: "Error"
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    // Handle image upload
+                    uploadedResponse = await cloudinary.uploader.upload(req.file.path,
+                    {
+                        transformation: [
+                            { width: 1000, height: 1000, crop: "limit" }
+                        ]
+                    },
+                    function (err)
+                    {
+                        if (err)
+                        {
+                            console.log(err);
+                            return res.status(500).json({
+                                success: false,
+                                message: "Error"
+                            });
+                        }
+                    });
+                }
+                file = uploadedResponse.secure_url;
             }
     
             const newPost = new postsCollection({
                 user: userId,
                 text: postText,
-                img,
+                img: file,
+                pdfName: pdfName || null
             });
             await newPost.save();
             res.status(201).json(newPost);
@@ -464,7 +521,66 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             console.log("Error in createPost controller: ", error);
         }
     });
+
+    app.patch('/edit-post', checkAuthenticated, upload.single('image-post'), async (req, res) => 
+    {
+        const parsedBody = JSON.parse(JSON.stringify(req.body));
     
+        const postID = parsedBody.postID;
+        const text = parsedBody.text;
+        let image = req.file;
+        const userId = req.user._conditions._id.toString();
+    
+        try 
+        {
+            let post = await postsCollection.findById(postID);
+            if (!post) return res.status(404).json({ message: "Post not found" });
+    
+            if (post.user.toString() !== userId)
+            {
+                return res.status(403).json({ message: "You are not authorized to edit this post" });
+            }
+    
+            if (!text && !image)
+            {
+                return res.status(400).json({ error: "Post must have text or image" });
+            }
+    
+            if (image)
+            {
+                const uploadedResponse = await cloudinary.uploader.upload(req.file.path,
+                {
+                    transformation: [
+                        { width: 1000, height: 1000, crop: "limit" }
+                    ]
+                },
+                function (err)
+                {
+                    if (err)
+                    {
+                        console.log(err);
+                        return res.status(500).json({
+                            success: false,
+                            message: "Error"
+                        });
+                    }
+                });
+                image = uploadedResponse.secure_url;
+            }
+    
+            post.text = text || post.text;
+            post.img = image || post.img;
+    
+            await post.save();
+            res.status(200).json(post);
+        }
+        catch (error)
+        {
+            res.status(500).json({ error: "Internal server error" });
+            console.log("Error in editPost controller: ", error);
+        }
+    });
+
     // Comment on post
     app.post("/comment/:id", checkAuthenticated, async (req, res) => 
     {
@@ -511,6 +627,87 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
         }
     });
     
+    // Edit comment on post
+    app.patch("/edit-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const { text } = req.body;
+            const { postId, commentId } = req.params;
+            const userId = req.user._conditions._id.toString();
+    
+            if (!text)
+            {
+                return res.status(400).json({ error: "Text field is required" });
+            }
+    
+            const post = await postsCollection.findById(postId);
+            if (!post)
+            {
+                return res.status(404).json({ error: "Post not found" });
+            }
+    
+            const comment = post.comments.id(commentId);
+            if (!comment)
+            {
+                return res.status(404).json({ error: "Comment not found" });
+            }
+    
+            if (comment.user.toString() !== userId)
+            {
+                return res.status(403).json({ error: "You are not authorized to edit this comment" });
+            }
+    
+            comment.text = text;
+            await post.save();
+    
+            res.status(200).json(post);
+        }
+        catch (error)
+        {
+            console.log("Error in editComment controller: ", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
+    
+    // Delete comment on post
+    app.delete("/delete-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const { postId, commentId } = req.params;
+            const userId = req.user._conditions._id.toString();
+            const post = await postsCollection.findById(postId);
+    
+            if (!post)
+            {
+                return res.status(404).json({ error: "Post not found" });
+            }
+    
+            const comment = post.comments.id(commentId);
+    
+            if (!comment)
+            {
+                return res.status(404).json({ error: "Comment not found" });
+            }
+    
+            if (comment.user.toString() !== userId)
+            {
+                return res.status(403).json({ error: "You are not authorized to delete this comment" });
+            }
+    
+            post.comments = post.comments.filter(c => c.id !== commentId);
+            await post.save();
+    
+            res.status(200).json(post);
+        }
+        catch (error)
+        {
+            console.log("Error in deleteComment controller: ", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
+    
     // Reply on comment
     app.post("/comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
     {
@@ -544,7 +741,8 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             comment.comments.push(newComment);
             await post.save();
             
-            if (userId.toString() !== comment.user.toString())
+            if (userId.toString() !== comment.user.toString() &&
+            post.user.toString() === comment.user.toString())
             {
                 const notification = new notificationsCollection({
                     from: userId,
@@ -564,9 +762,101 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
             res.status(500).json({ error: "Internal server error" });
         }
     });
+
+    // Edit reply on comment
+    app.patch("/edit-reply/:postId/:commentId/:replyId", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const { text } = req.body;
+            const { postId, commentId, replyId } = req.params;
+            const userId = req.user._conditions._id.toString();
+    
+            if (!text)
+            {
+                return res.status(400).json({ error: "Text field is required" });
+            }
+    
+            const post = await postsCollection.findById(postId);
+            if (!post)
+            {
+                return res.status(404).json({ error: "Post not found" });
+            }
+    
+            const comment = post.comments.id(commentId);
+            if (!comment)
+            {
+                return res.status(404).json({ error: "Comment not found" });
+            }
+    
+            const reply = comment.comments.id(replyId);
+            if (!reply)
+            {
+                return res.status(404).json({ error: "Reply not found" });
+            }
+    
+            if (reply.user.toString() !== userId)
+            {
+                return res.status(403).json({ error: "You are not authorized to edit this reply" });
+            }
+    
+            reply.text = text;
+            await post.save();
+    
+            res.status(200).json(post);
+        }
+        catch (error)
+        {
+            console.log("Error in editReply controller: ", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
+    
+    // Delete reply on comment
+    app.delete("/delete-reply/:postId/:commentId/:replyId", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const { postId, commentId, replyId } = req.params;
+            const userId = req.user._conditions._id.toString();
+            const post = await postsCollection.findById(postId);
+    
+            if (!post)
+            {
+                return res.status(404).json({ error: "Post not found" });
+            }
+    
+            const comment = post.comments.id(commentId);
+            if (!comment)
+            {
+                return res.status(404).json({ error: "Comment not found" });
+            }
+    
+            const reply = comment.comments.id(replyId);
+            if (!reply)
+            {
+                return res.status(404).json({ error: "Reply not found" });
+            }
+    
+            if (reply.user.toString() !== userId)
+            {
+                return res.status(403).json({ error: "You are not authorized to delete this reply" });
+            }
+    
+            comment.comments = comment.comments.filter(r => r.id !== replyId);
+            await post.save();
+    
+            res.status(200).json(post);
+        }
+        catch (error)
+        {
+            console.log("Error in deleteReply controller: ", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
     
     // Like or unlike post
-app.post("/like/:id", checkAuthenticated,  async (req, res) =>
+    app.post("/like/:id", checkAuthenticated,  async (req, res) =>
     {
         try
         {
@@ -628,6 +918,7 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         }
     });
     
+    // like or unlike comment
     app.post("/like-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
     {
         try
@@ -836,6 +1127,124 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         }
     });
     
+    // add post to guides
+    app.get("/guide/:id", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const post = await postsCollection.findById(req.params.id);
+            if (!post) return res.status(404).json({ error: "Post not found" });
+    
+            const user = await userCollection.findById(req.user._conditions._id);
+            if (!user) return res.status(404).json({ error: "User not found" });
+            if (!user.admin) return res.status(401).json({ error: "You are not authorized to add this post" });
+    
+            post.resource = !post.resource;
+            await post.save();
+    
+            res.status(200).json(post.resource);
+        }
+        catch (error)
+        {
+            console.log("Error in guides controller: ", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
+    
+    // get guides posts
+    app.get("/guides", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const guides = await postsCollection.find({ resource: true }).sort({ createdAt: -1 });
+            res.status(200).json(guides);
+        }
+        catch (error)
+        {
+            res.status(500).json({ error: "Internal server error" });
+            console.log("Error in /guides route: ", error);
+        }
+    });
+    
+    // get user list from input
+    app.get("/user-array/:username", checkAuthenticated, async (req, res) =>
+    {
+        try
+        {
+            const username = req.params.username;
+            user = await userCollection.find({ name: { $regex: username, $options: 'i' } });
+            
+            const userLength = user.length
+            let userResult = [];
+    
+            if (userLength > 0)
+            {
+                for (let i = 0; i < userLength; i++)
+                {
+                    let userObject = {};
+                    userObject.name = user[i].name;
+                    userObject.profileImg = user[i].profileImg;
+                    userResult.push(userObject);
+                }
+            }
+    
+            res.status(200).json(userResult);
+        }
+        catch (error)
+        {
+            console.log("Error in getUserPosts controller: ", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
+    
+    // get posts by a date range
+    app.get("/posts-by-date-range/:dateRange", checkAuthenticated, async (req, res) => 
+    {
+        try
+        {
+            const dateRange = req.params.dateRange;
+            const [startDateStr, endDateStr] = dateRange.split(' - ');
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+    
+            const posts = await postsCollection.find({
+                createdAt: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            }).sort({ createdAt: -1 });
+    
+            res.status(200).json(posts);
+        }
+        catch (error)
+        {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    });
+    
+    // get posts by search input
+    app.get("/posts-by-search/:searchInput", checkAuthenticated, async (req, res) => 
+    {
+        try
+        {
+            const searchInput = req.params.searchInput;
+            const posts = await postsCollection.find({
+                $or: [
+                    { text: { $regex: searchInput, $options: 'i' } },
+                    { pdfName: { $regex: searchInput, $options: 'i' } }
+                ]
+            }).sort({ createdAt: -1 });
+    
+            res.status(200).json(posts);
+        }
+        catch (error)
+        {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    });
+
     // Get user posts
     app.get("/user/:username", checkAuthenticated, async (req, res) =>
     {
@@ -843,7 +1252,7 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         {
             const username = req.params.username;
     
-            const user = await userCollection.findOne({ name: username });
+            let user = await userCollection.findOne({ name: username });
     
             if (!user) return res.status(404).json({ error: "User not found" });
     
@@ -902,7 +1311,7 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
     
         try
         {
-            const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+            await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
             {
                 likedVideos = info.likedVideos;
             });
@@ -968,7 +1377,7 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         let email;
         let liveTrainingsProgress
         
-        await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) => 
+        await userCollection.findOne({_id: req.user._conditions._id}).then((info) => 
         {
             email = info.email;
             liveTrainingsProgress = info.liveTrainingsProgress;
@@ -1006,7 +1415,7 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         
         try
         {
-            const results = await userCollection.findOne({_id: req.user._conditions._id}).then((info, err) =>
+            await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
             {
                 likedVideos = info.likedVideos;
                 email = info.email;
@@ -1128,14 +1537,14 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
     
         if(lesson.includes('-'))
         {
-            videoList = await videosCollection.findOne({trackMod: lesson}).then((data, err) =>
+            videoList = await videosCollection.findOne({trackMod: lesson}).then((data) =>
             {
                 return data;
             });
         }
         else
         {
-            videoList = await videosCollection.findOne({trackMod: "Live Trainings"}).then((data, err) =>
+            videoList = await videosCollection.findOne({trackMod: "Live Trainings"}).then((data) =>
             {
                 return data;
             });

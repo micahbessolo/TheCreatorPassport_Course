@@ -26,9 +26,9 @@
                 <div style="aspect-ratio: 16/9; position: relative">
                     <div class="video-cover">
                         <div style="display: flex; flex-direction: row; justify-content: center; align-content: center; flex-wrap: wrap; height: 100%;">
-                            <div id="video-ended-next" onclick="">
+                            <div id="video-ended-next" style="display: flex; justify-content: center;">
                                 <div class="cover-font">Continue Learning <i class="fa-solid fa-chevron-right" style="color: white;"></i></div>
-                                <div style="margin-top: 10px;"><img id="cover-next-lesson-image" src="" style="max-width: 250px; height: auto;" /></div>
+                                <div style="margin-top: 10px;"><img id="cover-next-lesson-image" src="" style="max-width: 250px; width: 60%; height: auto;" /></div>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
             <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 15px;">
                 <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
                     <div style="margin-left: auto; margin-right: auto;">
-                        <a id="back-button" style="color: white;"><i class="fa-solid fa-chevron-left"></i>  Previous</a>
+                        <a id="back-button" style="color: white; white-space: nowrap;"><i class="fa-solid fa-chevron-left"></i>  Previous</a>
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center;">
@@ -59,7 +59,7 @@
                 </div>
                 <div style="width: 100px; height: 48px; background: #649399; display: flex; flex-direction: column; justify-content: center;">
                     <div style="margin-left: auto; margin-right: auto;">
-                        <a id="next-button" style="color: white;">Next  <i class="fa-solid fa-chevron-right"></i></a>
+                        <a id="next-button" style="color: white; white-space: nowrap;">Next  <i class="fa-solid fa-chevron-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                         </div>
                         <div style="display: flex; flex-direction: row; justify-content: space-between; width: 150px;">
                             <div><button onclick="likeLesson();" class="noStyle" style="color: red;"><i class="fa-regular fa-heart" id="notLiked"></i><i class="fa-solid fa-heart" id="isLiked" style="display: none;"></i></button></div>
-                            <div><a id="nextLessonLink" style="color: #649399;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
+                            <div><a id="nextLessonLink" style="color: #649399; white-space: nowrap;">Next lesson <i class="fa-solid fa-chevron-right"></i></a></div>
                         </div>
                     </div>
                     <div style="margin-top: 20px;">
@@ -391,7 +391,8 @@
                     'videoDuration': duration,
                     'URLData': lesson
                 },
-                success: function (data) {}
+                success: function (data)
+                {}
             });
         }
         // when leaving the page runs postState function

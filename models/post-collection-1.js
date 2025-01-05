@@ -13,6 +13,11 @@ const postCollectionSchema = new mongoose.Schema(
 		img: {
 			type: String,
 		},
+		pdfName: {
+			type: String,
+			default: "",
+			required: true
+		},
 		likes: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -20,6 +25,10 @@ const postCollectionSchema = new mongoose.Schema(
 			},
 		],
 		pin: {
+			type: Boolean,
+			default: false,
+		},
+		resource: {
 			type: Boolean,
 			default: false,
 		},

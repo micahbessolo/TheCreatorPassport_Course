@@ -16,7 +16,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="assets/JS/topnav.js"></script>
+
+    <!-- date range picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 </head>
 <body>
     <input type="hidden" id="user" value="<%= userName %>" />
@@ -25,35 +29,128 @@
 
     <div id="wrapper"  style="z-index: 1; position: relative;">
         <!--topnav-->
-        <div id="topNavWrapper">
+        <div id="topNavWrapper" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
             <!--loaded from backend-->
         </div>
 
-        <!--hero-->
-        <div style="margin-top: 60px;">
-            <div class="hero-title-black">
-                <div style="top: 30px; position: relative;">
-                    <div style="display: flex; justify-content: center; padding-bottom: 15px;"><h4 style="font-family: 'Roboto', sans-serif; font-size: 29px;">The Creator Passport</h4></div>
-                    <div style="display: flex; justify-content: center; padding-bottom: 15px;"><h1 class="text-uppercase font-title">Community</h1></div>
-                    <div style="display: flex; justify-content: center;">
-                        <div class="menu-options">
-                            <div><a href="/" class="header-options">dashboard</a></div>
-                            <div><a href="/favorites" class="header-options">favorites</a></div>
-                            <div><a href="#" class="header-options text-decoration-underline">community</a></div>
-                            <div><a href="" class="header-options" id="liveTrainingsAnchor">live trainings</a></div>
+        <div id="hamburgerWrapper">
+            <button onclick="hamburgerFunction();" class="noStyle">
+                <i class="fa-solid fa-bars" style="font-size: 1.2rem;"></i>
+            </button>
+        </div>
+
+        <!--sidenav-->
+        <div id="sideNavWrapper">
+            <div id="hamburgerWrapper2">
+                <button onclick="hamburgerFunction();" class="noStyle">
+                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                </button>
+            </div>    
+            <div class="iconList">
+                <!-- profile -->
+                <div id="sidenav-profile" class="noStyle sideNavButtons" style="margin-left: 15px; height: 70px; display: flex; flex-direction: row; align-items: center;">
+                    <div style="height: 40px; width: 40px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
+                        <% if (profileImg) { %>
+                            <img src="<%= profileImg %>" class="currentImgURL imgLoading" alt="profile Image" />
+                        <% } else { %>
+                            <i class="fa-solid fa-user" style="font-size: 1.2rem;"></i>
+                        <% } %>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div style="margin-left: 15px;"><%= userName %></div>
+                    </div>
+                </div>
+                <!-- user search -->
+                <button onclick="toggleSearchInput();" id="sidenav-search-icon" class="noStyle sideNavButtons" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Search for posts by user's name">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <div id="expandable-search-rectangle">
+                            <i class="fa-solid fa-magnifying-glass" id="sidenav-search-icon-movable" style="position: absolute; z-index: 1000;"></i>
+                        </div>
+                        <div id="userSearchTitle" style="margin-left: 15px;">User Search</div>
+                    </div>
+                </button>
+                <div id="sidenav-search-input" class="input-group desktop-search-input-wrapper sideNavButtons" style="display: none;">
+                    <input id="userSearch" type="text" class="form-control desktop-search-input" placeholder="search user" onkeydown="if (event.key === 'Enter') userSearch();">
+                    <button class="noStyle input-group-append" type="button" onclick="userSearch()" id="searchButton">
+                        <i class="fa-solid fa-magnifying-glass" id="userSearchButton"></i>
+                    </button>
+                    <div id="user-search-results" style="display: none;">                        
+                        <!-- from userSearch() -->
+                    </div>
+                </div>
+                <!-- timeline -->
+                <div id="timeline-container" tabindex="0" style="position: relative;">
+                    <div id="date-picker-button" class="noStyle sideNavButtons" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Search for posts by date range">
+                        <div style="display: flex; flex-direction: row; align-items: center;">
+                            <div id="timeline-icon" style="height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </div>
+                            <div id="timelineTitle" style="margin-left: 15px;">Timeline</div>
+                        </div>
+                    </div>
+                    <div id="date-picker" style="display: none; height: 35px; width: 35px; border-radius: 50%;">
+                        <div id="reportrange"  class="pull-left" style="cursor: pointer;">
+                            <i class="fa-regular fa-calendar-days"></i>&nbsp;
+                            <span id="date-range"></span> <b class="caret"></b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                            <button id="display-button" class="cancelBtn btn btn-primary">Display</button>
+                            <button onclick="$('#date-picker').hide();" class="cancelBtn btn btn-secondary">Cancel</button>
                         </div>
                     </div>
                 </div>
+                <!-- guides -->
+                <button onclick="displayGuides();" class="noStyle sideNavButtons">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <div style="height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
+                            <i class="fa-regular fa-compass"></i>
+                        </div>
+                        <div style="margin-left: 15px;">Guides</div>
+                    </div>        
+                </button>
+                <!-- files -->
+                <button onclick="displayFiles();" class="noStyle sideNavButtons">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <div style="height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </div>
+                        <div style="margin-left: 15px;">Files</div>
+                    </div>        
+                </button>
+                <!-- events -->
+                <!-- <button onclick="displayEvents();" class="noStyle sideNavButtons">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <div style="height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <div style="margin-left: 15px;">Events</div>
+                    </div>        
+                </button> -->
             </div>
         </div>
 
         <!-- content -->
-        <div class="community-content">
-            <div style="width: 80%; min-height: 130px; background-color: #FFFFFF; padding: 10px; border-radius: 10px;">
+        <div class="community-content" style="position: relative;">
+                        
+            <div class="top-button-container">
+                <div>
+                    <button class="noStyle backButton" onclick="location.reload();">
+                        <i class="fa-solid fa-arrow-left" style="font-size: 1.5rem; padding-right: 10px;"></i>Go back
+                    </button>
+                </div>
+                <div id="sidenav-search-input" class="input-group desktop-search-input-wrapper sideNavButtons" style="width: 140px; border-radius: 50%; height: 50px;">
+                    <input id="postSearch" name="postSearch" type="text" class="form-control desktop-search-input" style="border: 1px solid #454545;" placeholder="search posts" onkeydown="if (event.key === 'Enter') postSearch();">
+                    <button class="noStyle input-group-append" type="button" onclick="postSearch()" id="searchButton">
+                        <i class="fa-solid fa-magnifying-glass" id="userSearchButton"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div style="width: 80%; max-width: 600px; min-height: 130px; background-color: #FFFFFF; padding: 10px; border-radius: 10px;">
                 <div style="display: flex; flex-direction: row;">
                     <div style="height: 50px; width: 50px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
                         <% if (profileImg) { %>
-                            <img src="<%= profileImg %>" class="currentImgURL" alt="profile Image" />
+                            <img src="<%= profileImg %>" class="currentImgURL imgLoading" alt="profile Image" />
                         <% } else { %>
                             <i class="fa-solid fa-user" style="font-size: 1.2rem;"></i>
                         <% } %>
@@ -62,8 +159,17 @@
                         <form id="postForm" action="/create-post" enctype="multipart/form-data" method="POST">
                             <input type="text" id="postText" name="postText" placeholder="Write something..." onInput="enableButton()" autocomplete="off" 
                             style="width: 100%; height: 40px; border-radius: 20px; border: 2px solid #454545; padding: 10px;"  />
-                            <input type='file' id="image-post" name="image-post" autocomplete="off" style="display: none;" accept='image/*' />
+                            <input id="image-post" name="image-post" type='file' autocomplete="off" style="display: none;" accept='image/*,application/pdf' onchange="displayImage(event)" />
+                            <input id="pdfName" name="pdfName" type="text" style="display: none;" />
                         </form>
+                        <img id="selected-image" style="display: none; margin-top: 20px; max-width: 100%; border-radius: 10px;" />
+                        <div id="selected-pdf" style="display: none; margin-top: 20px; max-width: 100%; border-radius: 10px;">
+                            <div><img src="https://static.xx.fbcdn.net/rsrc.php/v4/yK/r/S34ZSebSrQw.png"/></div>
+                            <div style="display: flex; flex-direction: column; justify-content: center;">
+                                <div style="color: #65686C; font-size: 13px;">PDF</div>
+                                <div id="pdf-title"></div>
+                            </div>
+                        </div>
                         <div style="padding: 5px 10px 5px 10px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e4e6eb; border-radius: 10px;">
                             <div style="font-weight: 700;">Add to your post</div>
                             <div style="height: 60px; display: flex; justify-content: space-between; align-items: center;">
@@ -77,10 +183,10 @@
                 </div>
             </div>
         </div>
-        <div id="pinned-post-list" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 30px;">
+        <div id="pinned-post-list">
             <!--data uploaded here from backend-->
         </div>
-        <div id="post-list" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 30px;">
+        <div id="post-list">
             <!--data uploaded here from backend-->
         </div>
         
@@ -102,8 +208,8 @@
             </div>
         </div>
 
-         <!--delete confirmation modal-->
-         <div class="modal fade" id="deleteConfirmation" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true" tabindex="-1">
+          <!--delete confirmation modal-->
+        <div class="modal fade" id="deleteConfirmation" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true" tabindex="-1">
             <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
                 <!--- Modal content --->
                 <div class="modal-content">
@@ -124,6 +230,44 @@
             </div>
         </div>
 
+        <!-- files/events modal-->
+        <div class="modal fade" id="fileEventsModal" role="dialog" aria-labelledby="fileEventsModal" aria-hidden="true" tabindex="-1">
+            <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+                <!--- Modal content --->
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: none;">
+                        <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding-left: 30px;">
+                            <div id="fileEventsTitle" style="font-size: 26px; font-family: 'Roboto', sans-serif;"></div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="fileEventsBody" class="modal-body" style="background-color: #FFFFFF;">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--notification post modal-->
+    <div class="modal fade" onfocusin="onActive();" onFocusOut="onActiveOut();" id="notificationPost" role="dialog" aria-labelledby="notificationPost" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <!--- Modal content --->
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none !important;">
+                    <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding-left: 30px;">
+                        <div id="fileEventsTitle" style="font-size: 26px;"></div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" background-color: #F0F2F5;>
+                    <div id="thePost" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="assets/JS/topnav.js"></script>
@@ -131,23 +275,232 @@
     <script type="text/javascript">
         topNav('community');
 
-        function liveTrainingsAnchor()
-		{
-			const liveTrainingsString = '<%=liveTrainingsProgress%>';
-			const liveTrainingsArray = liveTrainingsString.split(',');
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-			let lastSeen = 1;
-			for (let i = 0; i < liveTrainingsArray.length; i++)
-			{
-				if (liveTrainingsArray[i].length)
-				{
-					lastSeen = i + 1;
-				}
-			}
-		
-			document.getElementById("liveTrainingsAnchor").href = `/live-trainings?lesson=${lastSeen}`;
-		}
-		liveTrainingsAnchor();
+        // fixes issue where profile pics are shown zoomed in because of delayed CSS
+        window.addEventListener('load', function()
+        {
+            const images = document.querySelectorAll('.imgLoading');
+            images.forEach(img =>
+            {
+                img.style.display = 'block';
+            });
+        });
+
+        if (document.getElementById('pinned-post-list').innerText.trim() === '')
+        {
+            document.getElementById('pinned-post-list').style.marginTop = '0';
+        }
+
+        function hamburgerFunction()
+        {
+            const sideNav = document.getElementById('sideNavWrapper');
+            
+            if (sideNav.classList.contains('sideNavShow'))
+            {
+                sideNav.classList.remove('sideNavShow');
+                document.getElementsByClassName('iconList')[0].style.marginTop = '30px';
+            }
+            else
+            {
+                sideNav.classList.add('sideNavShow');
+                sideNav.style.background = '#F0F2F5'
+                document.getElementsByClassName('iconList')[0].style.marginTop = '50px';
+            }
+        }
+        
+        // sidenav functions
+        function toggleSearchInput()
+        {
+            $('#sidenav-search-input').css('width', '35px')
+            $('#sidenav-search-input').show();
+            $('#userSearchTitle').hide();
+            $('#sidenav-search-icon').hide();
+
+            $('#sidenav-search-input').animate({
+                width: '150px',
+                'border-radius': '0'
+            }, 250);
+
+            $('#sidenav-search-icon-movable').animate({
+                left: '+=100px'
+            }, 250);
+
+            setTimeout(function()
+            {
+                $('#userSearch').focus();
+            }, 250);
+        }
+
+        $(document).ready(function()
+        {
+            $('#userSearch').on('focusout', function()
+            {
+                if(event.relatedTarget != null)
+                {
+                    if (event.relatedTarget.tagName == 'BUTTON')
+                    {
+                        return
+                    }
+                }
+
+                $('#sidenav-search-input').animate({
+                    width: '35px',
+                    'border-radius': '50%'
+                }, 250);
+
+                setTimeout(function()
+                {
+                    $('#userSearchTitle').show();
+                    $('#sidenav-search-icon').show();
+                    $('#sidenav-search-icon-movable').css('left', 'auto');
+                    $('#sidenav-search-input').hide();
+                }, 250);
+            });
+
+            $('#display-button').on('click', function(event)
+            {
+                event.stopPropagation();
+                displayPostsByDates();
+            });
+
+            $('.daterangepicker').on('click', function()
+            {
+                $('#timeline-container').focus();
+            });
+
+            $('#timeline-container').on('focus', function()
+            {
+                $('#date-picker').show();
+                $('#timelineTitle').hide();
+                $('#timeline-icon').hide();
+
+                $('#date-picker').animate({
+                    'border-radius': '10px',
+                    'width': '215px',
+                    'height': '130px'
+                }, 250);
+            });     
+
+            $('#timeline-container').on('focusout', function(event)
+            {
+                if ($('.daterangepicker').css('display') === 'block')
+                {
+                    $('#timeline-container').focus();
+                    $('#date-picker').show();
+                }
+                else
+                {
+                    if (event.relatedTarget &&
+                        (event.relatedTarget.id === 'display-button' ||
+                        event.relatedTarget.id === 'date-picker-button'))
+                    {
+                        return;
+                    }
+
+                    $('#date-picker').animate({
+                        'border-radius': '50%',
+                        'width': '35px',
+                        'height': '35px'
+                    }, 250);
+
+                    setTimeout(function()
+                    {
+                        $('#date-picker').hide();
+                        $('#timelineTitle').show();
+                        $('#timeline-icon').show();
+                    }, 250);
+                }
+            });
+        });
+
+        $(function()
+        {
+            const start = moment().subtract(29, 'days');
+            const end = moment();
+
+            function cb(start, end)
+            {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            cb(start, end);
+        });
+
+        function displayPostsByDates()
+        {
+            const dateRange = document.getElementById('date-range').innerText;
+            
+            $.ajax({
+                url: `/posts-by-date-range/${dateRange}`,
+                type: 'GET',
+                success: function(data)
+                {
+                    document.getElementById('post-list').innerHTML = '';
+                    displayData(data, false);
+                    loadMorePostsEnabled = false;
+                    document.getElementsByClassName('backButton')[0].style.display = 'flex';
+                },
+                error: function(error)
+                {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function userSearch()
+        {
+            const userSearchInput = document.getElementById('userSearch');
+
+            $.ajax({
+                url: `/user-array/${userSearchInput.value}`,
+                type: 'GET',
+                success: function(data)
+                {
+                    let dataLength = data.length;
+                    let userResults = '';
+
+                    if (dataLength)
+                    {
+                        for (let i = 0; i < dataLength; i++)
+                        {
+                            const profileImg = userProfileImage(40, data[i])
+
+                            userResults += 
+                            `<button onclick="getUserPosts('${data[i].name}');" class="noStyle user-search-item-button">
+                                <div style="margin-right: 15px;">${profileImg}</div>
+                                <div style="text-align: start;">${data[i].name}</div>
+                            </button>`;
+                        }
+                    }
+                    else
+                    {
+                        userResults += `<div>no search results</div>`
+                    }
+                    document.getElementById('user-search-results').innerHTML = userResults;
+                    document.getElementById('user-search-results').style.display = "block";
+                },
+                error: function(error)
+                {
+                    console.error(error);
+                }
+            });
+            userSearchInput.focus();
+        }
 
         let page = 1;
         function loadPosts(isPinned=false)
@@ -173,10 +526,11 @@
         loadPosts(true);
         loadPosts();
 
+        let loadMorePostsEnabled = true;
         // Load more posts when the user scrolls to the bottom of the page
         $(window).scroll(function()
         {
-            if ($(window).scrollTop() + $(window).height() == $(document).height())
+            if (loadMorePostsEnabled && $(window).scrollTop() + $(window).height() == $(document).height())
             {
                 loadPosts();
             }
@@ -185,19 +539,25 @@
         function displayData(data, newComment=false, isPinned=false)
         {
             let html = '';
+            let dataArray = data;
 
-            data.forEach(e =>
+            if (typeof data === 'undefined')
+            {
+                dataArray = [];
+            }
+
+            dataArray.forEach(e =>
             {
                 // for debugging
                 if (typeof e._id !== 'string')
                 {
                    console.log(typeof e)
+                   console.log(e)
                 }
 
                 if (newComment)
                 {
-                    html +=
-                    `${createTableRow(e)}`;
+                    html += `${createTableRow(e)}`;
                     const node = createNodeFromHTML(html);
 
                     const parentElement = document.getElementById(`parent${e._id}`);
@@ -208,7 +568,7 @@
                 else
                 {
                     html +=
-                    `<div id="parent${e._id}" style="background: #FFFFFF; width: 80%; padding: 16px; margin-top: 30px; border-radius: 10px;">
+                    `<div id="parent${e._id}" style="background: #FFFFFF; width: 80%; max-width: 600px; padding: 16px; margin-top: 30px; border-radius: 10px;">
                         ${createTableRow(e)}
                     </div>`;
                 }
@@ -219,6 +579,7 @@
                 if (isPinned)
                 {
                     $(`#pinned-post-list`).append(html);
+                    document.getElementById('pinned-post-list').style.display = 'flex';
                 }
                 else
                 {
@@ -269,8 +630,8 @@
             // different profile image styles
             let profileImg1 = userProfileImage(50, result.user);
             const profileImg2 = userProfileImage(40, result.user);
-            const profileImg3 = userProfileImage(35, result.user, true);
-            const profileImg6 = userProfileImage(40, result.user, true);
+            const currentUserProfileImg35 = userProfileImage(35, result.user, true);
+            const currentUserProfileImg40 = userProfileImage(40, result.user, true);
 
             let postElement =
             `<div id="${result._id}${modal}" class="${modalStyling}">
@@ -304,15 +665,29 @@
                     }
 
             const isPinned = result.pin;
+            
+            let isGuide = false;
+            if (result.resource)
+            {
+                isGuide = result.resource;
+            }
 
             if (user === document.getElementById('user').value || <%= isAdmin %>)
             {
+                let width = "50px";
+
                 if (<%= isAdmin %>)
                 {
-                    postElement +=
-                `<div style="display: flex; flex-direction: row; justify-content: space-between; width: 60px;">
-                    <div style="position: relative">
-                        <button type="button" class="noStyle" style="color: black;" onclick="pinPost('${result._id}', '${modal}');">`
+                    width = "90px";
+                }
+
+                postElement +=
+                        `<div style="width: ${width}; display: flex; justify-content: space-between;">`;
+
+                    if (<%= isAdmin %>)
+                    {
+                        postElement +=
+                            `<button type="button" class="noStyle" style="color: black;" onclick="pinPost('${result._id}', '${modal}');" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="pin post">`;
                             if (isPinned)
                             {
                                 postElement += 
@@ -324,29 +699,46 @@
                                 `<i class="fa-solid fa-thumbtack"></i>`;
                             }
                             postElement += 
-                        `</button>
-                    </div>`
-                }
-                else
-                {
-                    if (isPinned)
-                    {
-                        postElement +=
-                    `<div style="display: flex; flex-direction: row; justify-content: space-between; width: 60px;">
-                        <div>
-                            <i class="fa-solid fa-thumbtack" style="color: #FF0000;"></i>
-                        </div>`;
+                            `</button>
+                        
+                            <button type="button" class="noStyle" style="color: black;" onclick="addGuide('${result._id}', '${modal}', this);">`;
+                            if (isGuide)
+                            {
+                                postElement +=
+                                `<i class="fa-regular fa-compass" style="color: #FF0000;"></i>`;
+                            }
+                            else
+                            {
+                                postElement +=
+                                `<i class="fa-regular fa-compass"></i>`;
+                            }
+                            postElement +=
+                            `</button>`;
                     }
-                }
+                    else
+                    {
+                        if (isPinned)
+                        {
+                            postElement +=
+                            `<div>
+                                <i class="fa-solid fa-thumbtack" style="color: #FF0000;"></i>
+                            </div>`;
+                        }
+                    }
 
-                postElement +=
-                        `<div style="position: relative">
-                            <button type="button" class="noStyle" style="color: black;" onclick="deletePostModal('${result._id}', '${modal}');">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
+                    postElement +=
+                            `<div>
+                                <button type="button" class="noStyle" style="color: black;" onclick="allowEditPost('${result._id}', '${modal}');">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </div>
+                            <div style="position: relative">
+                                <button type="button" class="noStyle" style="color: black;" onclick="deleteModal('${result._id}', '${modal}', 'post');">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
             }
             else
             {
@@ -359,21 +751,74 @@
                 `</div>`;
             }
 
+            postElement +=
+            `<form action="/edit-post" id="postEditForm${result._id}${modal}" method="patch" enctype="multipart/form-data">`
+
             if (result.text && result.text.length > 0)
             {
                 postElement +=
-                `<div style="margin-top: 15px;">${result.text}</div>`;
+                `<div id="postText${result._id}${modal}" style="margin-top: 15px;">${result.text}</div>
+                <input onInput="editPostAllowSubmit('${result._id}', '${modal}');" id="editPostText${result._id}${modal}" name="text" value="${result.text}" style="display: none; margin-top: 15px; width: 100%;" />`;
             }
                 
             if (result.img)
             {
+                if (result.img.slice(-4) === '.pdf')
+                {
+                    let pdfName = "";
+                    if (result.pdfName)
+                    {
+                        pdfName = result.pdfName;
+                    }
+
+                postElement +=
+                `<div onclick="window.open('${result.img}', '_blank');" type="button" class="noStyle" style="margin-top: 20px; width: 100%; border-radius: 10px; display: flex; justify-content: center; position: relative;">
+                    <div style="display: flex;">
+                        <div><img src="https://static.xx.fbcdn.net/rsrc.php/v4/yK/r/S34ZSebSrQw.png" alt="pdf logo"/></div>
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <div style="color: #65686C; font-size: 13px;">PDF</div>
+                            <div>${pdfName}</div>
+                        </div>
+                    </div>
+                    <button id="editPostImageButton${result._id}${modal}" type="button" class="noStyle edit-button" onclick="editPostImage('${result._id}', '${modal}');" style="background: #ffffff; height: 35px; width: 35px;">
+                        <i class="fa-solid fa-pen-to-square" style="font-size: 1.2rem;"></i>
+                    </button>
+                    <div>
+                        <div id="bufferPostEdit${result._id}${modal}" class="edit-button" style="display: none;">
+                            <img src="./assets/images/loading-buffering.gif" style="width: 50px; height: 50px;" />
+                        </div>
+                    </div>
+
+                    <input id="postID${result._id}" name="postID" value="${result._id}" style="display: none;" />
+                    <input onChange="editPostAllowSubmit('${result._id}', '${modal}', event);" type="file" id="editPostImage${result._id}${modal}" name="image-post" accept="image/*" style="display: none;" />
+                </div>
+                `;
+                }
+                else
+                {
                 postElement +=
                 `<div style="margin-top: 15px; display: flex; flex-direction: row; justify-content: center;">
-                    <div style="width: 100%">
-                        <img src="${result.img}" alt="post image" style="border-radius: 10px; max-width: 100%;" />
+                    <div style="position: relative; width: 100%; display: flex; justify-content: center;">
+                        <img src="${result.img}" id="postImage${result._id}${modal}" name="post-image" alt="post image" style="border-radius: 10px; max-width: 100%;" />
+                        <button id="editPostImageButton${result._id}${modal}" type="button" class="noStyle edit-button" onclick="editPostImage('${result._id}', '${modal}');" style="background: #ffffff; height: 35px; width: 35px;">
+                            <i class="fa-solid fa-pen-to-square" style="font-size: 1.2rem;"></i>
+                        </button>
+                        <div>
+                            <div id="bufferPostEdit${result._id}${modal}" class="edit-button" style="display: none;">
+                                <img src="./assets/images/loading-buffering.gif" style="width: 50px; height: 50px;" />
+                            </div>
+                        </div>
                     </div>
-                </div>`;
+
+                    <input id="postID${result._id}" name="postID" value="${result._id}" style="display: none;" />
+                    <input onChange="editPostAllowSubmit('${result._id}', '${modal}', event);" type="file" id="editPostImage${result._id}${modal}" name="image-post" accept="image/*" style="display: none;" />
+                </div>`;    
+                }
             }
+
+            postElement +=
+                `<button type="button" onClick="editPost('${result._id}', '${modal}')" id="postEditSubmit${result._id}${modal}" class="noStyle button-disabled" style="margin-top: 20px; border-radius: 10px; height: 40px; width: 100%; background: #0866FF; color: white; display: none;">Submit Change</button>
+            </form>`
 
             let userLiked = false;
             let userLikedPostClass = "fa-regular fa-thumbs-up";
@@ -434,15 +879,17 @@
                     `<div style="margin-top: 10px">
                         <button class="noStyle" onclick="showComments('${result._id}', this, '${modal}')" style="color: #65676b;">View all comments</button>
                     </div>
-                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; width: 100%;">
+                    <div class="comment-wrapper comment-wrapper-${comment1._id}${modal}" style="display: flex;">
                         <div style="margin-top: 15px; padding-right: 10px; display: flex; flex-direction: column; width: 50px;">
-                            ${profileImg4}`;
+                            <div style="position: relative; height: 40px; width: 40px;">
+                                <div style="position: absolute;">${profileImg4}</div>
+                            </div>`;
                         
                         // replies pipe
                         if (comment1RepliesLength > 0)
                         {
                             postElement +=
-                            `<div id="${comment1._id}replyPipe" class="pastReplyPipe${result._id}${modal}" style="display: none; height: calc(100% - 40px); width: 50px; padding-top: 5px;">
+                            `<div id="${comment1._id}replyPipe" class="hiddenReplyPipe${result._id}${modal} hiddenReplyPipe${comment1._id}${modal} replyPipe${modal} under-comment-profile-pic" style="display: none;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>`;
                         }
@@ -466,15 +913,58 @@
                         }
                     
                         postElement +=
-                            `<div class="${comment1._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: calc(100% - 40px); width: 50px;">
+                            `<div class="${comment1._id}replyPipe${modal} replyPipe${modal} under-comment-profile-pic-sometimes" style="display: none;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>
                         </div>
                         <div style="margin-top: 15px;width: 100%">
-                            <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">
-                                <div style="font-weight: 700; font-size: 13px;">${comment1.user.name}</div>
-                                <div style="font-size: 15px;">${comment1.text}</div>
-                            </div>
+                            <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">`
+
+                        let comment1Name = comment1.user.name;
+
+                        if (typeof comment1Name === 'undefined')
+                        {
+                            comment1Name = user;
+                        }
+
+                        if (comment1Name === document.getElementById('user').value || <%= isAdmin %>)
+                        {
+                            postElement +=
+                                `<div class="comment-edit">
+                                    <div style="font-weight: 700; font-size: 13px;">${comment1Name}</div>
+                                    <div id="toggleEllipsis${comment1._id}${modal}">
+                                        <button onClick="toggleCommentEditIcons('${comment1._id}', '${modal}')" class="noStyle">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </button>
+                                    </div>
+                                    <div id="toggleIcons${comment1._id}${modal}" class="hide" style="display: flex; flex-direction: row; justify-content: space-between; width: 40px;">
+                                        <div>
+                                            <button onClick="toggleCommentEdit('${comment1._id}', '${modal}')" class="noStyle">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button onClick="deleteModal('${result._id}', '${modal}', 'comment', '${comment1._id}');" class="noStyle">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="textComment${comment1._id}${modal}" style="font-size: 15px;">${comment1.text}</div>
+                                <input onInput="commentEdited('${comment1._id}', '${modal}')" id="editComment${comment1._id}${modal}" name="editComment${comment1._id}${modal}" value="${comment1.text}" style="width: 100%" class="hide" />
+                                <button onClick="editComment('${result._id}', '${comment1._id}', '${modal}')" type="button" id="editCommentButton${comment1._id}${modal}" class="noStyle button-disabled hide" style="margin-top: 10px; border-radius: 5px; padding: 3px; background: #0866FF; color: white;">
+                                    Update
+                                </button>`
+                        }
+                        else
+                        {
+                            postElement +=
+                                `<div style="font-weight: 700; font-size: 13px;">${comment1Name}</div>
+                                <div style="font-size: 15px;">${comment1.text}</div>`;
+                        }
+
+                        postElement +=      
+                            `</div>
                             <div style="display: flex; flex-direction: row; justify-content: space-between">
                                 <div style="display: flex; flex-direction: row; justify-content: flex-start">
                                     <div style="color: #65676b; font-size: 13px; margin-top: 4px;">${formatDate(comment1.createdAt)}</div>
@@ -505,12 +995,12 @@
                     let profileImg4 = userProfileImage(35, comment1Replies[comment1RepliesLength - 1].user);
                 
                 postElement +=
-                `<div  id="${comment1._id}replyAbbreviated${modal}" style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%;">
+                `<div id="${comment1._id}replyAbbreviated${modal}" class="comment-wrapper comment-wrapper-${comment1._id}${modal}" style="display: flex;">
                     <div style="display: flex; flex-direction: column;">
-                        <div id="${comment1._id}replyPipe${modal}" class="pastReplyPipe${result._id}${modal}" style="display: none; height: 33px; width: 50px; padding-right: 5px;">
+                        <div id="${comment1._id}replyPipe${modal}" class="hiddenReplyPipe${result._id}${modal} replyPipe${modal} abbreviated${modal} reply-pipe-corner-container" style="display: none;">
                             <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
                         </div>
-                        <div class="${comment1._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: 100% ;">
+                        <div class="${comment1._id}replyPipe${modal} replyPipe${modal} abbreviated${modal} reply-pipe-next" style="display: none;">
                             <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                         </div>
                     </div>
@@ -519,31 +1009,32 @@
                         <div class="hiddenReply">${comment1Replies[comment1RepliesLength - 1].user.name} replied · ${repliesAmount}</div>
                     </div>
                 </div>
-                <div id="allReplies${comment1._id}${modal}" style="display: none; flex-direction: column; width: 100%;">`;
+                <div id="allReplies${comment1._id}${modal}" class="comment-replies comment-replies-${comment1._id}${modal}" style="display: none;">`;
 
-                    // comment 1 replies
+    // comment 1 replies
                     for (let i = 0; i < comment1RepliesLength; i++)
                     {
                         // replied user's profile image
                         let profileImg5 = userProfileImage(35, comment1Replies[i].user);
 
                     postElement +=
-                    `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; width: 100%;">
-                        <div style="display: flex; flex-direction: column;">
-                            <div id="${comment1Replies[i]._id}replyPipe" class="pastReplyPipe${comment1._id}${modal}" style="display: block; height: 33px; width: 50px; padding-right: 5px;">
+                    `<div class="reply-and-pipe-wrapper reply-and-pipe-wrapper-${comment1Replies[i]._id}${modal}" style="display: flex;">
+                        <div class="reply-pipes-wrapper reply-pipes-wrapper-${comment1Replies[i]._id}${modal}">
+                            <div id="${comment1Replies[i]._id}replyPipe" class="hiddenReplyPipe${comment1._id}${modal} replyPipe${modal} reply-pipe-corner-container" style="display: block;">
                                 <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
                             </div>`
+                            // if its not the last reply
                             if (i !== comment1RepliesLength - 1)
                             {
                                 postElement +=
-                            `<div class="${comment1Replies[i]._id}replyPipe${modal}" style="display: block; height: 100%;">
+                            `<div class="${comment1Replies[i]._id}replyPipe${modal} replyPipe${modal} reply-pipe-next" style="display: block;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>`
                             }
                             else
                             {
                                 postElement +=
-                            `<div class="${comment1._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: 100% ;">
+                            `<div class="${comment1._id}replyPipe${modal} replyInputPipe${modal}" style="display: none; height: 100%;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>`
                             }
@@ -568,24 +1059,66 @@
 
                         postElement +=
                         `</div>
-                        <div style="display: flex; flex-direction: column; width: 100%;">
+                        <div class="reply-wrapper reply-wrapper-${comment1Replies[i]._id}${modal}">
                             <div style="margin-top: 15px; display: flex; flex-direction: row; width: 100%;">
-                                <div style="display: flex; flex-direction: column;">
+                                <div class="reply-pipes-wrapper reply-pipes-wrapper${comment1Replies[i]._id}${modal}">
                                     <div>${profileImg5}</div>
-                                    <div class="${comment1Replies[i]._id}replyPipe${modal} replyPipe${modal}" style="height: calc(100% - 35px); padding-top: 5px; display: none;">
+                                    <div class="${comment1Replies[i]._id}replyPipe${modal} replyInputPipe${modal}" style="height: calc(100% - 35px); padding-top: 5px; display: none;">
                                         <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 17px;"></div>
                                     </div>
                                 </div>
                                 <div style="margin-left: 10px; width: 100%;">
-                                    <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">
-                                        <div style="font-weight: 700; font-size: 13px;">${comment1Replies[i].user.name}</div>
-                                        <div style="font-size: 15px;">${comment1Replies[i].text}</div>
-                                    </div>
+                                    <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">`;
+
+                                    let comment1RepliesName = comment1Replies[i].user.name;
+                                    if (typeof comment1RepliesName === 'undefined')
+                                    {
+                                        comment1RepliesName = user;
+                                    }
+                                    
+                                    if (comment1RepliesName === document.getElementById('user').value || <%= isAdmin %>)
+                                    {
+                                        postElement +=
+                                            `<div class="comment-edit">
+                                                <div style="font-weight: 700; font-size: 13px;">${comment1RepliesName}</div>
+                                                <div id="toggleEllipsis${comment1Replies[i]._id}${modal}">
+                                                    <button onClick="toggleCommentEditIcons('${comment1Replies[i]._id}', '${modal}')" class="noStyle">
+                                                        <i class="fa-solid fa-ellipsis"></i>
+                                                    </button>
+                                                </div>
+                                                <div id="toggleIcons${comment1Replies[i]._id}${modal}" class="hide" style="display: flex; flex-direction: row; justify-content: space-between; width: 40px;">
+                                                    <div>
+                                                        <button onClick="toggleCommentEdit('${comment1Replies[i]._id}', '${modal}')" class="noStyle">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <button onClick="deleteModal('${result._id}', '${modal}', 'reply', '${comment1._id}', '${comment1Replies[i]._id}');" class="noStyle">
+                                                            <i class="fa-solid fa-trash-can"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="textComment${comment1Replies[i]._id}${modal}" style="font-size: 15px;">${comment1Replies[i].text}</div>
+                                            <input onInput="commentEdited('${comment1Replies[i]._id}', '${modal}')" id="editComment${comment1Replies[i]._id}${modal}" name="editComment${comment1Replies[i]._id}${modal}" value="${comment1Replies[i].text}" style="width: 100%" class="hide" />
+                                            <button onClick="editReply('${result._id}', '${comment1._id}', '${comment1Replies[i]._id}', '${modal}')" type="button" id="editCommentButton${comment1Replies[i]._id}${modal}" class="noStyle button-disabled hide" style="margin-top: 10px; border-radius: 5px; padding: 3px; background: #0866FF; color: white;">
+                                                Update
+                                            </button>`;
+                                    }
+                                    else
+                                    {
+                                        postElement +=
+                                            `<div style="font-weight: 700; font-size: 13px;">${comment1RepliesName}</div>
+                                            <div style="font-size: 15px;">${comment1Replies[i].text}</div>`;
+                                    }
+                                        
+                                    postElement +=
+                                    `</div>
                                     <div style="display: flex; flex-direction: row; justify-content: space-between">
                                         <div style="display: flex; flex-direction: row; justify-content: flex-start">
                                             <div style="color: #65676b; font-size: 13px; margin-top: 4px;">${formatDate(comment1Replies[i].createdAt)}</div>
                                             <div><button id="replyLikeText${comment1Replies[i]._id}${modal}" class="${userLikedCommentClass}" onclick="likeOrUnlikeReply('${result._id}', '${comment1._id}', '${comment1Replies[i]._id}', '${modal}');">Like</button></div>
-                                            <div><button class="noStyle commentButtons" onclick="replyOnCommentText('${comment1Replies[i]._id}', '${comment1Replies[i].user.name}', '${modal}');">Reply</button></div>
+                                            <div><button class="noStyle commentButtons" onclick="replyOnCommentText('${comment1Replies[i]._id}', '${comment1RepliesName}', '${modal}');">Reply</button></div>
                                         </div>
                                         <div style="margin-top: 5px;">
                                             <i class="fa-regular fa-thumbs-up"></i> <span id="${comment1Replies[i]._id}Likes${modal}">${comment1Replies[i].likes.length}</span>
@@ -598,7 +1131,7 @@
                                     <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 17px;"></div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; width: calc(100% - 50px);">
-                                    <div style="margin-top: 15px; padding-right: 10px;">${profileImg3}</div>
+                                    <div style="margin-top: 15px; padding-right: 10px;">${currentUserProfileImg40}</div>
                                     <div class="input-group" style="margin-top: 15px;">
                                         <input type="text" class="form-control" onFocusOut="buttonBlueOut('${comment1Replies[i]._id}', '${modal}')" 
                                         onfocus="buttonBlue('${comment1Replies[i]._id}', '${modal}')" id="${comment1Replies[i]._id}Text${modal}" 
@@ -626,7 +1159,7 @@
                         <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
                     </div>
                     <div style="display: flex; flex-direction: row; width: calc(100% - 50px);">
-                        <div style="margin-top: 15px; padding-right: 10px;">${profileImg3}</div>
+                        <div style="margin-top: 15px; padding-right: 10px;">${currentUserProfileImg35}</div>
                         <div class="input-group" style="margin-top: 15px;">
                             <input type="text" class="form-control" onFocusOut="buttonBlueOut('${comment1._id}', '${modal}')" 
                             onfocus="buttonBlue('${comment1._id}', '${modal}')" id="${comment1._id}Text${modal}" 
@@ -649,15 +1182,17 @@
                     let profileImg4 = userProfileImage(40, commentN.user);
 
                     postElement +=
-                    `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%;">
+                    `<div class="comment-wrapper comment-wrapper-${commentN._id}${modal}" style="display: flex;">
                         <div style="margin-top: 15px; padding-right: 10px; display: flex; flex-direction: column;">
-                            ${profileImg4}`;
+                            <div style="position: relative; height: 40px; width: 40px;">
+                                <div style="position: absolute;">${profileImg4}</div>
+                            </div>`;
                         
                         // replies pipe
                         if (commentNRepliesLength > 0)
                         {
                             postElement +=
-                            `<div id="${commentN._id}pipe" class="pastReplyPipe${result._id}${modal}" style="display: none; height: calc(100% - 40px); padding-top: 4px; width: 50px">
+                            `<div id="${commentN._id}pipe" class="hiddenReplyPipe${result._id}${modal} replyPipe${modal} under-comment-profile-pic" style="display: none;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>`;
                         }
@@ -681,15 +1216,56 @@
                         }
                             
                         postElement +=
-                            `<div class="${commentN._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: calc(100% - 40px); width: 50px;">
+                            `<div class="${commentN._id}replyPipe${modal} replyPipe${modal} under-comment-profile-pic-sometimes" style="display: none;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>
                         </div>
                         <div style="margin-top: 15px; width: 100%">
-                            <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">
-                                <div style="font-weight: 700; font-size: 13px;">${commentN.user.name}</div>
-                                <div style="font-size: 15px;">${commentN.text}</div>
-                            </div>
+                            <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">`;
+
+                        let commentNName = commentN.user.name
+                        if (typeof commentNName === 'undefined')
+                        {
+                            commentNName = user;
+                        }
+
+                        if (commentNName === document.getElementById('user').value || <%= isAdmin %>)
+                        {
+                            postElement +=
+                                `<div class="comment-edit">
+                                    <div style="font-weight: 700; font-size: 13px;">${commentNName}</div>
+                                    <div id="toggleEllipsis${commentN._id}${modal}">
+                                        <button onClick="toggleCommentEditIcons('${commentN._id}', '${modal}')" class="noStyle">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </button>
+                                    </div>
+                                    <div id="toggleIcons${commentN._id}${modal}" class="hide" style="display: flex; flex-direction: row; justify-content: space-between; width: 40px;">
+                                        <div>
+                                            <button onClick="toggleCommentEdit('${commentN._id}', '${modal}')" class="noStyle">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button onClick="deleteModal('${result._id}', '${modal}', 'comment', '${commentN._id}');" class="noStyle">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="textComment${commentN._id}${modal}" style="font-size: 15px;">${commentN.text}</div>
+                                <input onInput="commentEdited('${commentN._id}', '${modal}')" id="editComment${commentN._id}${modal}" name="editComment${commentN._id}${modal}" value="${commentN.text}" style="width: 100%" class="hide" />
+                                <button onClick="editComment('${result._id}', '${commentN._id}', '${modal}')" type="button" id="editCommentButton${commentN._id}${modal}" class="noStyle button-disabled hide" style="margin-top: 10px; border-radius: 5px; padding: 3px; background: #0866FF; color: white;">
+                                    Update
+                                </button>`;
+                        }
+                        else
+                        {
+                            postElement +=
+                                `<div style="font-weight: 700; font-size: 13px;">${commentNName}</div>
+                                <div style="font-size: 15px;">${commentN.text}</div>`;
+                        }
+                        postElement +=
+                            `</div>
                             <div style="display: flex; flex-direction: row; justify-content: space-between">
                                 <div style="display: flex; flex-direction: row; justify-content: flex-start">
                                     <div style="color: #65676b; font-size: 13px; margin-top: 4px;">${formatDate(commentN.createdAt)}</div>
@@ -719,12 +1295,12 @@
                         let profileImg4 = userProfileImage(35, commentNReplies[commentNRepliesLength - 1].user);
 
                         postElement +=
-                    `<div  id="${commentN._id}replyAbbreviated${modal}" style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%;">
+                    `<div id="${commentN._id}replyAbbreviated${modal}" class="comment-wrapper comment-wrapper-${commentN._id}${modal}" style="display: flex;">
                         <div style="display: flex; flex-direction: column;">
-                            <div id="${commentN._id}replyPipe${modal}" class="pastReplyPipe${result._id}${modal}" style="display: none; height: 33px; width: 50px; padding-right: 5px;">
+                            <div id="${commentN._id}replyPipe${modal}" class="hiddenReplyPipe${result._id}${modal} replyPipe${modal} abbreviated${modal} reply-pipe-corner-container" style="display: none;">
                                 <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
                             </div>
-                            <div class="${commentN._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: 100%;">
+                            <div class="${commentN._id}replyPipe${modal} replyPipe${modal} abbreviated${modal}" style="display: none; height: 100%;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>
                         </div>
@@ -733,33 +1309,35 @@
                             <div class="hiddenReply">${commentNReplies[commentNRepliesLength - 1].user.name} replied · ${repliesAmount}</div>
                         </div>
                     </div>
-                    <div id="allReplies${commentN._id}${modal}" style="display: none; flex-direction: column; width: 100%;">`;
+                    <div id="allReplies${commentN._id}${modal}" class="comment-replies comment-replies-${commentN._id}${modal}" style="display: none;">`;
                     
-                        // comment 1 replies
+                        // comment N replies
                         for (let j = 0; j < commentNRepliesLength; j++)
                         {
                             // replied user's profile image
                             let profileImg5 = userProfileImage(35, commentNReplies[j].user);
 
                         postElement +=
-                        `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; width: 100%;">
-                            <div style="display: flex; flex-direction: column;">
-                                <div id="${commentNReplies[j]._id}replyPipe" class="pastReplyPipe${commentN._id}${modal}" style="display: block; height: 33px; width: 50px; padding-right: 5px;">
+                        `<div class="reply-and-pipe-wrapper reply-and-pipe-wrapper-${commentNReplies[j]._id}${modal}" style="display: flex;">
+                            <div class="reply-pipes-wrapper reply-pipes-wrapper-${commentNReplies[j]._id}${modal}">
+                                <div id="${commentNReplies[j]._id}replyPipe" class="hiddenReplyPipe${commentN._id}${modal} replyPipe${modal} reply-pipe-corner-container" style="display: block;">
                                     <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
-                                </div>`
+                                </div>`;
+
+                                // if not the last reply
                                 if (j !== commentNRepliesLength - 1)
                                 {
                                     postElement +=
-                                `<div class="${commentNReplies[j]._id}replyPipe${modal}" style="display: block; height: 100%;">
+                                `<div class="${commentNReplies[j]._id}replyPipe${modal} replyPipe${modal} reply-pipe-next" style="display: block;">
                                     <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
-                                </div>`
+                                </div>`;
                                 }
                                 else
                                 {
                                     postElement +=
-                                `<div class="${commentN._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: 100%;">
+                                `<div class="${commentN._id}replyPipe${modal} replyInputPipe${modal}" style="display: none; height: 100%;">
                                     <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
-                                </div>`
+                                </div>`;
                                 }
 
                         // styles like button for replies that user already liked
@@ -782,24 +1360,66 @@
 
                             postElement +=
                             `</div>
-                            <div style="display: flex; flex-direction: column; width: 100%;">
+                            <div class="reply-wrapper reply-wrapper-${commentNReplies[j]._id}${modal}">
                                 <div style="margin-top: 15px; display: flex; flex-direction: row; width: 100%;">
-                                    <div style="display: flex; flex-direction: column;">
+                                    <div class="reply-pipes-wrapper reply-pipes-wrapper-${commentNReplies[j]._id}${modal}">
                                         <div>${profileImg5}</div>
-                                        <div class="${commentNReplies[j]._id}replyPipe${modal} replyPipe${modal}" style=" height: calc(100% - 35px); padding-top: 5px; display: none;">
+                                        <div class="${commentNReplies[j]._id}replyPipe${modal} replyInputPipe${modal}" style=" height: calc(100% - 35px); padding-top: 5px; display: none;">
                                             <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 17px;"></div>
                                         </div>
                                     </div>
                                     <div style="margin-left: 10px; width: 100%;">
-                                        <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">
-                                            <div style="font-weight: 700; font-size: 13px;">${commentNReplies[j].user.name}</div>
-                                            <div style="font-size: 15px;">${commentNReplies[j].text}</div>
-                                        </div>
+                                        <div style="background: #F0F2F5; padding: 8px; border-radius: 10px;">`;
+
+                                        let commentNReplyName = commentNReplies[j].user.name;
+                                        if (typeof commentNReplyName === 'undefined')
+                                        {
+                                            commentNReplyName = user;
+                                        }
+
+                                        if (commentNReplyName=== document.getElementById('user').value || <%= isAdmin %>)
+                                        {
+                                            postElement +=
+                                            `<div class="comment-edit">
+                                                <div style="font-weight: 700; font-size: 13px;">${commentNReplyName}</div>
+                                                <div id="toggleEllipsis${commentNReplies[j]._id}${modal}">
+                                                    <button onClick="toggleCommentEditIcons('${commentNReplies[j]._id}', '${modal}')" class="noStyle">
+                                                        <i class="fa-solid fa-ellipsis"></i>
+                                                    </button>
+                                                </div>
+                                                <div id="toggleIcons${commentNReplies[j]._id}${modal}" class="hide" style="display: flex; flex-direction: row; justify-content: space-between; width: 40px;">
+                                                    <div>
+                                                        <button onClick="toggleCommentEdit('${commentNReplies[j]._id}', '${modal}')" class="noStyle">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <button onClick="deleteModal('${result._id}', '${modal}', 'reply', '${commentN._id}', '${commentNReplies[j]._id}');" class="noStyle">
+                                                            <i class="fa-solid fa-trash-can"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="textComment${commentNReplies[j]._id}${modal}" style="font-size: 15px;">${commentNReplies[j].text}</div>
+                                            <input onInput="commentEdited('${commentNReplies[j]._id}', '${modal}')" id="editComment${commentNReplies[j]._id}${modal}" name="editComment${commentNReplies[j]._id}${modal}" value="${commentNReplies[j].text}" style="width: 100%" class="hide" />
+                                            <button onClick="editReply('${result._id}', '${commentN._id}', '${commentNReplies[j]._id}', '${modal}')" type="button" id="editCommentButton${commentNReplies[j]._id}${modal}" class="noStyle button-disabled hide" style="margin-top: 10px; border-radius: 5px; padding: 3px; background: #0866FF; color: white;">
+                                                Update
+                                            </button>`;
+                                        }
+                                        else
+                                        {
+                                            postElement +=
+                                            `<div style="font-weight: 700; font-size: 13px;">${commentNReplyName}</div>
+                                            <div style="font-size: 15px;">${commentNReplies[j].text}</div>`;
+                                        }
+
+                                        postElement +=   
+                                        `</div>
                                         <div style="display: flex; flex-direction: row; justify-content: space-between">
                                             <div style="display: flex; flex-direction: row; justify-content: flex-start">
                                                 <div style="color: #65676b; font-size: 13px; margin-top: 4px;">${formatDate(commentNReplies[j].createdAt)}</div>
                                                 <div><button id="replyLikeText${commentNReplies[j]._id}${modal}" class="${userLikedCommentClass}" onclick="likeOrUnlikeReply('${result._id}', '${commentN._id}', '${commentNReplies[j]._id}', '${modal}');">Like</button></div>
-                                                <div><button class="noStyle commentButtons" onclick="replyOnCommentText('${commentNReplies[j]._id}', '${commentNReplies[j].user.name}', '${modal}');">Reply</button></div>
+                                                <div><button class="noStyle commentButtons" onclick="replyOnCommentText('${commentNReplies[j]._id}', '${commentNReplyName}', '${modal}');">Reply</button></div>
                                             </div>
                                             <div style="margin-top: 5px;">
                                                 <i class="fa-regular fa-thumbs-up"></i> <span id="${commentNReplies[j]._id}Likes${modal}">${commentNReplies[j].likes.length}</span>
@@ -812,7 +1432,7 @@
                                         <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 17px;"></div>
                                     </div>
                                     <div style="display: flex; flex-direction: row; width: calc(100% - 50px);">
-                                        <div style="margin-top: 15px; padding-right: 10px;">${profileImg3}</div>
+                                        <div style="margin-top: 15px; padding-right: 10px;">${currentUserProfileImg35}</div>
                                         <div class="input-group" style="margin-top: 15px;">
                                             <input type="text" class="form-control" onFocusOut="buttonBlueOut('${commentNReplies[j]._id}', '${modal}')" 
                                             onfocus="buttonBlue('${commentNReplies[j]._id}', '${modal}')" id="${commentNReplies[j]._id}Text${modal}" 
@@ -841,9 +1461,9 @@
                             <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
                         </div>
                         <div style="display: flex; flex-direction: row; width: calc(100% - 50px);">
-                            <div style="margin-top: 15px; padding-right: 10px;">${profileImg3}</div>
+                            <div style="margin-top: 15px; padding-right: 10px;">${currentUserProfileImg35}</div>
                             <div class="input-group" style="margin-top: 15px;">
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control hi"
                                 onFocusOut="buttonBlueOut('${commentN._id}', '${modal}')" onfocus="buttonBlue('${commentN._id}', '${modal}')" 
                                 id="${commentN._id}Text${modal}" style="width: 100%; height: 40px; border-radius: 20px; background: #F0F2F5" 
                                 onkeydown="if (event.key === 'Enter') replyOnComment('${result._id}', '${commentN._id}', '${commentN._id}', '${modal}');" />
@@ -885,7 +1505,7 @@
                             <div style="margin-top: 15px; padding-right: 10px;">
                                 ${profileImg4}
                             </div>
-                            <div class="${result.comments[0]._id}replyPipe${modal} replyPipe${modal}" style="display: none; height: calc(100% - 40px); width: 50px; padding-top: 5px;">
+                            <div class="${result.comments[0]._id}replyPipe${modal} replyPipe${modal} under-comment-profile-pic" style="display: none;">
                                 <div style="border-left: 2px solid #d8d9dc; height: 100%; margin-left: 20px;"></div>
                             </div>
                         </div>
@@ -911,11 +1531,11 @@
                             <div style="border-bottom: 2px solid #d8d9dc; border-left: 2px solid #d8d9dc; border-bottom-left-radius: 7px; height: 33px; margin-left: 20px;"></div>
                         </div>
                         <div style="display: flex; flex-direction: row; width: calc(100% - 50px);">
-                            <div style="margin-top: 15px; padding-right: 10px;">${profileImg2}</div>
+                            <div style="margin-top: 15px; padding-right: 10px;">${currentUserProfileImg40}</div>
                             <div class="input-group" style="margin-top: 15px;">
                                 <input type="text" class="form-control" onFocusOut="buttonBlueOut('${result.comments[0]._id}', '${modal}')" onfocus="buttonBlue('${result.comments[0]._id}', '${modal}')" 
                                 id="${result.comments[0]._id}Text${modal}" style="width: 100%; height: 40px; border-radius: 20px; background: #F0F2F5" 
-                                onkeydown="if (event.key === 'Enter') replyOnComment('${result._id}', '${result.comments[0]._id}', '${result.comments[0]._id}', '${modal}'); />
+                                onkeydown="if (event.key === 'Enter') replyOnComment('${result._id}', '${result.comments[0]._id}', '${result.comments[0]._id}', '${modal}');" />
                                 <button class="noStyle input-group-append" type="button" onclick="replyOnComment('${result._id}', '${result.comments[0]._id}', '${result.comments[0]._id}', '${modal}');">
                                     <i class="fa-regular fa-paper-plane" id="${result.comments[0]._id}icon${modal}"></i>
                                 </button>
@@ -931,7 +1551,7 @@
             postElement +=
                     `</div>
                     <div style="display: flex; flex-direction: row;">
-                        <div style="margin-top: 15px; padding-right: 10px;">${profileImg6}</div>
+                        <div style="margin-top: 15px; padding-right: 10px;">${currentUserProfileImg40}</div>
                         <div class="input-group" style="margin-top: 15px;">
                             <input type="text" class="form-control" onFocusOut="buttonBlueOut('${result._id}}', '${modal}')" onfocus="buttonBlue('${result._id}}', '${modal}')"
                             id="makeComment${result._id}${modal}" id="postText" placeholder="Write comment..." style="width: 100%; height: 40px; border-radius: 20px; background: #F0F2F5"
@@ -950,7 +1570,7 @@
         function showComments(postID, clickedButton, modal)
         {
             const hiddenComments = document.getElementById(`hiddenComments${postID}${modal}`);
-            const hiddenReplies = document.getElementsByClassName(`pastReplyPipe${postID}${modal}`);
+            const hiddenReplies = document.getElementsByClassName(`hiddenReplyPipe${postID}${modal}`);
             const hiddenReplyAbbreviated = document.getElementsByClassName(`replyAbbreviated${postID}${modal}`);
 
             if (hiddenComments.style.display === 'none')
@@ -988,7 +1608,11 @@
             for (let i = 0; i < document.getElementsByClassName(`replyInput${modal}`).length; i++)
             {
                 document.getElementsByClassName(`replyInput${modal}`)[i].style.display = 'none';
-                document.getElementsByClassName(`replyPipe${modal}`)[i].style.display = 'none';
+            }
+                        
+            for (let i = 0; i < document.getElementsByClassName(`replyInputPipe${modal}`).length; i++)
+            {
+                document.getElementsByClassName(`replyInputPipe${modal}`)[i].style.display = 'none';
             }
 
             for (let i = 0; i < document.getElementsByClassName(`${textElement}replyPipe${modal}`).length; i++)
@@ -1150,11 +1774,6 @@
             return postElement
         }
 
-        function getInitials(name)
-        {
-            return name.split(' ').map(word => word[0].toUpperCase()).join('');
-        }
-
         function formatDate(dateString)
         {
             if (!dateString)
@@ -1187,12 +1806,36 @@
             }
         }
 
+        function displayImage(event)
+        {
+            const image = document.getElementById('selected-image');
+            const file = event.target.files[0];
+            const fileName = file.name;
+            const fileExtension = fileName.slice(-4);
+
+            if (fileExtension === '.pdf')
+            {
+                document.getElementById('pdf-title').innerText = fileName;
+                document.getElementById('pdfName').value = fileName;
+                document.getElementById('selected-pdf').style.display = 'flex';
+            }
+            else
+            {
+                image.src = URL.createObjectURL(file);
+                image.style.display = 'block';
+            }
+        }
+
         function createPost()
         {
             const formData = new FormData(document.getElementById('postForm'));
 
             if ([...formData.entries()].length > 0)
-            {
+            { 
+                const postButton = document.getElementById('post-button');
+                const originalText = postButton.innerHTML;
+                postButton.innerHTML = '<div class="spinner"><img src="./assets/images/loading-buffering.gif" style="width: 35px; height: 35px;" /></div>';
+
                 fetch('/create-post',
                 {
                     method: 'POST',
@@ -1201,23 +1844,25 @@
                 .then(response => response.json())
                 .then(data =>
                 {
+                    postButton.innerHTML = originalText;
                     document.getElementById('postText').value = '';
                     document.getElementById('post-button').classList.remove('button-enabled');
                     document.getElementById('post-button').classList.add('button-disabled');
                     
                     const html =
-                    `<div id="parent${data._id}" style="background: #FFFFFF; width: 80%; padding: 16px; margin-top: 30px; border-radius: 10px;">
+                    `<div id="parent${data._id}" style="background: #FFFFFF; width: 80%; max-width: 600px; padding: 16px; margin-top: 30px; border-radius: 10px;">
                         ${createTableRow(data)}
                     </div>`;
                     $('#post-list').prepend(html);
+                    document.getElementById('selected-image').src = '';
+                    document.getElementById('selected-image').style.display = 'none';
+                    document.getElementById('selected-pdf').style.display = 'none';
                 })
                 .catch(error =>
                 {
                     console.error(error);
+                    postButton.innerHTML = originalText;
                 });
-            }
-            else
-            {
             }
         }
 
@@ -1228,7 +1873,7 @@
             $.ajax({
                 url: `/comment/${postId}`,
                 type: 'POST',
-                data:{
+                data: {
                     text: text,
                 },
                 success: function(data)
@@ -1254,6 +1899,108 @@
                     console.error("error" + error);
                 }
             });
+        }
+
+        function editComment(postId, commentId, modal)
+        {
+            const textComment = document.getElementById(`textComment${commentId}${modal}`);
+            const editComment = document.getElementById(`editComment${commentId}${modal}`);
+
+            if (textComment.innerText !== editComment.value)
+            {
+                $.ajax({
+                    url: `/edit-comment/${postId}/${commentId}`,
+                    type: 'PATCH',
+                    data: {
+                        text: editComment.value,
+                    },
+                    success: function(response)
+                    {
+                        textComment.classList.remove('hide');
+                        editComment.classList.add('hide');
+                        textComment.innerText = editComment.value;
+                        document.getElementById(`editCommentButton${commentId}${modal}`).style.display = 'none';
+                        toggleCommentEditIcons(commentId, modal);
+                    },
+                    error: function(xhr, status, error)
+                    {
+                        console.error('Error updating comment:', xhr.responseText);
+                    }
+                });
+            }
+        }
+
+        function editReply(postId, commentId, replyId, modal)
+        {
+            const textReply = document.getElementById(`textComment${replyId}${modal}`);
+            const editReply = document.getElementById(`editComment${replyId}${modal}`);
+
+            if (textReply.innerText !== editReply.value)
+            {
+                $.ajax({
+                    url: `/edit-reply/${postId}/${commentId}/${replyId}`,
+                    type: 'PATCH',
+                    data: {
+                        text: editReply.value,
+                    },
+                    success: function(response)
+                    {
+                        textReply.classList.remove('hide');
+                        editReply.classList.add('hide');
+                        textReply.innerText = editReply.value;
+                        document.getElementById(`editCommentButton${replyId}${modal}`).style.display = 'none';
+                        toggleCommentEditIcons(replyId, modal);
+                    },
+                    error: function(xhr, status, error)
+                    {
+                        console.error('Error updating reply:', xhr.responseText);
+                    }
+                });
+            }
+        }
+
+        function toggleCommentEditIcons(commentId, modal)
+        {
+            const toggleEllipsis = document.getElementById(`toggleEllipsis${commentId}${modal}`);
+            const toggleIcons = document.getElementById(`toggleIcons${commentId}${modal}`);
+        
+            if (toggleEllipsis.classList.contains('hide'))
+            {
+                toggleEllipsis.classList.remove('hide');
+                toggleIcons.classList.add('hide');
+            }
+            else
+            {
+                toggleEllipsis.classList.add('hide');
+                toggleIcons.classList.remove('hide');
+            }
+        }
+
+        function toggleCommentEdit(commentId, modal)
+        {
+            const textComment = document.getElementById(`textComment${commentId}${modal}`);
+            const editComment = document.getElementById(`editComment${commentId}${modal}`);
+            const editCommentButton = document.getElementById(`editCommentButton${commentId}${modal}`);
+
+            if (editComment.classList.contains('hide'))
+            {
+                editComment.classList.remove('hide');
+                editCommentButton.focus();
+                editCommentButton.classList.remove('hide');
+                textComment.classList.add('hide');
+            }
+            else
+            {
+                editComment.classList.add('hide');
+                editCommentButton.classList.add('hide');
+                textComment.classList.remove('hide');
+            }
+        }
+
+        function commentEdited(commentId, modal)
+        {
+            const editCommentButton = document.getElementById(`editCommentButton${commentId}${modal}`);
+            editCommentButton.classList.remove('button-disabled')
         }
 
         function replyOnComment(postId, commentId, replyID, modal)
@@ -1399,13 +2146,99 @@
             });
         }
 
-        function deletePostModal(postId, modal)
+        function allowEditPost(postID, modal)
+        {
+            document.getElementById(`postText${postID}`).style.display = 'none';
+            document.getElementById(`editPostText${postID}`).style.display = 'block';
+            document.getElementById(`editPostImageButton${postID}${modal}`).style.display = 'block';
+            document.getElementById(`postEditSubmit${postID}${modal}`).style.display = 'block';
+        }
+
+        function editPostImage(postID, modal)
+        {
+            document.getElementById(`editPostImage${postID}${modal}`).click();
+        }
+
+        function editPostAllowSubmit(postID, modal, event="")
+        {
+            document.getElementById(`postEditSubmit${postID}${modal}`).classList.remove('button-disabled');
+            
+            if (event)
+            {
+                document.getElementById(`postImage${postID}${modal}`).src = document.getElementById(`editPostImage${postID}${modal}`).value;  
+            
+                const image = document.getElementById(`postImage${postID}${modal}`);
+                image.src = URL.createObjectURL(event.target.files[0]);
+            }
+        }
+
+        function editPost(postID, modal)
+        {
+            if (!document.getElementById(`postEditSubmit${postID}${modal}`).classList.contains('button-disabled'))
+            {
+                const formData = new FormData(document.getElementById(`postEditForm${postID}${modal}`));
+
+                if ([...formData.entries()].length > 0)
+                {
+                    document.getElementById(`editPostImageButton${postID}${modal}`).style.display = "none";
+                    document.getElementById(`bufferPostEdit${postID}${modal}`).style.display = "block";
+
+                    fetch('/edit-post',
+                    {
+                        method: 'PATCH',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data =>
+                    {
+                        $.ajax({
+                            url: `/get-post/${postID}`,
+                            type: 'GET',
+                            success: function(data)
+                            {
+                                displayData([data], true)
+                                document.getElementById(`bufferPostEdit${postID}${modal}`).style.display = "none";
+                            },
+                            error: function(error)
+                            {
+                                console.error(error);
+                                document.getElementById(`bufferPostEdit${postID}${modal}`).style.display = "none";
+                            }
+                        });
+                    })
+                    .catch(error =>
+                    {
+                        console.error(error);
+                    });
+                }
+            }
+        }
+
+        function deleteModal(postId, modal, type, commentId="", replyId="")
         {
             const deleteButton = document.getElementById('deleteButton');
-            deleteButton.addEventListener('click', function() {
-                deletePost(postId, modal);
-            });
 
+            if (type === 'post')
+            {
+                deleteButton.addEventListener('click', function()
+                {
+                    deletePost(postId, modal);
+                });
+            }
+            else if (type === 'comment')
+            {
+                deleteButton.addEventListener('click', function()
+                {
+                    deleteComment(postId, commentId, modal);
+                });
+            }
+            else if (type === 'reply')
+            {
+                deleteButton.addEventListener('click', function()
+                {
+                    deleteReply(postId, commentId, replyId, modal);
+                });   
+            }
             $('#deleteConfirmation').modal('show');
         }
         
@@ -1428,6 +2261,88 @@
                 error: function(error)
                 {
                     console.error(error);
+                }
+            });
+        }
+
+        function deleteComment(postId, commentId, modal)
+        {   
+            $.ajax({
+                url: `/delete-comment/${postId}/${commentId}`,
+                type: 'DELETE',
+                success: function(response)
+                {
+                    $('#deleteConfirmation').modal('hide');
+
+                    const commentWrapper = document.getElementsByClassName(`comment-wrapper-${commentId}${modal}`);
+                    for (let i = 0; i < commentWrapper.length; i++)
+                    {
+                        commentWrapper[i].style.display = 'none';
+                    }
+
+                    const replyWrapper = document.getElementsByClassName(`comment-replies-${commentId}${modal}`);
+                    for (let i = 0; i < replyWrapper.length; i++)
+                    {
+                        replyWrapper[i].style.display = 'none';
+                    }
+                },
+                error: function(xhr, status, error)
+                {
+                    console.error('Error updating comment:', xhr.responseText);
+                }
+            });
+        }
+
+        function deleteReply(postId, commentId, replyID, modal)
+        {   
+            $.ajax({
+                url: `/delete-reply/${postId}/${commentId}/${replyID}`,
+                type: 'DELETE',
+                success: function(response)
+                {
+                    $('#deleteConfirmation').modal('hide');
+                    
+                    const replyPipesWrapper = document.getElementsByClassName(`reply-and-pipe-wrapper-${replyID}${modal}`)[0];
+                    replyPipesWrapper.style.display = 'none';
+
+                    // This code is to delete the pipe that extends to the deleted reply
+                    // creates replyPipe class so it can locate the previous classes of the same name
+                    replyPipesWrapper.classList.add('replyPipe');
+                
+                    let previousReplyPipe;
+                    const allReplyPipes = document.getElementsByClassName('replyPipe');
+
+                    for (let i = 0; i < allReplyPipes.length; i++)
+                    {
+                        if (allReplyPipes[i] === replyPipesWrapper)
+                        {
+                            let pipeNotDeleted = false;
+                            let j = 1;
+
+                            while (!pipeNotDeleted)
+                            {
+                                // finds the previous class as long as this condition is true
+                                if ((allReplyPipes[i - j].classList.contains('reply-pipe-next') || 
+                                allReplyPipes[i - j].classList.contains('under-comment-profile-pic')) &&
+                                !allReplyPipes[i - j].classList.contains('abbreviated'))
+                                {
+                                    previousReplyPipe = i - j;
+                                    pipeNotDeleted = true;
+                                }
+                                else
+                                {
+                                    j++
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    // removes previous pipe element
+                    allReplyPipes[previousReplyPipe].style.display = 'none';
+                },
+                error: function(xhr, status, error)
+                {
+                    console.error('Error updating comment:', xhr.responseText);
                 }
             });
         }
@@ -1455,11 +2370,13 @@
                 type: 'GET',
                 success: function(data)
                 {
-                    if (data.length > 0)
-                    {
-                        let user;
-                        let profileImg;
+                    $('#userPosts-list').html('<div>No posts</div>');
 
+                    let profileImg;
+                    let user;
+
+                    if (data.length)
+                    {                    
                         if (typeof data[0].user.name !== 'undefined')
                         {
                             user = data[0].user.name;
@@ -1470,7 +2387,7 @@
                             }
                             else
                             {
-                                profileImg = getInitials(user);
+                                profileImg = '';
                             }
                         }
                         else
@@ -1479,29 +2396,46 @@
                             profileImg = document.getElementById('img').value;
                         }
 
-                        if (profileImg.length <= 5)
+                        for (let i = 0; i < data.length; i++)
                         {
-                            profileImg =
-                            `<div style="height: 50px; width: 50px; border-radius: 50%;">${profileImg}</div>`;
+                            $('#userPosts-list').empty().append(createTableRow(data[i], false, true));
                         }
-                        else
-                        {
-                            profileImg =
-                            `<img src="${profileImg}" class="currentImgURL" alt="profile Image" />`;
-                        }
-
-                        $('#profileAndUser').html(
-                            `<div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center; flex-wrap: nowrap;">
-                                <div style="border-radius: 50%; display: flex; height: 75px; width: 75px; justify-content: center; align-items: center; overflow: hidden;">${profileImg}</div>
-                                <div style="margin-left: 10px;">${user}</div>
-                            </div>`
-                        );
                     }
-                    
-                    for (let i = 0; i < data.length; i++)
+                    else
                     {
-                        $('#userPosts-list').append(createTableRow(data[i], false, "modalWidth"));
+                        $.ajax({
+                            url: `/user-array/${username}`,
+                            type: 'GET',
+                            async: false,
+                            success: function(result)
+                            {
+                                profileImg = result[0].profileImg;
+                                user = result[0].name;
+                            }
+                        });
                     }
+
+                    if (profileImg.length <= 5)
+                    {
+                        profileImg =
+                        `<div style="height: 50px; width: 50px; border-radius: 50%;">
+                            <div style="height: 50px; width: 50px; border-radius: 50%; border: 1px solid #454545; display: flex; justify-content: center; align-items: center;">
+                                <i class="fa-solid fa-user" style="font-size: 1.2rem;"></i>
+                            </div>
+                        </div>`;
+                    }
+                    else
+                    {
+                        profileImg =
+                        `<img src="${profileImg}" class="currentImgURL" alt="profile Image" />`;
+                    }
+
+                    $('#profileAndUser').empty().html(
+                        `<div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center; flex-wrap: nowrap;">
+                            <div style="border-radius: 50%; display: flex; height: 75px; width: 75px; justify-content: center; align-items: center; overflow: hidden;">${profileImg}</div>
+                            <div style="margin-left: 10px;">${user}</div>
+                        </div>`
+                    );
                 },
                 error: function(error)
                 {
@@ -1511,6 +2445,15 @@
 
             $('#allPosts').modal('show');
         }
+
+        // focuses the search input after the modal is closed
+        $(document).ready(function()
+        {
+            $('#allPosts').on('hidden.bs.modal', function ()
+            {
+                $('#userSearch').focus();
+            });
+        });
 
         function enableButton()
         {
@@ -1543,6 +2486,135 @@
         function buttonBlueOut(id, modal)
         {
             document.getElementById(`${id}icon${modal}`).style.color = '#333333';
+        }
+
+        function addGuide(postId, modal, button)
+        {
+            $.ajax({
+                url: `/guide/${postId}`,
+                type: 'GET',
+                success: function(data)
+                {
+                    const icon = button.querySelector('.fa-compass');
+                    const iconColor = window.getComputedStyle(icon).color;
+                    const redColor = 'rgb(255, 0, 0)';
+
+                    if (iconColor === redColor)
+                    {
+                        icon.style.color = 'black';
+                    }
+                    else
+                    {
+                        icon.style.color = '#FF0000';
+                    }
+                },
+                error: function(error)
+                {
+                    console.error(error);
+                }
+            });
+        }
+
+        function formatDate(dateString)
+        {
+            const date = new Date(dateString);
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            };
+            return date.toLocaleString('en-US', options);
+        }
+
+        function displayGuides()
+        {
+            $.ajax({
+                url: `/guides`,
+                type: 'GET',
+                success: function(data)
+                {
+                    document.getElementById('pinned-post-list').innerHTML = '';
+                    document.getElementById('post-list').innerHTML = '';
+                    displayData(data, false, false);
+                    document.getElementsByClassName('backButton')[0].style.display = 'flex';
+                },
+                error: function(error)
+                {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function postSearch()
+        {
+            const searchInput = document.getElementById('postSearch').value;
+
+            $.ajax({
+                url: `/posts-by-search/${searchInput}`,
+                type: 'GET',
+                success: function(data)
+                {
+                    document.getElementById('pinned-post-list').innerHTML = '';
+                    document.getElementById('post-list').innerHTML = '';
+                    displayData(data, false, false);
+                    document.getElementsByClassName('backButton')[0].style.display = 'flex';
+                },
+                error: function(error)
+                {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function displayFiles()
+        {
+            $.ajax({
+                url: `/get-pdf-files`,
+                type: 'GET',
+                success: function(data)
+                {
+                    $('#fileEventsTitle').text('Files');
+                    $('#fileEventsModal').modal('show');
+
+                    let innerHTML = `<div>`;
+                    
+                    for (let i = 0; i < data.length; i++)
+                    {
+
+
+                        innerHTML += `
+                        <div class="file-item" style="display: flex; justify-content: space-between; align-items: center;">
+                            <a href="${data[i].img}" target="_blank" style="display: flex; align-items: center;">
+                                <div><img src="https://static.xx.fbcdn.net/rsrc.php/v4/yK/r/S34ZSebSrQw.png" alt="pdf logo" height="32" width="32"></div>
+                                <div class="pdf-link" style="font-size: 15px; color: #080809; cursor: pointer;">${data[i].pdfName}</div>
+                            </a>
+                            <div style="color: #65686C; font-size: 13px;">PDF</div>
+                            <div style="display: flex; flex-direction: column;">
+                                <div style="font-size: 13px; color: #080809;">${formatDate(data[i].updatedAt)}</div>
+                                <div style="font-size: 12px; color: #65686C;">by <b>${data[i].user}</b></div>
+                            </div>
+                        </div>
+                        `;
+                    }
+
+                    innerHTML += `<div>`;
+
+                    document.getElementById('fileEventsBody').innerHTML = innerHTML;
+                },
+                error: function(error)
+                {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function displayEvents()
+        {
+            $('#fileEventsTitle').text('Events');
+            $('#fileEventsModal').modal('show');
         }
     </script>
 </body>

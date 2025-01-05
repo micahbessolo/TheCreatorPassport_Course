@@ -18,6 +18,10 @@
     cursor: pointer;
     outline: inherit;
 }
+.dashboard-link
+{
+    white-space: nowrap;
+}
 .dashboard-link:hover
 {
     text-decoration: underline;
@@ -261,4 +265,8 @@ progress::-moz-progress-bar
     {
         display: none;
     }
+}
+#lesson-of
+{
+    padding-left: 3px;
 }
