@@ -48,7 +48,7 @@
             </div>    
             <div class="iconList">
                 <!-- profile -->
-                <div id="sidenav-profile" class="noStyle sideNavButtons" style="margin-left: 15px; height: 70px; display: flex; flex-direction: row; align-items: center;">
+                <button onclick="getUserPosts('<%= userName %>');" id="sidenav-profile" class="noStyle sideNavButtons" style="margin-left: 15px; height: 70px; display: flex; flex-direction: row; align-items: center;">
                     <div style="height: 40px; width: 40px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 50%; border: 1px solid #454545;">
                         <% if (profileImg) { %>
                             <img src="<%= profileImg %>" class="currentImgURL imgLoading" alt="profile Image" />
@@ -59,7 +59,7 @@
                     <div style="display: flex; align-items: center;">
                         <div style="margin-left: 15px;"><%= userName %></div>
                     </div>
-                </div>
+                </button>
                 <!-- user search -->
                 <button onclick="toggleSearchInput();" id="sidenav-search-icon" class="noStyle sideNavButtons" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Search for posts by user's name">
                     <div style="display: flex; flex-direction: row; align-items: center;">
@@ -2398,7 +2398,7 @@
 
                         for (let i = 0; i < data.length; i++)
                         {
-                            $('#userPosts-list').empty().append(createTableRow(data[i], false, true));
+                            $('#userPosts-list').append(createTableRow(data[i], false, true));
                         }
                     }
                     else

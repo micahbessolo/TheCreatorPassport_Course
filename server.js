@@ -129,7 +129,7 @@ if ((process.env.NODE_ENV || '').trim() !== 'production')
 
         if (userEmail === "ryanleebanksmedia@gmail.com" || userEmail === "dani@theloverspassport.com" 
         || userEmail === "dreamwithlo@gmail.com" || userEmail === "maggie@theloverspassport.com"
-        || userEmail === "bessolomicah@gmail.com" || userEmail === "stephenjiroch99@gmail.com")
+        || userEmail === "bessolomicah@gmail.com" || userEmail === "stephenjiroch99@gmail.com" || userEmail === "thecreatorpassport@gmail.com")
         {
             isAdmin = true;
         }
