@@ -557,30 +557,61 @@
                     <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
                     <div style="margin-left:6px;">Workbooks + All Other Links</div>
                 </a>`;
-                
-                if (returnObject.resources[Number(module.split('-')[2]) - 1].includes(';'))
-                {
-                    const resourceArray = returnObject.resources[Number(module.split('-')[2]) - 1].split(';');
 
-                    for (let i = 0; i < resourceArray.length; i++)
+                if (currentTrack === 3)
+                {
+                    let resourcesHTML +=
+                    `<a id="download1" href="../assets/resources/Creator_Passport_Pitching_and_Negotiation_E-Book.pdf" target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                        <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                        <div style="margin-left:6px;">Pitching & Negotiation E-Book</div>
+                    </a>`;
+                }
+
+                if (resourcesLength > 0)
+                {
+                    if (resourceArray[0].includes('--')) // this splits the link the title is 0 and the link is 1
                     {
-                        if (resourceArray[i].includes('--')) // this splits the link the title is 0 and the link is 1
+                        resourcesHTML +=
+                        `<a id="download${0}" href="${resourceArray[0].split('--')[1]}"
+                        target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                            <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                            <div style="margin-left:6px;">${resourceArray[0].split('--')[0]}</div>
+                        </a>`;
+                    }
+                    else
+                    {
+                        resourcesHTML +=
+                        `<a id="download${0}" href="../assets/resources/${resourceArray[0].replaceAll(' ', '_')}.pdf"
+                        target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                            <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                            <div style="margin-left:6px;">${resourceArray[0]}</div>
+                        </a>`;
+                    }
+
+                    if (returnObject.resources[Number(module.split('-')[2]) - 1].includes(';'))
+                    {
+                        const resourceArray = returnObject.resources[Number(module.split('-')[2]) - 1].split(';');
+
+                        for (let i = 1; i < resourceArray.length; i++)
                         {
-                            resourcesHTML +=
-                            `<a id="download${i}" href="${resourceArray[i].split('--')[1]}"
-                            target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
-                                <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
-                                <div style="margin-left:6px;">${resourceArray[i].split('--')[0]}</div>
-                            </a>`;
-                        }
-                        else
-                        {
-                            resourcesHTML +=
-                            `<a id="download${i}" href="../assets/resources/${resourceArray[i].replaceAll(' ', '_')}.pdf"
-                            target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
-                                <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
-                                <div style="margin-left:6px;">${resourceArray[i]}</div>
-                            </a>`;
+                            if (resourceArray[i].includes('--')) // this splits the link the title is 0 and the link is 1
+                            {
+                                resourcesHTML +=
+                                `<a id="download${i}" href="${resourceArray[i].split('--')[1]}"
+                                target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                                    <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                                    <div style="margin-left:6px;">${resourceArray[i].split('--')[0]}</div>
+                                </a>`;
+                            }
+                            else
+                            {
+                                resourcesHTML +=
+                                `<a id="download${i}" href="../assets/resources/${resourceArray[i].replaceAll(' ', '_')}.pdf"
+                                target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                                    <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                                    <div style="margin-left:6px;">${resourceArray[i]}</div>
+                                </a>`;
+                            }
                         }
                     }
                 }

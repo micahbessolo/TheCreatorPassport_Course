@@ -117,7 +117,6 @@ app.get('/', checkAuthenticated, async (req, res) =>
     let userEmail;
     let userName;
     let profileImg;
-    let isAdmin = false;
     let cohort;
 
     await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
@@ -133,7 +132,7 @@ app.get('/', checkAuthenticated, async (req, res) =>
     || userEmail === "dreamwithlo@gmail.com" || userEmail === "maggie@theloverspassport.com"
     || userEmail === "bessolomicah@gmail.com" || userEmail === "stephenjiroch99@gmail.com" || userEmail === "thecreatorpassport@gmail.com")
     {
-        isAdmin = true;
+        cohort = 3;
     }
 
     res.render('dashboard.ejs', {
