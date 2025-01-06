@@ -548,14 +548,21 @@
                 let resourcesHTML =
                 `<a id="download1" href="../assets/resources/${trackResource}" target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
                     <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
-                    <div style="margin-left:6px;">${returnObject.resources[Number(module.split('-')[2]) - 1].split(';')[0]}</div>
+                    <div style="margin-left:6px;">Track ${(module.split('-')[0])} Workbook</div>
+                </a>`;
+
+                resourcesHTML +=
+                `<a id="download${0}" href="https://docs.google.com/document/d/1ADzAeBt1pu74mi9hTii1Tf8jlHapYCba3OAXt_IRG5s/edit?tab=t.0#heading=h.qbwmbxi08r85"
+                target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
+                    <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
+                    <div style="margin-left:6px;">Workbooks + All Other Links</div>
                 </a>`;
                 
                 if (returnObject.resources[Number(module.split('-')[2]) - 1].includes(';'))
                 {
                     const resourceArray = returnObject.resources[Number(module.split('-')[2]) - 1].split(';');
 
-                    for (let i = 1; i < resourceArray.length; i++)
+                    for (let i = 0; i < resourceArray.length; i++)
                     {
                         if (resourceArray[i].includes('--')) // this splits the link the title is 0 and the link is 1
                         {

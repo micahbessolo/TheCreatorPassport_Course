@@ -2370,8 +2370,11 @@
                 type: 'GET',
                 success: function(data)
                 {
-                    $('#userPosts-list').html('<div>No posts</div>');
-
+                    if (!data.length)
+                    {
+                        $('#userPosts-list').html('<div>No posts</div>');
+                    }
+                    
                     let profileImg;
                     let user;
 

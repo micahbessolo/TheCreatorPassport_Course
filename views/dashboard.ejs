@@ -62,15 +62,10 @@
 						<div><a href="#" class="header-options text-decoration-underline">dashboard</a></div>
 						<div><a href="/favorites" class="header-options">favorites</a></div>
 						<div>
-							<% if(isTestUser) { %>
+							<% if(cohort === 3) { %>
 								<a href="/community-page" class="header-options">community</a>
 							<% } else { %>
-								<button class="header-options noStyle" onClick="communityOptions()" style="font-size: 20px;">community</button>
-								<div id="community-options" style="display: none; flex-direction: row; justify-content: space-evenly; position: absolute; width: 240px; height: 40px; background: #d3d3d3; margin-top: 20px; margin-left: -60px; padding-top: 3px;">
-									<a href="https://www.facebook.com/groups/1055892835736335/" target="_blank" class="community-options">Cohort 1</a>
-									<div style="font-size: 20px; color: black;">|</div>
-									<a href="https://www.facebook.com/groups/creatorpassportcohort2" target="_blank" class="community-options">Cohort 2</a>
-								</div>
+								<a href="https://www.facebook.com/groups/creatorpassportalumni" target="_blank" class="header-options">community</a>
 							<% } %>
 						</div>
 						<div><a href="" class="header-options" id="liveTrainingsAnchor">live trainings</a></div>
