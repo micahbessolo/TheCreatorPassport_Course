@@ -22,37 +22,10 @@
 <body>
 	<div id="wrapper"  style="z-index: 1; position: relative;">
 		<!--topnav-->
-		<div class="topNav">
-			<div style="color: #649399; text-decoration: underline !important;">Dashboard</div>
-			
-			<div class="topnav-right-wrapper">
-				<div class="mobile-search-button noStyle">
-					<button class="noStyle" type="button" onclick="searchInputDisplay();">
-						<i class="fa-solid fa-magnifying-glass"></i>
-					</button>
-				</div>
-	
-				<div id="searchWrapper" class="desktop-search-button" onFocus="showSearchResults()" onfocusout="hideSearchResults();" tabindex="-1">
-					<div class="input-group desktop-search-input-wrapper">
-						<input type="text" class="form-control desktop-search-input" id="videoSearch" placeholder="search video"
-						onkeydown="if (event.key === 'Enter') displaySearchResults();" />
-						<button class="noStyle input-group-append" type="button" onclick="displaySearchResults();">
-							<i class="fa-solid fa-magnifying-glass" id="videoSearchButton"></i>
-						</button>
-					</div>
-					<div id="searchResultsDropdown" class="dropdown-content hide">
-	
-					</div>
-				</div>
-				<div>
-					<a href="#">
-						<form action="/logout?_method=DELETE" method="POST" onsubmit="updateRememberMe();">
-							<button type="submit" style="all:unset; color: white;">Log Out</button>
-						</form>
-					</a>
-				</div>
-			</div>
-		</div>
+        <div id="topNavWrapper" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
+            <!--loaded from backend-->
+        </div>
+		
 		<div class="hero-title-black">
 			<div style="top: 30px; position: relative;">
 				<div style="display: flex; justify-content: center; padding-bottom: 15px;"><h4 style="font-family: 'Roboto', sans-serif; font-size: 29px;">The Creator Passport</h4></div>
@@ -145,7 +118,10 @@
 		</div>
     </div>
 
+	<script type="text/javascript" src="assets/JS/topnav.js"></script>
+
 	<script type="text/javascript">
+		topNav('Dashboard');
 
 		function communityOptions()
 		{
