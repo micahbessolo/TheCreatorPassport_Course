@@ -15,12 +15,11 @@ exports.forgotPassword = async (req, res) =>
 
     await userCollections.findOne({email: req.body.email}).then((user, err) =>
     {
-        userName = user.name;
-
-        if(err || !user)
+        if (err || !user)
         {
             return res.render('forgot-password.ejs', { messages: 'No user with that email' });
         }
+        userName = user.name;
 
         const token = jwt.sign({_id: user._id}, process.env.RESET_PASSWORD_KEY, {expiresIn: '20m'});
 
