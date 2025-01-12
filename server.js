@@ -34,7 +34,7 @@ const initializePassport = require('./passport-config');
 const {forgotPassword, resetPassword} = require("./password_recovery/auth");
 const multer  = require('multer');
 const storage = multer.diskStorage({
-    filename: function (file, cb)
+    filename: function (req, file, cb)
     {
         cb(null, file.originalname)
     }
