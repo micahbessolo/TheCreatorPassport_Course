@@ -26,7 +26,7 @@ cloudinary.config({
 const connectMongoDB = require("./mongodb");
 const userCollection = require('./models/user-collection');
 const videosCollection = require('./models/video-collections');
-let postsCollection = require('./models/post-collection-1-1');
+let postsCollection = require('./models/post-collection-1');
 const notificationsCollection = require('./models/notification-collection');
 
 const { topNav, topNavNotifications, markNotificationRead } = require('./topnav');
@@ -144,7 +144,6 @@ app.get('/', checkAuthenticated, async (req, res) =>
         profileImg: profileImg,
         liveTrainingsProgress: liveTrainingsProgress,
         cohort: cohort
-        isTestUser: isAdmin
     });
 });
 
