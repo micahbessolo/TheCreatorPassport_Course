@@ -26,13 +26,14 @@ cloudinary.config({
 const connectMongoDB = require("./mongodb");
 const userCollection = require('./models/user-collection');
 const videosCollection = require('./models/video-collections');
-const postsCollection = require('./models/post-collection-1');
+let postsCollection = require('./models/post-collection-1-1');
 const notificationsCollection = require('./models/notification-collection');
 
 const { topNav, topNavNotifications, markNotificationRead } = require('./topnav');
 const initializePassport = require('./passport-config');
 const {forgotPassword, resetPassword} = require("./password_recovery/auth");
 const multer  = require('multer');
+
 const storage = multer.diskStorage({
     filename: function (req, file, cb)
     {
@@ -118,6 +119,7 @@ app.get('/', checkAuthenticated, async (req, res) =>
     let userName;
     let profileImg;
     let cohort;
+    let isAdmin;
 
     await userCollection.findOne({_id: req.user._conditions._id}).then((info) =>
     {
@@ -126,6 +128,7 @@ app.get('/', checkAuthenticated, async (req, res) =>
         profileImg = info.profileImg;
         liveTrainingsProgress = info.liveTrainingsProgress;;
         cohort = info.cohort
+        isAdmin = info.admin;
     });
 
     if (userEmail === "ryanleebanksmedia@gmail.com" || userEmail === "dani@theloverspassport.com" 
@@ -141,7 +144,33 @@ app.get('/', checkAuthenticated, async (req, res) =>
         profileImg: profileImg,
         liveTrainingsProgress: liveTrainingsProgress,
         cohort: cohort
+        isTestUser: isAdmin
     });
+});
+
+// for adding an admin
+app.get('/add-admin-privileges', async (req, res) =>
+    {
+    try
+    {
+        await userCollection.updateMany({}, { $set: { admin: false } });
+
+        const adminEmails = [
+            'mbessolo@westmont.edu',
+            'ryanleebanksmedia@gmail.com',
+            'dani@theloverspassport.com',
+            'dreamwithlo@gmail.com',
+            'maggie@theloverspassport.com',
+            'thecreatorpassport@gmail.com'
+        ];
+        await userCollection.updateMany({ email: { $in: adminEmails } }, { $set: { admin: true } });
+
+        res.send('Admin privileges updated successfully');
+    } 
+    catch (err) 
+    {
+        res.status(500).send('Error updating admin privileges: ' + err);
+    }
 });
 
 app.get('/topNav/:page', checkAuthenticated, async (req, res) => 
@@ -199,7 +228,6 @@ app.post('/update-user', checkAuthenticated, upload.single('profileImg'), async 
 
         user.email = email || user.email;
         user.profileImg = profileImg || user.profileImg;
-
         user = await user.save();
 
         return res.json({profileImg: user.profileImg, email: user.email})
@@ -250,6 +278,16 @@ app.get('/search-videos/:searchInput', checkAuthenticated, async (req, res) =>
     {
         console.error('Error searching videos:', error);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/count-cohort-3', async (req, res) => {
+    try {
+        const count = await userCollection.countDocuments({ cohort: 3 });
+        res.status(200).json({ count });
+    } catch (error) {
+        console.log("Error in counting documents: ", error.message);
+        res.status(500).json({ error: error.message });
     }
 });
 
@@ -445,6 +483,7 @@ app.get('/get-pdf-files', async (req, res) =>
     }
 });
 
+
 app.post('/create-post', checkAuthenticated, upload.single('image-post'), async (req, res) =>
 {
     const { postText, pdfName } = req.body;
@@ -598,15 +637,15 @@ app.post("/comment/:id", checkAuthenticated, async (req, res) =>
             return res.status(400).json({ error: "Text field is required" });
         }
         
-        const post = await postsCollection.findById(postId);
-        if (!post)
+		const post = await postsCollection.findById(postId);
+		if (!post)
         {
             return res.status(404).json({ error: "Post not found" });
         }
 
-        const comment = { user: userId, text, createdAt: currentTime};
-        post.comments.push(comment);
-        await post.save();
+		const comment = { user: userId, text, createdAt: currentTime};
+		post.comments.push(comment);
+		await post.save();
 
         if (userId.toString() !== post.user.toString())
         {
@@ -620,11 +659,94 @@ app.post("/comment/:id", checkAuthenticated, async (req, res) =>
             await notification.save();
         }
 
+		res.status(200).json(post);
+	}
+    catch (error)
+    {
+        console.log("Error in commentOnPost controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Edit comment on post
+app.patch("/edit-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const { text } = req.body;
+        const { postId, commentId } = req.params;
+        const userId = req.user._conditions._id.toString();
+        const user = await userCollection.findById(req.user._conditions._id);
+
+        if (!text)
+        {
+            return res.status(400).json({ error: "Text field is required" });
+        }
+
+        const post = await postsCollection.findById(postId);
+        if (!post)
+        {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const comment = post.comments.id(commentId);
+        if (!comment)
+        {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        if (comment.user.toString() !== userId && !user.admin)
+        {
+            return res.status(403).json({ error: "You are not authorized to edit this comment" });
+        }
+
+        comment.text = text;
+        await post.save();
+
         res.status(200).json(post);
     }
     catch (error)
     {
-        console.log("Error in commentOnPost controller: ", error);
+        console.log("Error in editComment controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Delete comment on post
+app.delete("/delete-comment/:postId/:commentId", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const { postId, commentId } = req.params;
+        const userId = req.user._conditions._id.toString();
+        const post = await postsCollection.findById(postId);
+        const user = await userCollection.findById(req.user._conditions._id);
+
+        if (!post)
+        {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const comment = post.comments.id(commentId);
+
+        if (!comment)
+        {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        if (comment.user.toString() !== userId  && !user.admin)
+        {
+            return res.status(403).json({ error: "You are not authorized to delete this comment" });
+        }
+
+        post.comments = post.comments.filter(c => c.id !== commentId);
+        await post.save();
+
+        res.status(200).json(post);
+    }
+    catch (error)
+    {
+        console.log("Error in deleteComment controller: ", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -866,11 +988,11 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
 {
     try
     {
-        const userId = req.user._conditions._id;
-        const { id: postId } = req.params;
-        const post = await postsCollection.findById(postId);
+		const userId = req.user._conditions._id;
+		const { id: postId } = req.params;
+		const post = await postsCollection.findById(postId);
 
-        if (!post)
+		if (!post)
         {
             return res.status(404).json({ error: "Post not found" });
         }
@@ -880,9 +1002,8 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
         if (userLikedPost)
         {
             // Unlike post
-            await postsCollection.updateOne({ _id: postId }, { $pull: { likes: userId } });
-            await userCollection.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
-
+			await postsCollection.updateOne({ _id: postId }, { $pull: { likes: userId } });
+			await userCollection.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
             await notificationsCollection.findOneAndDelete({
                 from: userId,
                 fromName: req.user._conditions.name,
@@ -891,9 +1012,9 @@ app.post("/like/:id", checkAuthenticated,  async (req, res) =>
                 post: postId
             });
 
-            const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
-            res.status(200).json(updatedLikes);
-        }
+			const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+			res.status(200).json(updatedLikes);
+		}
         else
         {
             // Like post
@@ -1062,6 +1183,224 @@ app.post("/like-reply/:postId/:commentId/:replyId", checkAuthenticated, async (r
     }
 });
 
+app.get("/getProgress", async (req, res) =>
+{
+    try
+    {
+        // const allUsers = await userCollection.find({ trackMod: { $exists: false } });
+        const allUsers = await userCollection.find({
+            $and: [
+                { trackMod: { $exists: false } },
+                { $or: [ { cohort: 2 }, { cohort: { $exists: false } } ] }
+            ]
+        });
+        let totalValueArray = [];
+
+        for (let i = 0; i < allUsers.length; i++)
+        {
+            if (allUsers[i].name !== 
+                "Micah Bessolo" && allUsers[i].name !== "Dani Rod"
+                && allUsers[i].name !== "Stephen Jiroch" && allUsers[i].name !== "test sixteen"
+                && allUsers[i].name !== "Lotte Leers" && allUsers[i].name !== "Jill Langley"
+                && allUsers[i].name !== "Jonah Magness" && allUsers[i].name !== "Danielle Rodr"
+                && allUsers[i].name !== "Dani R" && allUsers[i].name !== "D Rod"
+                && allUsers[i].name !== "Dani R" && allUsers[i].name !== "Dani Rodriguez"
+                && allUsers[i].name !== "Noam Koren" && allUsers[i].name !== "Stephen"
+                && allUsers[i].name !== "Testing Tester" && allUsers[i].name !== "Edward Mann"
+            )
+            {
+                let object = allUsers[i];
+
+                const track1 = ["_1_1", "_1_2", "_1_3", "_1_4", "_1_5", "_1_6", "_1_7", "_1_8", "_1_9", "_1_10", "_1_11", "_1_12", "_1_13", "_1_14", "_1_15", "_1_16"];
+                const track2 = ["_2_1", "_2_2", "_2_3", "_2_4", "_2_5", "_2_6", "_2_7", "_2_8", "_2_9", "_2_10", "_2_11"];
+                const track3 = ["_3_1", "_3_2", "_3_3", "_3_4", "_3_5", "_3_6", "_3_7", "_3_8", "_3_9", "_3_10"];
+    
+                let values1 = track1.map(key => object[key]);
+                let values2 = track2.map(key => object[key]);
+                let values3 = track3.map(key => object[key]);
+    
+                value1Total = 0;
+                for (let i = 0; i < values1.length; i++)
+                {
+                    for (let j = 0; j < values1[i].length; j++)
+                    {
+                        if (values1[i][j] !== "")
+                        {
+                            if (values1[i][j].split('_')[2] !== "NaN" && values1[i][j].split('_')[2] !== "Infinity")
+                            {
+                                value1Total += Number(values1[i][j].split('_')[2]);
+                            }
+                        }
+                    }
+                }
+    
+                value2Total = 0;
+                for (let i = 0; i < values2.length; i++)
+                {
+                    for (let j = 0; j < values2[i].length; j++)
+                    {
+                        if (values2[i][j] !== "")
+                        {
+                            if (values2[i][j].split('_')[2] !== "NaN" && values2[i][j].split('_')[2] !== "Infinity")
+                            {
+                                value2Total += Number(values2[i][j].split('_')[2]);
+                            }
+                        }
+                    }
+                }
+    
+                value3Total = 0;
+                for (let i = 0; i < values3.length; i++)
+                {
+                    for (let j = 0; j < values3[i].length; j++)
+                    {
+                        if (values3[i][j] !== "")
+                        {
+                            if (values3[i][j].split('_')[2] !== "NaN" && values3[i][j].split('_')[2] !== "Infinity")
+                            {
+                                value3Total += Number(values3[i][j].split('_')[2]);
+                            }
+                        }
+                    }
+                }
+                const clientValue = [object.name, (value1Total/183 * 100).toFixed(2), (value2Total/61 * 100).toFixed(2), (value3Total/59 * 100).toFixed(2)];
+                totalValueArray.push(clientValue)
+            }
+        }
+        res.status(200).json(totalValueArray);
+    }
+    catch (error)
+    {
+        console.log("Error in getProgress controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// finds average lesson progress for each lesson
+app.get("/getLessonProgress", async (res) =>
+{
+    try
+    {
+        const allUsers = await userCollection.find({ trackMod: { $exists: false } });
+        let totalValueArray = [];
+
+        for (let i = 0; i < allUsers.length; i++)
+        {
+            if (allUsers[i].name !== 
+                "Micah Bessolo" && allUsers[i].name !== "Dani Rod"
+                && allUsers[i].name !== "Stephen Jiroch" && allUsers[i].name !== "test sixteen"
+                && allUsers[i].name !== "Lotte Leers" && allUsers[i].name !== "Jill Langley"
+                && allUsers[i].name !== "Jonah Magness" && allUsers[i].name !== "Danielle Rodr"
+                && allUsers[i].name !== "Dani R" && allUsers[i].name !== "D Rod"
+                && allUsers[i].name !== "Dani R" && allUsers[i].name !== "Dani Rodriguez"
+                && allUsers[i].name !== "Noam Koren" && allUsers[i].name !== "Stephen"
+                && allUsers[i].name !== "Testing Tester" && allUsers[i].name !== "Edward Mann"
+            )
+            {
+                let object = allUsers[i];
+
+                const track1 = ["_1_1", "_1_2", "_1_3", "_1_4", "_1_5", "_1_6", "_1_7", "_1_8", "_1_9", "_1_10", "_1_11", "_1_12", "_1_13", "_1_14", "_1_15", "_1_16"];
+                const track2 = ["_2_1", "_2_2", "_2_3", "_2_4", "_2_5", "_2_6", "_2_7", "_2_8", "_2_9", "_2_10", "_2_11"];
+                const track3 = ["_3_1", "_3_2", "_3_3", "_3_4", "_3_5", "_3_6", "_3_7", "_3_8", "_3_9", "_3_10"];
+    
+                let values1 = track1.map(key => object[key]);
+                let values2 = track2.map(key => object[key]);
+                let values3 = track3.map(key => object[key]);
+
+                let value1Array = [];
+                let value2Array = [];
+                let value3Array = [];
+
+                processTrack(values1, track1, value1Array);
+                processTrack(values2, track2, value2Array);
+                processTrack(values3, track3, value3Array);
+
+                totalValueArray.push(value1Array);
+                totalValueArray.push(value2Array);
+                totalValueArray.push(value3Array);
+            }
+        }
+
+        const averageProgressArray = calculateAverageProgress(totalValueArray);
+        res.status(200).json(averageProgressArray);
+    }
+    catch (error)
+    {
+        console.log("Error in getProgress controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+function processTrack(values, track, valueArray)
+{
+    for (let i = 0; i < values.length; i++)
+    {
+        for (let j = 0; j < values[i].length; j++)
+        {
+            let valueObject = {};
+
+            if (values[i][j] !== "")
+            {
+                if (values[i][j].split('_')[2] !== "NaN" && values[i][j].split('_')[2] !== "Infinity" && values[i][j].split('_')[2] !== null)
+                {
+                    let trackValue = track[i].split('_')[1];
+                    let moduleValue = track[i].split('_')[2];
+                    valueObject.lesson = `track: ${trackValue} module: ${moduleValue} lesson: ${Number(j) + 1}`;
+                    valueObject.progress = Number(values[i][j].split('_')[2]);
+                }
+            }
+            else
+            {
+                if (values[i][j].split('_')[2] !== "NaN" && values[i][j].split('_')[2] !== "Infinity" && values[i][j].split('_')[2] !== null)
+                {
+                    let trackValue = track[i].split('_')[1];
+                    let moduleValue = track[i].split('_')[2];
+                    valueObject.lesson = `track: ${trackValue} module: ${moduleValue} lesson: ${Number(j) + 1}`;
+                    valueObject.progress = 0;
+                }
+            }
+            if (valueObject.progress !== null && valueObject.progress !== undefined)
+            {
+                valueArray.push(valueObject);
+            }
+        }
+    }
+}
+
+function calculateAverageProgress(totalValueArray)
+{
+    // Flatten the array of arrays into a single array
+    const flattenedArray = totalValueArray.flat();
+
+    // Create a map to group by lesson
+    const lessonMap = new Map();
+
+    flattenedArray.forEach(item => {
+        const { lesson, progress } = item;
+        if (!lessonMap.has(lesson)) {
+            lessonMap.set(lesson, { totalProgress: 0, count: 0 });
+        }
+        const lessonData = lessonMap.get(lesson);
+        lessonData.totalProgress += progress;
+        lessonData.count += 1;
+    });
+
+    // Create the result array with average progress
+    const resultArray = [];
+    lessonMap.forEach((value, key) =>
+    {
+        resultArray.push({
+            lesson: key,
+            progress: value.totalProgress / value.count
+        });
+    });
+
+    // Sort the result array by progress in descending order
+    resultArray.sort((a, b) => b.progress - a.progress);
+
+    return resultArray;
+}
+
 app.get("/name/:id", async (req, res) =>
 {
     try
@@ -1083,10 +1422,10 @@ app.delete("/:id", checkAuthenticated, async (req, res) =>
 {
     try
     {
-        const post = await postsCollection.findById(req.params.id);
+		const post = await postsCollection.findById(req.params.id);
         const user = await userCollection.findById(req.user._conditions._id);
 
-        if (post.user.toString() !== req.user._conditions._id.toString() && !user.admin)
+		if (post.user.toString() !== req.user._conditions._id.toString() && !user.admin)
         {
             return res.status(401).json({ error: "You are not authorized to delete this post" });
         }
@@ -1251,6 +1590,146 @@ app.get("/posts-by-search/:searchInput", checkAuthenticated, async (req, res) =>
     }
 });
 
+// Pin post
+app.get("/pin/:id", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const post = await postsCollection.findById(req.params.id);
+        if (!post) return res.status(404).json({ error: "Post not found" });
+
+        const user = await userCollection.findById(req.user._conditions._id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user.admin) return res.status(401).json({ error: "You are not authorized to pin this post" });
+
+        post.pin = !post.pin;
+        await post.save();
+
+        res.status(200).json(post.pin);
+    }
+    catch (error)
+    {
+        console.log("Error in pinPost controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// add post to guides
+app.get("/guide/:id", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const post = await postsCollection.findById(req.params.id);
+        if (!post) return res.status(404).json({ error: "Post not found" });
+
+        const user = await userCollection.findById(req.user._conditions._id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user.admin) return res.status(401).json({ error: "You are not authorized to add this post" });
+
+        post.resource = !post.resource;
+        await post.save();
+
+        res.status(200).json(post.resource);
+    }
+    catch (error)
+    {
+        console.log("Error in guides controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// add post to guides
+app.get("/guides", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const guides = await postsCollection.find({ resource: true }).sort({ createdAt: -1 });
+        res.status(200).json(guides);
+    }
+    catch (error)
+    {
+        res.status(500).json({ error: "Internal server error" });
+        console.log("Error in /guides route: ", error);
+    }
+});
+
+app.get("/user-array/:username", checkAuthenticated, async (req, res) =>
+{
+    try
+    {
+        const username = req.params.username;
+        user = await userCollection.find({ name: { $regex: username, $options: 'i' } });
+        
+        const userLength = user.length
+        let userResult = [];
+
+        if (userLength > 0)
+        {
+            for (let i = 0; i < userLength; i++)
+            {
+                let userObject = {};
+                userObject.name = user[i].name;
+                userObject.profileImg = user[i].profileImg;
+                userResult.push(userObject);
+            }
+        }
+
+        res.status(200).json(userResult);
+    }
+    catch (error)
+    {
+		console.log("Error in getUserPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+app.get("/posts-by-date-range/:dateRange", checkAuthenticated, async (req, res) => 
+{
+    try
+    {
+        const dateRange = req.params.dateRange;
+        const [startDateStr, endDateStr] = dateRange.split(' - ');
+        const startDate = new Date(startDateStr);
+        const endDate = new Date(endDateStr);
+
+        const posts = await postsCollection.find({
+            createdAt: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json(posts);
+    }
+    catch (error)
+    {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// get posts by search input
+app.get("/posts-by-search/:searchInput", checkAuthenticated, async (req, res) => 
+{
+    try
+    {
+        const searchInput = req.params.searchInput;
+        const posts = await postsCollection.find({
+            $or: [
+                { text: { $regex: searchInput, $options: 'i' } },
+                { pdfName: { $regex: searchInput, $options: 'i' } }
+            ]
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json(posts);
+    }
+    catch (error)
+    {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 // Get user posts
 app.get("/user/:username", checkAuthenticated, async (req, res) =>
 {
@@ -1258,7 +1737,7 @@ app.get("/user/:username", checkAuthenticated, async (req, res) =>
     {
         const username = req.params.username;
 
-        let user = await userCollection.findOne({ name: username });
+		let user = await userCollection.findOne({ name: username });
 
         if (!user) return res.status(404).json({ error: "User not found" });
 

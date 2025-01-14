@@ -2,11 +2,11 @@ const userCollections = require('../models/user-collection');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const mailgun = require("mailgun-js");
-// const DOMAIN = 'sandboxce966cd0186342eba02597c12a52c3d0.mailgun.org';
 const DOMAIN = 'mg.thecreatorpassport.com';
 const bcrypt = require('bcrypt');
 const axios = require('axios').default;
 const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
+
 
 // sends forgot-password email with link including token
 exports.forgotPassword = async (req, res) =>
