@@ -315,51 +315,11 @@ progress::-moz-progress-bar {
   display: flex; 
   flex-direction: row; 
   justify-content: space-between; 
-  flex-wrap: nowrap;
-  width: 520px;
-}
-
-.menu-options div
-{
-  padding: 0 10px 10px 10px;
-}
-
-@media (max-width: 600px)
-{
-  .menu-options
-  {
-    display: flex; 
-    flex-direction: row; 
-    justify-content: space-between; 
-    flex-wrap: wrap;
-    width: 90%;
-  }
-}
-
-.menu-options
-{
-  display: flex; 
-  flex-direction: row; 
-  justify-content: space-between; 
-  flex-wrap: nowrap;
-  width: 520px;
-}
-
-.menu-options div
-{
-  padding: 0 10px 10px 10px;
-}
-
-@media (max-width: 600px)
-{
-  .menu-options
-  {
-    display: flex; 
-    flex-direction: row; 
-    justify-content: space-between; 
-    flex-wrap: wrap;
-    width: 90%;
-  }
+  flex-wrap: wrap;
+  width: fit-content;
+  column-gap: 15px;
+  row-gap: 15px;
+  max-width: 90%;
 }
 
 .header-options
@@ -367,7 +327,6 @@ progress::-moz-progress-bar {
   color: #FFFFFF; 
   font-size: 20px; 
   letter-spacing: 1px;
-  white-space: nowrap;
   white-space: nowrap;
 }
 .header-options:hover

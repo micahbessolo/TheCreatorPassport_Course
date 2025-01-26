@@ -115,3 +115,12 @@ progress::-webkit-progress-value
     white-space: normal !important;
     font-size: 18px !important;
 }
+.play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px; /* Adjust size as needed */
+    color: white; /* Adjust color as needed */
+    pointer-events: none; /* Ensure the icon doesn't interfere with clicking the image */
+}

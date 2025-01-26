@@ -75,6 +75,14 @@ async function topNav(req)
                 <div class="adjustable-text" style="color: #649399; text-decoration: underline !important;">Course</div>
             </div>`;
             break;
+        case 'admin':
+            breadCrumb =
+            `<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap;">
+                <div><a class="dashboard-link" style="color: #FFFFFF;" href="/">Dashboard</a></div>
+                <div class="adjustable-padding" style="color: white;"><i class="fa-solid fa-chevron-right"></i></div>
+                <div id="tracks" style="color: #649399; text-decoration: underline !important;">Admin</div>
+            </div>`;
+            break;
     }
 
     if (profileImg)

@@ -14,6 +14,7 @@
 </head>
 <body>
     <div>
+        <input id="_1_0" class="resumeVideo" style="display: none;" value="<%= _1_0 %>" />
         <input id="_1_1" class="resumeVideo" style="display: none;" value="<%= _1_1 %>" />
         <input id="_1_2" class="resumeVideo" style="display: none;" value="<%= _1_2 %>" />
         <input id="_1_3" class="resumeVideo" style="display: none;" value="<%= _1_3 %>" />
@@ -105,7 +106,25 @@
                 </div>
 
                 <div class="track-cards-container">
-
+                    <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
+                        <div style="padding: 15px; width: 330px;">
+                            <div style="height: 310px; margin-bottom: 15px;">
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <div><h5>Module 0</h5></div>
+                                    <div class="completed_1_0"></div>
+                                </div>
+                                <h3 style="height: 100px;">
+                                    Watch this before Starting Track 1
+                                </h3>
+                                <a href="/course?module=1-0-0" style="display: flex; flex-direction: row; justify-content: center; position: relative; cursor: pointer;">
+                                    <img src="../assets/images/1-0-1.png" style="width: 300px; height: auto;" />
+                                    <div class="play-icon">
+                                        &#9658; <!-- Unicode character for play icon -->
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div> 
                     <div style="max-width: 345px; max-height: 560px; background: #f7f6f2; border-radius: 12px; margin-bottom: 20px; margin-left: 15px; margin-right: 15px;;">
                         <div style="padding: 15px; width: 330px;">
                             <div style="height: 310px; margin-bottom: 15px;">
@@ -788,7 +807,7 @@
 
     document.title = "Track 1";
 
-    let allModArray = ["_1_1","_1_2","_1_3","_1_4","_1_5","_1_6","_1_7","_1_8","_1_9","_1_10","_1_11","_1_12","_1_13","_1_14","_1_15","_1_16"];
+    let allModArray = ["_1_0","_1_1","_1_2","_1_3","_1_4","_1_5","_1_6","_1_7","_1_8","_1_9","_1_10","_1_11","_1_12","_1_13","_1_14","_1_15","_1_16"];
 
     const allModLength = allModArray.length;
     let totalViewed = 0;
@@ -819,7 +838,11 @@
                         <i class="fa-solid fa-check" style="padding-right: 15px; color: green;"></i>
                     </div>`;
 
-                    moduleElement.getElementsByTagName('li')[j].appendChild(node);
+                    if (typeof moduleElement !== "undefined")
+                    {
+                        moduleElement.getElementsByTagName('li')[j].appendChild(node);
+                    }
+                   
                     totalViewed += 1;
                     completeCount +=1;
                 }

@@ -193,7 +193,7 @@ const UserSchema = new mongoose.Schema({
         default: false
     }
     
-}, {timestamps: true});
+}, {timestamps: true,  strict: false });
 
 const userCollections = mongoose.model("logincollections", UserSchema);
 

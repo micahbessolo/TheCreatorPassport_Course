@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <title>Course</title>
+	<link rel="icon" type="image/x-icon" href="../assets/images/creatorPassportIcon.ico">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+	<link rel="stylesheet" href="https://use.typekit.net/djz3fym.css">
+	<link rel="stylesheet" type="text/css" href="./assets/CSS/topnav.css" />
+	<script type="text/javascript" src="assets/JS/topnav.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <style>
+        #delete-email-return, #add-account-return, #send-email-return, #search-account-return, #update-email-return 
+        {
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+        .hidden
+        {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+	<div id="wrapper"  style="z-index: 1; position: relative;">
+		<!--topnav-->
+        <div id="topNavWrapper" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
+            <!--loaded from backend-->
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-top: 100px;">
+            <div>
+                <h1>Admin functions</h1>
+                <div style="margin-top: 20px;">
+                    <label>Search Accounts</label> <br />
+                    <input id="search-email" placeholder="email" required autocomplete="off" />
+                    <button onclick="findUser();">Search</button>
+                    <div id="search-account-return"></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label>Update Email</label> <br />
+                    <input id="old-email" placeholder="existing email" required autocomplete="off" />
+                    <input id="new-email" placeholder="new email" required autocomplete="off" />
+                    <button onclick="updateEmail();">Update</button>
+                    <div id="update-email-return"></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label>Add Account</label> <br />
+                    <input id="first-name" placeholder="first name" required autocomplete="off" />
+                    <input id="last-name" placeholder="last name" required autocomplete="off" />
+                    <input id="add-email" placeholder="email" required autocomplete="off" />
+                    <button onclick="addUser();">Add</button>
+                    <div id="add-account-return"></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label>Delete Accounts</label> <br />
+                    <input id="delete-email" placeholder="email" required autocomplete="off" />
+                    <button onclick="showDeleteModal();">Delete</button>
+                    <div id="delete-email-return"></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label>Send first time email</label> <br />
+                    <input id="send-email" placeholder="email" autocomplete="off" />
+                    <button onclick="sendEmail();">Send</button>
+                    <div id="send-email-return"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--delete confirmation modal-->
+    <div class="modal fade" id="deleteConfirmation" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+            <!--- Modal content --->
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none;">
+                    <div id="profileAndUser"></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="background-color: #FFFFFF;">
+                    <div style="font-family: 'Roboto', sans-serif;">Are you sure you want to delete this user?</div>
+                    <div style="display: flex; justify-content: center; margin-top: 25px;">
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; width: 300px;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" onclick="confirmDeleteUser();">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<script type="text/javascript" src="assets/JS/topnav.js"></script>
+
+	<script type="text/javascript">
+		topNav('admin');
+
+        function showDeleteModal()
+        {
+            $('#deleteConfirmation').modal('show');
+        }
+
+        function hideDeleteModal()
+        {
+            $('#deleteConfirmation').modal('hide');
+        }
+
+        function confirmDeleteUser()
+        {
+            hideDeleteModal();
+            deleteUser();
+        }
+
+        function findUser()
+        {
+            let email = document.getElementById('search-email').value;
+
+            $.ajax({
+                url: `/find-user-by-email/${email}`,
+                type: 'GET',
+                async: false,
+                success: function(data)
+                {
+                    showReturnMessage(`${data.name}`, `search-account-return`);
+                    document.getElementById('search-email').value = '';
+                },
+                error: function(error)
+                {
+                    showReturnMessage(`Error: ${error.responseText}`, `search-account-return`);
+                    document.getElementById('search-email').value = '';
+                }
+            });
+        }
+
+        function updateEmail()
+        {
+            let oldEmail = document.getElementById('old-email').value;
+            let newEmail = document.getElementById('new-email').value;
+
+            $.ajax({
+                url: `/update-email/${oldEmail}/${newEmail}`,
+                type: 'GET',
+                async: false,
+                success: function(data)
+                {
+                    showReturnMessage(`email updated from ${oldEmail} to ${newEmail}`, `update-email-return`);
+                    document.getElementById('old-email').value = '';
+                    document.getElementById('new-email').value = '';
+                },
+                error: function(error)
+                {
+                    showReturnMessage(`Error: ${error.responseText}`, `update-email-return`);
+                    document.getElementById('old-email').value = '';
+                    document.getElementById('new-email').value = '';
+                }
+            });
+        }
+
+        function addUser()
+        {
+            let firstName = document.getElementById('first-name').value;
+            let lastName = document.getElementById('last-name').value;
+            let email = document.getElementById('add-email').value;
+
+            $.ajax({
+                url: `/add-user/${firstName}/${lastName}/${email}`,
+                type: 'POST',
+                async: false,
+                success: function(data)
+                {
+                    showReturnMessage('Account added successfully!', 'add-account-return');
+                    document.getElementById('first-name').value = '';
+                    document.getElementById('last-name').value = '';
+                    document.getElementById('add-email').value = '';
+                },
+                error: function(error)
+                {
+                    showReturnMessage(`Error: ${error.responseText}`, 'add-account-return');
+                    document.getElementById('first-name').value = '';
+                    document.getElementById('last-name').value = '';
+                    document.getElementById('add-email').value = '';
+                }
+            });
+        }
+
+        function deleteUser()
+        {
+            let email = document.getElementById('delete-email').value;
+
+            $.ajax({
+                url: `/delete-user-by-email/${email}`,
+                type: 'DELETE',
+                async: false,
+                success: function(data)
+                {
+                    showReturnMessage('Account deleted successfully!', 'delete-email-return');
+                    document.getElementById('delete-email').value = '';
+                },
+                error: function(error)
+                {
+                    showReturnMessage(`Error, didn't work :/ ${error.responseText}`, 'delete-email-return');
+                    document.getElementById('delete-email').value = '';
+                }
+            });
+        }
+
+        function sendEmail()
+        {
+            let email = document.getElementById('send-email').value;
+
+            $.ajax({
+                url: `/send-first-time-email/${email}`,
+                type: 'GET',
+                async: false,
+                success: function(data)
+                {
+                    showReturnMessage('Email sent succesfully', 'send-email-return');
+                    document.getElementById('send-email').value = '';
+                },
+                error: function(error)
+                {
+                    showReturnMessage(`Error, didn't work :/ ${error.responseText}`, 'send-email-return');
+                    document.getElementById('send-email').value = '';
+                }
+            });
+        }
+
+        function showReturnMessage(text, elementId)
+        {
+            const messageElement = document.getElementById(elementId);
+            messageElement.innerText = text;
+            messageElement.style.display = 'block';
+
+            setTimeout(() =>
+            {
+                messageElement.classList.add('hidden');
+            }, 5000); // Wait for 5 seconds
+
+            setTimeout(() =>
+            {
+                messageElement.style.display = 'none';
+                messageElement.classList.remove('hidden');
+            }, 6000); // Wait for 6 seconds to ensure the fade-out transition completes
+        }
+	</script>
+
+</body>
+</html>

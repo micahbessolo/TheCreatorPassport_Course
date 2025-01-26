@@ -17,6 +17,7 @@
 <body style="background-color: #36454F;">
     <div>
         <input class="likedVideoList" style="display: none;" value="<%= likedVideos %>" />
+        <input id="_1_0" class="resumeVideo" style="display: none;" value="<%= _1_0 %>" />
         <input id="_1_1" class="resumeVideo" style="display: none;" value="<%= _1_1 %>" />
         <input id="_1_2" class="resumeVideo" style="display: none;" value="<%= _1_2 %>" />
         <input id="_1_3" class="resumeVideo" style="display: none;" value="<%= _1_3 %>" />
@@ -174,9 +175,20 @@
         let isLiked = false;
         let returnObject = {};
 
+        let lessonNumber;
+        if (Number(module.split("-")[2]) === 0)
+        {
+            lessonNumber = 1;
+        }
+        else
+        {
+            lessonNumber = Number(module.split("-")[2]);
+        }
+
         // Helps get next/previous videos when it is a last/first video of a module
         // track 1
         allVidArray1 = [
+            "1-0-0",
             "1-1-1","1-1-2","1-1-3","1-1-4","1-1-5","1-1-6","1-1-7","1-1-8","1-1-9","1-1-10","1-1-11","1-1-12","1-1-13","1-1-14",
             "1-2-1","1-2-2","1-2-3","1-2-4","1-2-5","1-2-6","1-2-7","1-2-8","1-2-9","1-2-10","1-2-11","1-2-12","1-2-13","1-2-14","1-2-15","1-2-16","1-2-17",
             "1-3-1","1-3-2","1-3-3","1-3-4","1-3-5","1-3-6","1-3-7","1-3-8","1-3-9","1-3-10",
@@ -275,9 +287,9 @@
         {
             // gets start time
             let startPoint;
-            let currentLessonData = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[Number(module.split("-")[2]) - 1];
+            let currentLessonData = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[lessonNumber - 1];
 
-            if (currentLessonData === 0 || currentLessonData === "" || currentLessonData === "NaN_undefined_NaN")
+            if (currentLessonData === 0 || currentLessonData === "" || currentLessonData === "NaN_undefined_NaN" || typeof currentLessonData === 'undefined')
             {
                 startPoint = 0;
             }
@@ -292,7 +304,7 @@
                 {
                     height: '100%',
                     width: '100%',
-                    videoId: returnObject.links[Number(module.split("-")[2]) - 1],
+                    videoId: returnObject.links[lessonNumber - 1],
                     playerVars:
                     {
                         'playsinline': 1,
@@ -405,7 +417,12 @@
         // styling including image, title, and link for next lesson, active lesson on sidenav, copy
         function pageStyling(titles, copy)
         {
-            const URLSection = Number(module.split('-')[2]);
+            let URLSection = Number(module.split('-')[2]);
+
+            if (URLSection === 0)
+            {
+                URLSection = 1;
+            }
 
             if (titles)
             {
@@ -496,7 +513,7 @@
                     document.getElementById('back-button').addEventListener('click', function(){postState(); location.href = `./course?module=${previousLesson}`;});
                 }
 
-                let videoDescription = copy[Number(module.split('-')[2]) - 1];
+                let videoDescription = copy[URLSection - 1];
 
 
                 document.getElementById('currentLessonTitle').innerText = titles[URLSection - 1];
@@ -567,13 +584,13 @@
                     </a>`;
                 }
 
-                if (returnObject.resources[Number(module.split('-')[2]) - 1].length > 0)
+                if (typeof returnObject.resources[URLSection - 1] !== 'undefined' && returnObject.resources[URLSection - 1].length > 0)
                 {
-                    if (returnObject.resources[Number(module.split('-')[2]) - 1].includes(';'))
+                    if (returnObject.resources[URLSection - 1].includes(';'))
                     {
-                        const resourceArray = returnObject.resources[Number(module.split('-')[2]) - 1].split(';');
+                        const resourceArray = returnObject.resources[URLSection - 1].split(';');
 
-                        for (let i = 1; i < resourceArray.length; i++)
+                        for (let i = 0; i < resourceArray.length; i++)
                         {
                             if (resourceArray[i].includes('--')) // this splits the link the title is 0 and the link is 1
                             {
@@ -597,7 +614,7 @@
                     }
                     else
                     {
-                        const lessonResources = returnObject.resources[Number(module.split('-')[2]) - 1]
+                        const lessonResources = returnObject.resources[URLSection - 1]
                         if (lessonResources.includes('--')) // this splits the link the title is 0 and the link is 1
                         {
                             resourcesHTML +=
@@ -609,11 +626,12 @@
                         }
                         else
                         {
+                            console.log(lessonResources)
                             resourcesHTML +=
                             `<a id="download${0}" href="../assets/resources/${lessonResources.replaceAll(' ', '_')}.pdf"
                             target="_blank" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;">
                                 <div><i class="fa-regular fa-file-pdf" style="color: #e23002; font-size: 1.2rem;"></i></div>
-                                <div style="margin-left:6px;">${lessonResources.resources}</div>
+                                <div style="margin-left:6px;">${lessonResources}</div>
                             </a>`;
                         }
                     }
@@ -624,8 +642,17 @@
 
         function markAsCompleteButton()
         {
-            const lessonStatus = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[Number(module.split("-")[2]) - 1];
-            const percentComplete = lessonStatus.split('_')[2];
+            const lessonStatus = document.getElementById(`_${module.split("-")[0]}_${module.split("-")[1]}`).value.split(",")[lessonNumber - 1];
+            
+            let percentComplete;
+            if (typeof lessonStatus != 'undefined')
+            {
+                percentComplete = lessonStatus.split('_')[2];
+            }
+            else
+            {
+                percentComplete = 0
+            }
             
             if (Number(percentComplete) >= .95)
             {

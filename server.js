@@ -147,28 +147,723 @@ app.get('/', checkAuthenticated, async (req, res) =>
     });
 });
 
-// for adding an admin
-app.get('/add-admin-privileges', async (req, res) =>
-    {
+app.get('/admin-page', checkAuthenticated, async (req, res) =>
+{
+    res.render('admin.ejs');
+});
+
+app.get('/find-user-by-email/:email', checkAuthenticated, async (req, res) =>
+{
+    const email = req.params.email;
+    const userId = req.user._conditions._id.toString();
+
     try
     {
-        await userCollection.updateMany({}, { $set: { admin: false } });
+        // Verify that the person calling the function is an admin
+        const adminUser = await userCollection.findOne({ _id: userId, admin: true });
+        if (!adminUser)
+        {
+            return res.status(403).send('Access denied. Admin privileges required.');
+        }
 
-        const adminEmails = [
-            'mbessolo@westmont.edu',
-            'ryanleebanksmedia@gmail.com',
-            'dani@theloverspassport.com',
-            'dreamwithlo@gmail.com',
-            'maggie@theloverspassport.com',
-            'thecreatorpassport@gmail.com'
-        ];
-        await userCollection.updateMany({ email: { $in: adminEmails } }, { $set: { admin: true } });
+        // Search for the user by email
+        const user = await userCollection.findOne({ email: email });
+        if (!user)
+        {
+            return res.status(404).send('User not found.');
+        }
 
-        res.send('Admin privileges updated successfully');
-    } 
-    catch (err) 
+        // Return the user's name
+        res.status(200).json({ name: user.name });
+    }
+    catch (err)
     {
-        res.status(500).send('Error updating admin privileges: ' + err);
+        res.status(500).send('Error finding user: ' + err);
+    }
+});
+
+app.delete('/delete-user-by-email/:email', checkAuthenticated, async (req, res) =>
+{
+    const email = req.params.email;
+    const userId = req.user._conditions._id.toString();
+
+    try
+    {
+        const adminUser = await userCollection.findOne({ _id: userId, admin: true });
+        if (!adminUser)
+        {
+            return res.status(403).send('Access denied. Admin privileges required.');
+        }
+
+        // Delete the user by email
+        const result = await userCollection.deleteOne({ email: email });
+        if (result.deletedCount === 0)
+        {
+            return res.status(404).send('User not found.');
+        }
+
+        // Return success message
+        res.status(200).send('User deleted successfully.');
+    }
+    catch (err)
+    {
+        res.status(500).send('Error deleting user: ' + err);
+    }
+});
+
+app.get('/update-email/:oldEmail/:newEmail', checkAuthenticated, async (req, res) =>
+{
+    const oldEmail = req.params.oldEmail;
+    const newEmail = req.params.newEmail;
+    const userId = req.user._conditions._id.toString();
+
+    try
+    {
+        const adminUser = await userCollection.findOne({ _id: userId, admin: true });
+        if (!adminUser)
+        {
+            return res.status(403).send('Access denied. Admin privileges required.');
+        }
+
+        const result = await userCollection.findOneAndUpdate(
+            { email: oldEmail },
+            { $set: { email: newEmail } },
+            { new: true }
+        );
+
+        if (!result)
+        {
+            return res.status(404).send('User not found.');
+        }
+
+        res.status(200).send('Email updated successfully.');
+    }
+    catch (err)
+    {
+        console.log("Error updating email: " + err);
+        res.status(500).send('An error occurred while updating the email.');
+    }
+});
+
+app.post('/add-user/:firstName/:lastName/:email', checkAuthenticated, async (req, res) =>
+{
+    const { firstName, lastName, email } = req.params;
+    const userId = req.user._conditions._id.toString();
+    const fullName = `${firstName} ${lastName}`;
+
+    try
+    {
+        const adminUser = await userCollection.findOne({ _id: userId, admin: true });
+        if (!adminUser)
+        {
+            return res.status(403).send('Access denied. Admin privileges required.');
+        }
+
+        // Check if any document in userCollection has a matching email
+        const existingUser = await userCollection.findOne({ email: email });
+        if (existingUser)
+        {
+            return res.status(400).send('User with this email already exists.');
+        }
+
+
+        // Create a new document with the combined first name and last name and the email
+        const newUser =
+        {
+            password: 'temporaryPassword123',
+            name: fullName,
+            email: email,
+            createdDate: new Date().toISOString()
+        };
+        await userCollection.create(newUser);
+
+        // Return success message
+        res.status(201).send('User created successfully.');
+    }
+    catch (err)
+    {
+        res.status(500).send('Error creating user: ' + err);
+    }
+});
+
+app.get('/send-first-time-email/:email', checkAuthenticated, async (req, res) => 
+{
+    const email = req.params.email;
+    const userId = req.user._conditions._id.toString();
+
+    try
+    {
+        const adminUser = await userCollection.findOne({ _id: userId, admin: true });
+        if (!adminUser)
+        {
+            return res.status(403).send('Access denied. Admin privileges required.');
+        }
+
+        await userCollection.findOne({email: email}).then((user, err) =>
+        {
+            if (err || !user)
+            {
+                return res.render('forgot-password.ejs', { messages: 'No user with that email' });
+            }
+            userName = user.name;
+    
+            const token = jwt.sign({_id: user._id}, process.env.RESET_PASSWORD_KEY, {expiresIn: '20m'});
+    
+            const data =
+            {
+                from: 'noreply@theloverspassport.com',
+                to: email,
+                subject: 'Password Reset',
+                html:
+                `<html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <meta name="x-apple-disable-message-reformatting" />
+                    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                    <meta name="color-scheme" content="light dark" />
+                    <meta name="supported-color-schemes" content="light dark" />
+                    <title></title>
+                    <style type="text/css" rel="stylesheet" media="all">
+                    
+                    @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700&display=swap");
+                    body {
+                    width: 100% !important;
+                    height: 100%;
+                    margin: 0;
+                    -webkit-text-size-adjust: none;
+                    }
+                    
+                    a {
+                    color: #3869D4;
+                    }
+                    
+                    a img {
+                    border: none;
+                    }
+                    
+                    td {
+                    word-break: break-word;
+                    }
+                    
+                    .preheader {
+                    display: none !important;
+                    visibility: hidden;
+                    mso-hide: all;
+                    font-size: 1px;
+                    line-height: 1px;
+                    max-height: 0;
+                    max-width: 0;
+                    opacity: 0;
+                    overflow: hidden;
+                    }
+                    /* Type ------------------------------ */
+                    
+                    body,
+                    td,
+                    th {
+                    font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+                    }
+                    
+                    h1 {
+                    margin-top: 0;
+                    color: #333333;
+                    font-size: 22px;
+                    font-weight: bold;
+                    text-align: left;
+                    }
+                    
+                    h2 {
+                    margin-top: 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: left;
+                    }
+                    
+                    h3 {
+                    margin-top: 0;
+                    color: #333333;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-align: left;
+                    }
+                    
+                    td,
+                    th {
+                    font-size: 16px;
+                    }
+                    
+                    p,
+                    ul,
+                    ol,
+                    blockquote {
+                    margin: .4em 0 1.1875em;
+                    font-size: 16px;
+                    line-height: 1.625;
+                    }
+                    
+                    p.sub {
+                    font-size: 13px;
+                    }
+                    /* Utilities ------------------------------ */
+                    
+                    .align-right {
+                    text-align: right;
+                    }
+                    
+                    .align-left {
+                    text-align: left;
+                    }
+                    
+                    .align-center {
+                    text-align: center;
+                    }
+                    
+                    .u-margin-bottom-none {
+                    margin-bottom: 0;
+                    }
+                    /* Buttons ------------------------------ */
+                    
+                    .button {
+                    background-color: #3869D4;
+                    border-top: 10px solid #3869D4;
+                    border-right: 18px solid #3869D4;
+                    border-bottom: 10px solid #3869D4;
+                    border-left: 18px solid #3869D4;
+                    display: inline-block;
+                    color: #FFF;
+                    text-decoration: none;
+                    border-radius: 3px;
+                    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16);
+                    -webkit-text-size-adjust: none;
+                    box-sizing: border-box;
+                    }
+                    
+                    .button--green {
+                    background-color: #22bc66;
+                    color: white;
+                    border-top: 10px solid #22BC66;
+                    border-right: 18px solid #22BC66;
+                    border-bottom: 10px solid #22BC66;
+                    border-left: 18px solid #22BC66;
+                    }
+                    
+                    .button--red {
+                    background-color: #FF6136;
+                    border-top: 10px solid #FF6136;
+                    border-right: 18px solid #FF6136;
+                    border-bottom: 10px solid #FF6136;
+                    border-left: 18px solid #FF6136;
+                    }
+                    
+                    @media only screen and (max-width: 500px) {
+                    .button {
+                        width: 100% !important;
+                        text-align: center !important;
+                    }
+                    }
+                    /* Attribute list ------------------------------ */
+                    
+                    .attributes {
+                    margin: 0 0 21px;
+                    }
+                    
+                    .attributes_content {
+                    background-color: #F4F4F7;
+                    padding: 16px;
+                    }
+                    
+                    .attributes_item {
+                    padding: 0;
+                    }
+                    /* Related Items ------------------------------ */
+                    
+                    .related {
+                    width: 100%;
+                    margin: 0;
+                    padding: 25px 0 0 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    }
+                    
+                    .related_item {
+                    padding: 10px 0;
+                    color: #CBCCCF;
+                    font-size: 15px;
+                    line-height: 18px;
+                    }
+                    
+                    .related_item-title {
+                    display: block;
+                    margin: .5em 0 0;
+                    }
+                    
+                    .related_item-thumb {
+                    display: block;
+                    padding-bottom: 10px;
+                    }
+                    
+                    .related_heading {
+                    border-top: 1px solid #CBCCCF;
+                    text-align: center;
+                    padding: 25px 0 10px;
+                    }
+                    /* Discount Code ------------------------------ */
+                    
+                    .discount {
+                    width: 100%;
+                    margin: 0;
+                    padding: 24px;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    background-color: #F4F4F7;
+                    border: 2px dashed #CBCCCF;
+                    }
+                    
+                    .discount_heading {
+                    text-align: center;
+                    }
+                    
+                    .discount_body {
+                    text-align: center;
+                    font-size: 15px;
+                    }
+                    /* Social Icons ------------------------------ */
+                    
+                    .social {
+                    width: auto;
+                    }
+                    
+                    .social td {
+                    padding: 0;
+                    width: auto;
+                    }
+                    
+                    .social_icon {
+                    height: 20px;
+                    margin: 0 8px 10px 8px;
+                    padding: 0;
+                    }
+                    /* Data table ------------------------------ */
+                    
+                    .purchase {
+                    width: 100%;
+                    margin: 0;
+                    padding: 35px 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    }
+                    
+                    .purchase_content {
+                    width: 100%;
+                    margin: 0;
+                    padding: 25px 0 0 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    }
+                    
+                    .purchase_item {
+                    padding: 10px 0;
+                    color: #51545E;
+                    font-size: 15px;
+                    line-height: 18px;
+                    }
+                    
+                    .purchase_heading {
+                    padding-bottom: 8px;
+                    border-bottom: 1px solid #EAEAEC;
+                    }
+                    
+                    .purchase_heading p {
+                    margin: 0;
+                    color: #85878E;
+                    font-size: 12px;
+                    }
+                    
+                    .purchase_footer {
+                    padding-top: 15px;
+                    border-top: 1px solid #EAEAEC;
+                    }
+                    
+                    .purchase_total {
+                    margin: 0;
+                    text-align: right;
+                    font-weight: bold;
+                    color: #333333;
+                    }
+                    
+                    .purchase_total--label {
+                    padding: 0 15px 0 0;
+                    }
+                    
+                    body {
+                    background-color: #F2F4F6;
+                    color: #51545E;
+                    }
+                    
+                    p {
+                    color: #51545E;
+                    }
+                    
+                    .email-wrapper {
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    background-color: #F2F4F6;
+                    }
+                    
+                    .email-content {
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    }
+                    /* Masthead ----------------------- */
+                    
+                    .email-masthead {
+                    padding: 25px 0;
+                    text-align: center;
+                    }
+                    
+                    .email-masthead_logo {
+                    width: 94px;
+                    }
+                    
+                    .email-masthead_name {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #A8AAAF;
+                    text-decoration: none;
+                    text-shadow: 0 1px 0 white;
+                    }
+                    /* Body ------------------------------ */
+                    
+                    .email-body {
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    }
+                    
+                    .email-body_inner {
+                    width: 570px;
+                    margin: 0 auto;
+                    padding: 0;
+                    -premailer-width: 570px;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    background-color: #FFFFFF;
+                    }
+                    
+                    .email-footer {
+                    width: 570px;
+                    margin: 0 auto;
+                    padding: 0;
+                    -premailer-width: 570px;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    text-align: center;
+                    }
+                    
+                    .email-footer p {
+                    color: #A8AAAF;
+                    }
+                    
+                    .body-action {
+                    width: 100%;
+                    margin: 30px auto;
+                    padding: 0;
+                    -premailer-width: 100%;
+                    -premailer-cellpadding: 0;
+                    -premailer-cellspacing: 0;
+                    text-align: center;
+                    }
+                    
+                    .body-sub {
+                    margin-top: 25px;
+                    padding-top: 25px;
+                    border-top: 1px solid #EAEAEC;
+                    }
+                    
+                    .content-cell {
+                    padding: 45px;
+                    }
+                    /*Media Queries ------------------------------ */
+                    
+                    @media only screen and (max-width: 600px) {
+                    .email-body_inner,
+                    .email-footer {
+                        width: 100% !important;
+                    }
+                    }
+                    
+                    @media (prefers-color-scheme: dark) {
+                    body,
+                    .email-body,
+                    .email-body_inner,
+                    .email-content,
+                    .email-wrapper,
+                    .email-masthead,
+                    .email-footer {
+                        background-color: #333333 !important;
+                        color: #FFF !important;
+                    }
+                    p,
+                    ul,
+                    ol,
+                    blockquote,
+                    h1,
+                    h2,
+                    h3,
+                    span,
+                    .purchase_item {
+                        color: #FFF !important;
+                    }
+                    .attributes_content,
+                    .discount {
+                        background-color: #222 !important;
+                    }
+                    .email-masthead_name {
+                        text-shadow: none !important;
+                    }
+                    }
+                    
+                    :root {
+                    color-scheme: light dark;
+                    supported-color-schemes: light dark;
+                    }
+                    </style>
+                    <!--[if mso]>
+                    <style type="text/css">
+                    .f-fallback  {
+                        font-family: Arial, sans-serif;
+                    }
+                    </style>
+                <![endif]-->
+                </head>
+                <body>
+                    <span class="preheader">Use this link to reset your password. The link is only valid for 24 hours.</span>
+                    <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                        <td align="center">
+                        <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                            <td class="email-masthead">
+                                <a href="https://theloverspassport.com/" class="f-fallback email-masthead_name">
+                                The Lovers Passport
+                            </a>
+                            </td>
+                            </tr>
+                            <!-- Email Body -->
+                            <tr>
+                            <td class="email-body" width="570" cellpadding="0" cellspacing="0">
+                                <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                                <!-- Body content -->
+                                <tr>
+                                    <td class="content-cell">
+                                    <div class="f-fallback">
+                                        <h1>Hi ${userName},</h1>
+                                        <p>You recently purchased the Creator Passport course account. Use the button below to create a password. <strong>This password reset is only valid for the next 20 minutes</strong></p>
+                                        <br>
+                                        <p>If 20 minutes have passed and you need a new link, click <a href="https://thecreatorpassport.com/forgot-password" target="_blank" style="text-decoration: underline !important;">here</a></p>
+                                        <!-- Action -->
+                                        <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                        <tr>
+                                            <td align="center">
+                                            <!-- Border based button
+                        https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                                <tr>
+                                                <td align="center">
+                                                    <a href="https://thecreatorpassport.com/reset-password/?access_token=${token}" class="f-fallback button button--green" target="_blank">Create your password</a>
+                                                </td>
+                                                </tr>
+                                            </table>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                        <p>Thanks,
+                                        <br>The Lovers Passport team</p>
+                                        <!-- Sub copy -->
+                                        <table class="body-sub" role="presentation">
+                                        <tr>
+                                            <td>
+                                            <p class="f-fallback sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
+                                            <p class="f-fallback sub">https://thecreatorpassport.com/reset-password/?access_token=${token}</p>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                    </td>
+                                </tr>
+                                </table>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td>
+                                <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                                <tr>
+                                    <td class="content-cell" align="center">
+                                    <p class="f-fallback sub align-center">
+                                        The Lovers Passport LLC
+                                    </p>
+                                    </td>
+                                </tr>
+                                </table>
+                            </td>
+                            </tr>
+                        </table>
+                        </td>
+                    </tr>
+                    </table>
+                </body>
+                </html>
+                `
+            };
+    
+            return user.updateOne({resetLink: token}).then(function(success, err)
+            {
+                if(err)
+                {
+                    return res.json(
+                    {
+                        error: err.message
+                    });
+                }
+                else
+                {
+                    mg.messages().send(data, function(error, body)
+                    {
+                        if(error)
+                        {
+                            return res.json(
+                            {
+                                error: error.message
+                            });
+                        }
+                        return;
+                    });
+                }
+            });
+        });
+
+        // Return success message
+        res.status(201).send('Email sent successfully.');
+    }
+    catch (err)
+    {
+        res.status(500).send('Error sending email: ' + err);
     }
 });
 
@@ -1825,34 +2520,75 @@ app.patch('/video-state:videoState', async (req, res) =>
         const videoDuration = JSON.parse(JSON.stringify(req.body)).videoDuration;
         const URLData = JSON.parse(JSON.stringify(req.body)).URLData;
         const sectionArray = `_${URLData.split('-')[0]}_${URLData.split('-')[1]}`;
-        const Lesson = Number(URLData.split('-')[2]) - 1;
+        let Lesson = Number(URLData.split('-')[2]) - 1;
+        if (Lesson === -1)
+        {
+            Lesson = 0;
+        }
+        let isNewKey = false;
 
-        // video Complete Marked
+        // Ensure sectionArray and Lesson are defined
+        if (!user[sectionArray])
+        {
+            user[sectionArray] = [];
+            isNewKey = true;
+        }
+        if (!user[sectionArray][Lesson])
+        {
+            user[sectionArray][Lesson] = '';
+        }
+
+        // Video Complete Marked
         if (currentTime === videoDuration)
         {
             user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${1}`;
-            await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+
+            if (isNewKey)
+            {
+                await userCollection.findOneAndUpdate(
+                    { email: user.email },
+                    { $set: { [sectionArray]: [user[sectionArray][Lesson]] } },
+                    { new: true }
+                );
+            }
+            else
+            {
+                await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+            }
         }
         else
         {
-            let percentageComplete = Number(currentTime)/Number(videoDuration);
+            let percentageComplete = Number(currentTime) / Number(videoDuration);
             percentageComplete = percentageComplete.toFixed(2);
-            
-            // only updates if the new progress is higher than the initial progress
-            if (user[sectionArray][Lesson] === "" ||
+
+            // Only updates if the new progress is higher than the initial progress
+            if (typeof user[sectionArray][Lesson] === "undefined" || user[sectionArray][Lesson] === "" ||
                 Number(user[sectionArray][Lesson].split('_')[2]) < percentageComplete)
             {
                 user[sectionArray][Lesson] = `${currentTime}_${videoDuration}_${percentageComplete}`;
-                await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+
+                if (isNewKey)
+                {
+                    let result = await userCollection.findOneAndUpdate(
+                        { email: user.email },
+                        { $set: { [sectionArray]: [user[sectionArray][Lesson]] } },
+                        { new: true }
+                    );
+                }
+                else
+                {
+                    await userCollection.findOneAndUpdate({email: user.email}, user, {new: true});
+                }
             }
         }
         return res.json({
             message: 'state updated'
         });
     }
-    catch(err)
+    catch (err)
     {
         console.log("didn't work: " + err);
+        res.status(500).send('An error occurred while updating the video state.');
     }
 });
 
@@ -1992,7 +2728,7 @@ app.get('/course', async (req, res) =>
         if (!user) throw new Error('User not found');
 
         const data = { likedVideos: user.likedVideos };
-        for (let i = 1; i <= 16; i++)
+        for (let i = 0; i <= 16; i++)
         {
             data[`_1_${i}`] = user[`_1_${i}`];
         }
@@ -2045,7 +2781,7 @@ app.get('/track1', async (req, res) =>
         if (!user) throw new Error('User not found');
 
         const data = {};
-        for (let i = 1; i <= 16; i++)
+        for (let i = 0; i <= 16; i++)
         {
             data[`_1_${i}`] = user[`_1_${i}`];
         }
