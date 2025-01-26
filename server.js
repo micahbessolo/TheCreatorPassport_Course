@@ -143,7 +143,8 @@ app.get('/', checkAuthenticated, async (req, res) =>
         email: userEmail,
         profileImg: profileImg,
         liveTrainingsProgress: liveTrainingsProgress,
-        cohort: cohort
+        cohort: cohort,
+        isAdmin: isAdmin
     });
 });
 
