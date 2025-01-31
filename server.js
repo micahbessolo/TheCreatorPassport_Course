@@ -2509,6 +2509,11 @@ app.get('/terms-and-conditions', (req, res) =>
     res.render('terms-and-conditions.ejs');
 });
 
+app.get('/privacy-policy', (req, res) => 
+{
+    res.render('privacy-policy.ejs');
+});
+
 // save video progress and percentage complete
 app.patch('/video-state:videoState', async (req, res) =>
 {
