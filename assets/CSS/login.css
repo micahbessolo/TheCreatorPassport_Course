@@ -1,7 +1,7 @@
 body
 {
     text-align: center;
-    background-image: url("https://theloverspassport.com/wp-content/uploads/2021/03/IMG_5965-scaled.jpg");
+    background-image: url("../images/TLP-login-background.jpg");
     background-repeat: no-repeat;
     background-position: 50% 15%;
     background-attachment: local;
@@ -34,7 +34,6 @@ h1
 .content
 {
     padding-top: 20vh;
-    align-items: center;
     margin: auto;
     font-family: gopher, sans-serif;
     font-weight: 400;
@@ -45,23 +44,23 @@ div a
     color: black;
     text-decoration: none;
 }
-.email
+#email
 {
-    width: 225px;
+    width: 235px;
     display: inline;
 }
-.password
+#password
 {
-    width: 225px;
+    width: 235px;
     display: inline-block;
 }
 .emailLabel
 {
-    padding-right: 150px;
+    margin-right: 180px;
 }
 .pwdLabel
 {
-    padding-right: 110px;
+    margin-right: 160px;
 }
 .submitBtn
 {
