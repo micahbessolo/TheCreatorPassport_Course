@@ -60,12 +60,18 @@ app.use(passport.initialize());
 app.use(passport.session()); // keeps track of the user's session
 app.use(methodOverride('_method'));
 
+const setCSPHeaders = (req, res, next) =>
+{
+    res.setHeader("Content-Security-Policy", "default-src 'self'; form-action 'self';");
+    next();
+};
+
 app.get('/login', checkNotAuthenticated, (req, res) => 
 {
     res.render('login.ejs');
 });
 
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', 
+app.post('/login', checkNotAuthenticated, setCSPHeaders, passport.authenticate('local', 
 {
     successRedirect: '/',
     failureRedirect: '/login',
