@@ -42,6 +42,15 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
+// for sending email function
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+const mailgun = require("mailgun-js");
+const DOMAIN = 'mg.thecreatorpassport.com';
+const bcrypt = require('bcrypt');
+const axios = require('axios').default;
+const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
+
 initializePassport(passport, 
     email => userCollection.findOne({email: email}),
     id => userCollection.findOne({_id: id})
