@@ -2753,7 +2753,7 @@ app.get('/course', async (req, res) =>
         {
             data[`_1_${i}`] = user[`_1_${i}`];
         }
-        for (let i = 1; i <= 11; i++)
+        for (let i = 0; i <= 11; i++)
         {
             data[`_2_${i}`] = user[`_2_${i}`];
         }
@@ -2823,7 +2823,7 @@ app.get('/track2', async (req, res) =>
         if (!user) throw new Error('User not found');
 
         const data = {};
-        for (let i = 1; i <= 11; i++)
+        for (let i = 0; i <= 11; i++)
         {
             data[`_2_${i}`] = user[`_2_${i}`];
         }
