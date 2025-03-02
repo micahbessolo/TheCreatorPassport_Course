@@ -35,7 +35,8 @@ function initialize(passport, getUserByEmail, getUserById)
     // to maintain the user's session
     passport.serializeUser((User, done) => done(null, User.id));
     // attaches the user to the req.user object
-    passport.deserializeUser((id, done) => {
+    passport.deserializeUser((id, done) =>
+    {
         return done(null, getUserById(id))
     });
 }
