@@ -686,10 +686,11 @@ function createTableRowNav(result, isNewComment=false, isModal=false)
     else
     {
         const comment1 = result.comments[0];
-        let profileImg4 = userProfileImageNav(40, comment1.user);
 
-        if (result.comments[0])
+        if (comment1)
         {
+            let profileImg4 = userProfileImageNav(40, comment1.user);
+
             postElement +=
             `<div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; width: 100%;">
                 <div style="display: flex; flex-direction: column;">

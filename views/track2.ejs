@@ -616,6 +616,27 @@
     <div style="position: relative; bottom: 0; display: flex; flex-direction: row; justify-content: center; width: 100%;">
         <div><a href="./terms-and-conditions" style="color: black;">Terms of Service</a></div>
     </div>
+
+    <div class="modal fade" onfocusin="onActive();" onFocusOut="onActiveOut();" id="notificationPost" role="dialog" aria-labelledby="notificationPost" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <!--- Modal content --->
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none !important;">
+                    <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding-left: 30px;">
+                        <div id="fileEventsTitle" style="font-size: 26px;"></div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" background-color: #F0F2F5;>
+                    <div id="thePost" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 </body>
 
 <script type="text/javascript" src="assets/JS/topnav.js"></script>
